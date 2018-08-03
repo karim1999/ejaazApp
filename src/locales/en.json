@@ -1,0 +1,5 @@
+{
+  "login": {
+    "welcome": "Welcome {{name}} to our localized app!"
+  }
+}
