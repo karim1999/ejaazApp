@@ -3,7 +3,6 @@ const initialState = {
     user: {},
     token: ""
 };
-
 export const currentUser= (state = initialState, action) => {
     switch (action.type){
         case "SET_USER":

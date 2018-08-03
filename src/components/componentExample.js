@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Text } from 'native-base';
 import {View} from "react-native";
-export default class componentExample extends Component {
+export default class ComponentExample extends Component {
     render() {
         return (
             <View>

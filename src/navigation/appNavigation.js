@@ -1,12 +1,13 @@
 import React from 'react';
 import { createTabNavigator } from 'react-navigation';
-import HomeScreen from '../screens/app/Home';
+import Home from '../screens/app/Home';
 
 const AppStack = createTabNavigator(
     {
-        Home: HomeScreen
+        Home: Home
     },
     {
+        headerMode: 'none',
         initialRouteName: 'Home',
     }
 );

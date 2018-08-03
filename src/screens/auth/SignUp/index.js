@@ -4,7 +4,7 @@ import {Container, Header, Content, Form, Item, Input, Button} from 'native-base
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import server from "../../../constants/config"
-export default class SignIn extends Component {
+export default class SignUp extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -39,14 +39,17 @@ export default class SignIn extends Component {
                      <Input placeholder="Username" placeholderTextColor="#fff"/>
                    </Item>
                    <Item rounded style={styles.input}>
+                     <Input placeholder="Email" placeholderTextColor="#fff"/>
+                   </Item>
+                   <Item rounded style={styles.input}>
                      <Input placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}/>
                    </Item>
-                   <Button info style={styles.button}><Text style={styles.buttonText}> Login </Text></Button>
+                   <Button info style={styles.button}><Text style={styles.buttonText}> Signup </Text></Button>
                  </Form>
                  <View style={styles.signupTextCont}>
-                  <Text style={styles.signupText}>Don't have an account yet?</Text>
-                  <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignUp')}>
-                    <Text style={styles.signupButton}> Signup</Text>
+                  <Text style={styles.signupText}>Already have an account?</Text>
+                  <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignIn')}>
+                    <Text style={styles.signupButton}> Sign in</Text>
                   </TouchableOpacity>
                 </View>
                </Content>
