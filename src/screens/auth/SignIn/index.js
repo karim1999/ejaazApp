@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
-import server from "../../../constants/server"
+import server from "../../../constants/config"
 export default class SignIn extends Component {
     constructor(props){
         super(props);
