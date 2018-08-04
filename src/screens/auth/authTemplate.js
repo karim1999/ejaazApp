@@ -20,7 +20,7 @@ export default class AuthTemplate extends Component {
                         </Button>
                     </Right>
                 </Header>
-                <Content>
+                <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
                     { this.props.children }
                 </Content>
             </Container>

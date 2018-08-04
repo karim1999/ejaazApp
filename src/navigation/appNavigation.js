@@ -1,8 +1,8 @@
 import React from 'react';
-import { createTabNavigator } from 'react-navigation';
+import {createStackNavigator} from 'react-navigation';
 import Home from '../screens/app/Home';
 
-const AppStack = createTabNavigator(
+const AppStack = createStackNavigator(
     {
         Home: Home
     },
