@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackgro
 import {Container, Header, Content, Form, Item, Input, Button} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
-import server from "../../../constants/config"
+import Server from "../../../constants/config"
 export default class SignUp extends Component {
     constructor(props){
         super(props);
@@ -21,7 +21,7 @@ export default class SignUp extends Component {
     }
     async onRegisterPressed(){
         try{
-            let response = await fetch('http://192.168.1.6:8000/api/auth/register',{
+            let response = await fetch(Server.url+'api/auth/register',{
                 method:'POST',
                 headers:{
                     'Accept': 'application/json',

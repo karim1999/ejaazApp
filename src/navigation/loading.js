@@ -6,7 +6,7 @@ import {
     View,
 } from 'react-native';
 import axios from 'axios';
-import { SERVER_URL } from "../constants/config";
+import Server from "../constants/config";
 import {connect} from "react-redux";
 import {setUser} from "../reducers";
 
@@ -20,7 +20,7 @@ class AuthLoadingScreen extends React.Component {
     _bootstrapAsync = async () => {
         const userToken = await AsyncStorage.getItem('token');
         if(userToken){
-            return axios.post(SERVER_URL+'api/auth/me?token='+userToken).then(response => {
+            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
                 this.props.setUser(response.data);
                 this.props.navigation.navigate('App');
             }).catch(error => {

@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Button} from 'native-base';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator } from 'react-native';
+import {Container, Header, Content, Form, Item, Input, Button, Toast} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
-import server from "../../../constants/config"
-export default class SignIn extends Component {
+import Server from "../../../constants/config"
+import axios from "axios";
+import {setUser} from "../../../reducers";
+import {connect} from "react-redux";
+
+class SignIn extends Component {
     constructor(props){
         super(props);
         this.state = {
+            isSigningIn: false,
             categories:[{
                 id:1,
                 name:'first category'
@@ -15,40 +20,35 @@ export default class SignIn extends Component {
         }
     }
 
-    async onLoginPressed(){
-        try{
-            let response = await fetch('http://192.168.1.6:8000/api/auth/login',{
-                method:'POST',
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-
-                    email: this.state.email,
-                    password: this.state.password,
-
-                })
+    onLoginPressed(){
+        this.setState({
+            isSigningIn: true
+        });
+        return axios.post(Server.url+'api/auth/login', {
+            email: this.state.email,
+            password: this.state.password,
+        }).then(response => {
+            this.props.setUser(response.data.user, response.data.access_token);
+            Toast.show({
+                text: 'Logged in successfully',
+                type: "success",
+                buttonText: 'Okay'
             });
-
-            let res = await response.text();
-            console.warn("res is "+ res);
-        }catch(errors){
-
-        }
+            this.setState({
+                isSigningIn: false
+            });
+        }).catch(error =>{
+            Toast.show({
+                text: 'Wrong username or password',
+                type: "danger",
+                buttonText: 'Okay'
+            });
+            this.setState({
+                isSigningIn: false
+            });
+        });
     }
     componentDidMount(){
-        // Imprtant Read it --------------------------------->
-        /*
-        (here we use fetch function to get data from server and we set it into
-        state via function called setState
-        and we have constant for the server imported
-        use it  : server.url
-      )
-        --hint
-        please note that hint is created for you to search for the names mentioned here
-        and don't always ask project owner make google your best friend
-        */
     }
     render() {
         return (
@@ -66,7 +66,12 @@ export default class SignIn extends Component {
                                     <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" 
                                     onChangeText={(val) => this.setState({password: val})} secureTextEntry={true}/>
                                 </Item>
-                                <Button info style={styles.button} onPress={this.onLoginPressed.bind(this)}><Text style={styles.buttonText}> Login </Text></Button>
+                                <Button info style={styles.button} onPress={this.onLoginPressed.bind(this)}>
+                                    <Text style={styles.buttonText}> Login </Text>
+                                    {this.state.isSigningIn && (
+                                        <ActivityIndicator style={{}} size="small" color="#000000" />
+                                    )}
+                                </Button>
                             </Form>
                             <View style={styles.signupTextCont}>
                                 <Text style={styles.signupText}>Don't have an account yet?</Text>
@@ -127,3 +132,14 @@ const styles = StyleSheet.create({
     }
 
 });
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SignIn);
