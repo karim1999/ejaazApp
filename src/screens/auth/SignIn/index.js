@@ -21,32 +21,40 @@ class SignIn extends Component {
     }
 
     onLoginPressed(){
-        this.setState({
-            isSigningIn: true
-        });
-        return axios.post(Server.url+'api/auth/login', {
-            email: this.state.email,
-            password: this.state.password,
-        }).then(response => {
-            this.props.setUser(response.data.user, response.data.access_token);
-            Toast.show({
-                text: 'Logged in successfully',
-                type: "success",
-                buttonText: 'Okay'
-            });
+        if(this.state.email == "" || this.state.password == ""){
             this.setState({
-                isSigningIn: false
+                isSigningIn: true
             });
-        }).catch(error =>{
+            return axios.post(Server.url+'api/auth/login', {
+                email: this.state.email,
+                password: this.state.password,
+            }).then(response => {
+                this.props.setUser(response.data.user, response.data.access_token);
+                Toast.show({
+                    text: 'Logged in successfully',
+                    type: "success",
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isSigningIn: false
+                });
+            }).catch(error =>{
+                Toast.show({
+                    text: 'Wrong email or password.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isSigningIn: false
+                });
+            });
+        }else{
             Toast.show({
-                text: 'Wrong username or password',
+                text: 'Email and password cannot be empty.',
                 type: "danger",
                 buttonText: 'Okay'
             });
-            this.setState({
-                isSigningIn: false
-            });
-        });
+        }
     }
     componentDidMount(){
     }
