@@ -22,14 +22,14 @@ class AuthLoadingScreen extends React.Component {
         if(userToken){
             return axios.post(SERVER_URL+'api/auth/me?token='+userToken).then(response => {
                 this.props.setUser(response.data);
-                this.props.navigation.navigate('Auth');
+                this.props.navigation.navigate('App');
             }).catch(error => {
                 // return AsyncStorage.removeItem('token').then(()=>{
-                this.props.navigation.navigate('App');
+                this.props.navigation.navigate('Auth');
                 // });
             })
         }else{
-            this.props.navigation.navigate('App');
+            this.props.navigation.navigate('Auth');
         }
     };
 

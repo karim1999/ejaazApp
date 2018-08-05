@@ -14,6 +14,29 @@ export default class SignIn extends Component {
             }]
         }
     }
+
+    async onLoginPressed(){
+        try{
+            let response = await fetch('http://192.168.1.6:8000/api/auth/login',{
+                method:'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+
+                    email: this.state.email,
+                    password: this.state.password,
+
+                })
+            });
+
+            let res = await response.text();
+            console.warn("res is "+ res);
+        }catch(errors){
+
+        }
+    }
     componentDidMount(){
         // Imprtant Read it --------------------------------->
         /*
@@ -36,12 +59,14 @@ export default class SignIn extends Component {
                             <Form>
                                 <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                                 <Item rounded style={styles.input}>
-                                    <Input placeholder="Username" placeholderTextColor="#fff"/>
+                                    <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
+                                    onChangeText={(val) => this.setState({email: val})}/>
                                 </Item>
                                 <Item rounded style={styles.input}>
-                                    <Input placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}/>
+                                    <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" 
+                                    onChangeText={(val) => this.setState({password: val})} secureTextEntry={true}/>
                                 </Item>
-                                <Button info style={styles.button}><Text style={styles.buttonText}> Login </Text></Button>
+                                <Button info style={styles.button} onPress={this.onLoginPressed.bind(this)}><Text style={styles.buttonText}> Login </Text></Button>
                             </Form>
                             <View style={styles.signupTextCont}>
                                 <Text style={styles.signupText}>Don't have an account yet?</Text>
@@ -69,6 +94,10 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 40,
         alignSelf: 'center',
+    },
+    inputText:{
+        color: '#fff',
+        fontSize: 16
     },
     button:{
         alignSelf: 'center',

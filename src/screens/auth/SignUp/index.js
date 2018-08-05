@@ -8,10 +8,38 @@ export default class SignUp extends Component {
     constructor(props){
         super(props);
         this.state = {
+            name:"",
+            email:"",
+            password:"",
+            password_confirmation:"",
+            errors:[],
             categories:[{
                 id:1,
                 name:'first category'
             }]
+        }
+    }
+    async onRegisterPressed(){
+        try{
+            let response = await fetch('http://192.168.1.6:8000/api/auth/register',{
+                method:'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+
+                    name: this.state.name,
+                    email: this.state.email,
+                    password: this.state.password,
+
+                })
+            });
+
+            let res = await response.text();
+            console.warn("res is "+ res);
+        }catch(errors){
+
         }
     }
     componentDidMount(){
@@ -36,15 +64,22 @@ export default class SignUp extends Component {
                             <Form>
                                 <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                                 <Item rounded style={styles.input}>
-                                    <Input placeholder="Username" placeholderTextColor="#fff"/>
+                                    <Input style={styles.inputText} placeholder="Username" placeholderTextColor="#fff"
+                                     onChangeText={(val) => this.setState({name: val})}/>
                                 </Item>
                                 <Item rounded style={styles.input}>
-                                    <Input placeholder="Email" placeholderTextColor="#fff"/>
+                                    <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
+                                    onChangeText={(val) => this.setState({email: val})}/>
                                 </Item>
                                 <Item rounded style={styles.input}>
-                                    <Input placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}/>
+                                    <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}
+                                    onChangeText={(val) => this.setState({password: val})}/>
                                 </Item>
-                                <Button info style={styles.button}><Text style={styles.buttonText}> Signup </Text></Button>
+                                <Item rounded style={styles.input}>
+                                    <Input style={styles.inputText} placeholder="Confirm password" placeholderTextColor="#fff" secureTextEntry={true}
+                                    onChangeText={(val) => this.setState({password_confirmation: val})}/>
+                                </Item>
+                                <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}><Text style={styles.buttonText}> Signup </Text></Button>
                             </Form>
                             <View style={styles.signupTextCont}>
                                 <Text style={styles.signupText}>Already have an account?</Text>
@@ -72,6 +107,10 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 40,
         alignSelf: 'center',
+    },
+    inputText:{
+        color: '#fff',
+        fontSize: 16
     },
     button:{
         alignSelf: 'center',
