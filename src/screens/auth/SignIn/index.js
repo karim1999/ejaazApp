@@ -63,7 +63,7 @@ class SignIn extends Component {
             <AuthTemplate>
                 <View style={styles.container}>
                     <ImageBackground source={require('../../../images/Background.png')} style={{height: '100%', width: '100%', }}>
-                        <Content>
+                        <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
                             <Form>
                                 <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                                 <Item rounded style={styles.input}>
