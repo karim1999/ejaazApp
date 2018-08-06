@@ -94,6 +94,9 @@ class SignIn extends Component {
                         <Text style={styles.signupButton}> Signup</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity style={{alignItems: 'center',}} onPress={()=> this.props.navigation.navigate('ResetPassword')}>
+                        <Text style={styles.signupButton}> Forgot Your Password? </Text>
+                    </TouchableOpacity>
             </AuthTemplate>
         );
     }

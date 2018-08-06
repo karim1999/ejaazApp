@@ -5,57 +5,51 @@ import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
 import axios from "axios";
-export default class SignUp extends Component {
+export default class ResetPassword extends Component {
     constructor(props){
         super(props);
         this.state = {
-           isSignUp: false,
-           name: "",
+           isResetPassword: false,
            email: "",
-           password: "",
             categories:[{
                 id:1,
                 name:'first category'
             }]
         }
     }
-    onRegisterPressed(){
-        if(this.state.name == "" || this.state.email == "" || this.state.password == ""){
+    onResetPasswordPressed(){
+        if(this.state.email == ""){
             
             Toast.show({
-                text: 'Fields cannot be empty.',
+                text: 'email cannot be empty.',
                 type: "danger",
                 buttonText: 'Okay'
             });
         
         }else{
              this.setState({
-                isSignUp:true
+                isResetPassword:true
             });
 
-        return axios.post(Server.url+'api/auth/register',{
+        return axios.post(Server.url+'api/auth/password/reset',{
 
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
+            email: this.state.email
             
         }).then(response => {
             Toast.show({
-                text: 'Register successfully',
+                text: 'A reset email has been sent! Please check your email.',
                 type: 'success',
                 buttonText: 'Okay'
             });
             this.setState({
-                isSignUp: false
+                isResetPassword: false
             });
         }).catch(error => {
             let text= "No Internet Connection.";
-            if(error.response.status == 400 && error.response.data && error.response.data.type == "validation" && error.response.data.error){
-                if(error.response.data.error.name){
-                    text= error.response.data.error.name[0];
-                }else if(error.response.data.error.email){
+            if(error.response.status == 401 && error.response.data.email &&  error.response.data.error.email){
+                if(error.response.data.error.email){
                     text= error.response.data.error.email[0];
-                }    
+                }
             }
             Toast.show({
                 text,
@@ -63,7 +57,7 @@ export default class SignUp extends Component {
                 buttonText: 'Okay'
             });
             this.setState({
-                isSignUp: false
+                isResetPassword: false
             });
         });
         }
@@ -87,30 +81,16 @@ export default class SignUp extends Component {
                 <Form>
                     <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Username" placeholderTextColor="#fff"
-                               onChangeText={(val) => this.setState({name: val})}/>
-                    </Item>
-                    <Item rounded style={styles.input}>
                         <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({email: val})}/>
                     </Item>
-                    <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}
-                               onChangeText={(val) => this.setState({password: val})}/>
-                    </Item>
-                    <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}>
-                    <Text style={styles.buttonText}> Signup </Text>
-                    {this.state.isSignUp && (
+                    <Button info style={styles.button} onPress={this.onResetPasswordPressed.bind(this)}>
+                    <Text style={styles.buttonText}> Send Password Reset Link </Text>
+                    {this.state.isResetPassword && (
                         <ActivityIndicator style={{}} size="small" color="#000000" />
                     )}
                     </Button>
                 </Form>
-                <View style={styles.signupTextCont}>
-                    <Text style={styles.signupText}>Already have an account?</Text>
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignIn')}>
-                        <Text style={styles.signupButton}> Sign in</Text>
-                    </TouchableOpacity>
-                </View>
 
             </AuthTemplate>
         );
@@ -140,20 +120,5 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#fff',
         textAlign: 'center',
-    },
-    signupTextCont:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row'
-    },
-    signupText:{
-        color:'#999',
-        fontSize: 16
-    },
-    signupButton:{
-        color:'#367fa9',
-        fontSize: 16,
-        fontWeight: '500',
     }
-
 });

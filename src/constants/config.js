@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://192.168.1.3/'; // dev
+const SERVER_URL = 'http://192.168.1.3:8000/'; // dev
 
 export default {
     url:SERVER_URL,
