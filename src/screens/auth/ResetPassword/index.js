@@ -46,7 +46,7 @@ export default class ResetPassword extends Component {
             });
         }).catch(error => {
             let text= "No Internet Connection.";
-            if(error.response.status == 401 && error.response.data.email &&  error.response.data.error.email){
+            if(error.response.status == 401 && error.response.data.error &&  error.response.data.error.email){
                 if(error.response.data.error.email){
                     text= error.response.data.error.email[0];
                 }
