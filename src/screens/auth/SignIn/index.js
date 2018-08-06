@@ -61,34 +61,29 @@ class SignIn extends Component {
     render() {
         return (
             <AuthTemplate>
-                <View style={styles.container}>
-                    <ImageBackground source={require('../../../images/Background.png')} style={{height: '100%', width: '100%', }}>
-                        <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
-                            <Form>
-                                <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
-                                    onChangeText={(val) => this.setState({email: val})}/>
-                                </Item>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" 
-                                    onChangeText={(val) => this.setState({password: val})} secureTextEntry={true}/>
-                                </Item>
-                                <Button info style={styles.button} onPress={this.onLoginPressed.bind(this)}>
-                                    <Text style={styles.buttonText}> Login </Text>
-                                    {this.state.isSigningIn && (
-                                        <ActivityIndicator style={{}} size="small" color="#000000" />
-                                    )}
-                                </Button>
-                            </Form>
-                            <View style={styles.signupTextCont}>
-                                <Text style={styles.signupText}>Don't have an account yet?</Text>
-                                <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignUp')}>
-                                    <Text style={styles.signupButton}> Signup</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Content>
-                    </ImageBackground>
+
+                <Form>
+                    <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({email: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({password: val})} secureTextEntry={true}/>
+                    </Item>
+                    <Button info style={styles.button} onPress={this.onLoginPressed.bind(this)}>
+                        <Text style={styles.buttonText}> Login </Text>
+                        {this.state.isSigningIn && (
+                            <ActivityIndicator style={{}} size="small" color="#000000" />
+                        )}
+                    </Button>
+                </Form>
+                <View style={styles.signupTextCont}>
+                    <Text style={styles.signupText}>Don't have an account yet?</Text>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignUp')}>
+                        <Text style={styles.signupButton}> Signup</Text>
+                    </TouchableOpacity>
                 </View>
             </AuthTemplate>
         );
@@ -96,11 +91,6 @@ class SignIn extends Component {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     input:{
         width: 300,
         marginBottom: 10,

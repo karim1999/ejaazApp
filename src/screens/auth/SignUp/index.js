@@ -58,49 +58,39 @@ export default class SignUp extends Component {
     render() {
         return (
             <AuthTemplate>
-                <Container style={styles.container}>
-                    <ImageBackground source={require('../../../images/Background.png')} style={{height: '100%', width: '100%', }}>
-                        <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
-                            <Form>
-                                <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Username" placeholderTextColor="#fff"
-                                     onChangeText={(val) => this.setState({name: val})}/>
-                                </Item>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
-                                    onChangeText={(val) => this.setState({email: val})}/>
-                                </Item>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}
-                                    onChangeText={(val) => this.setState({password: val})}/>
-                                </Item>
-                                <Item rounded style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Confirm password" placeholderTextColor="#fff" secureTextEntry={true}
-                                    onChangeText={(val) => this.setState({password_confirmation: val})}/>
-                                </Item>
-                                <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}><Text style={styles.buttonText}> Signup </Text></Button>
-                            </Form>
-                            <View style={styles.signupTextCont}>
-                                <Text style={styles.signupText}>Already have an account?</Text>
-                                <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignIn')}>
-                                    <Text style={styles.signupButton}> Sign in</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Content>
-                    </ImageBackground>
-                </Container>
+                <Form>
+                    <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Username" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({name: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({email: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}
+                               onChangeText={(val) => this.setState({password: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Confirm password" placeholderTextColor="#fff" secureTextEntry={true}
+                               onChangeText={(val) => this.setState({password_confirmation: val})}/>
+                    </Item>
+                    <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}><Text style={styles.buttonText}> Signup </Text></Button>
+                </Form>
+                <View style={styles.signupTextCont}>
+                    <Text style={styles.signupText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('SignIn')}>
+                        <Text style={styles.signupButton}> Sign in</Text>
+                    </TouchableOpacity>
+                </View>
+
             </AuthTemplate>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     input:{
         width: 300,
         marginBottom: 10,
