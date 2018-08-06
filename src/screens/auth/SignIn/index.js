@@ -13,6 +13,8 @@ class SignIn extends Component {
         super(props);
         this.state = {
             isSigningIn: false,
+            email: "",
+            password: "",
             categories:[{
                 id:1,
                 name:'first category'
@@ -21,11 +23,22 @@ class SignIn extends Component {
     }
 
     onLoginPressed(){
+
         if(this.state.email == "" || this.state.password == ""){
+
+            Toast.show({
+                text: 'Email and password cannot be empty.',
+                type: "danger",
+                buttonText: 'Okay'
+            });
+
+        }else {
+
             this.setState({
                 isSigningIn: true
             });
-            return axios.post(Server.url+'api/auth/login', {
+
+            return axios.post(Server.url + 'api/auth/login', {
                 email: this.state.email,
                 password: this.state.password,
             }).then(response => {
@@ -38,7 +51,7 @@ class SignIn extends Component {
                 this.setState({
                     isSigningIn: false
                 });
-            }).catch(error =>{
+            }).catch(error => {
                 Toast.show({
                     text: 'Wrong email or password.',
                     type: "danger",
@@ -48,13 +61,9 @@ class SignIn extends Component {
                     isSigningIn: false
                 });
             });
-        }else{
-            Toast.show({
-                text: 'Email and password cannot be empty.',
-                type: "danger",
-                buttonText: 'Okay'
-            });
+
         }
+
     }
     componentDidMount(){
     }
