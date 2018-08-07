@@ -48,6 +48,7 @@ class SignIn extends Component {
                     type: "success",
                     buttonText: 'Okay'
                 });
+                this.props.navigation.navigate('Home');
                 this.setState({
                     isSigningIn: false
                 });
