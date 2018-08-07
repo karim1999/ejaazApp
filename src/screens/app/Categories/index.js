@@ -1,11 +1,39 @@
 import React from 'react';
-import { StyleSheet, View,} from 'react-native';
-import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon, Title, Body, Button } from 'native-base';
+import { StyleSheet, View, ListView} from 'react-native';
+import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon, Title, Body, Button, ActivityIndicator } from 'native-base';
+import axios from "axios";
+import Server from "../../../constants/config";
 
 
 export default class Categories extends React.Component {
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      isLoading: true,
+      cloneCategory:[]
+    }
+  
+  }
+  componentDidMount(){
+    return axios.get(Server.url + 'api/auth/category')
+    .then(response => {
+      var standardDataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.setState({
+        isLoading:false,
+        cloneCategory: standardDataSource.cloneWithRows(response.data.CategoriesName)
+      });
+    })
+  }
+  
   render() {
+    if(this.state.isLoading){
+      return(
+        <View>
+          <ActivityIndicator color="#000" />
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
 
@@ -15,7 +43,10 @@ export default class Categories extends React.Component {
             <ListItem>
               <Left>
                 <Icon type="Ionicons" name='code-working' />
-                <Text> Development</Text>
+                <ListView
+                  dataSource={this.state.cloneCategory}
+                  renderRow={(rowData) => <Text>Name: {rowData.name}</Text>}
+                />
               </Left>
               <Right>
                 <Icon type="Ionicons" name="arrow-dropright" />
