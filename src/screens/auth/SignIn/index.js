@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator, AsyncStorage } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Button, Toast} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
@@ -43,6 +43,7 @@ class SignIn extends Component {
                 password: this.state.password,
             }).then(response => {
                 this.props.setUser(response.data.user, response.data.access_token);
+                let item= this.storeItem('token', response.data.access_token);
                 Toast.show({
                     text: 'Logged in successfully',
                     type: "success",
@@ -65,6 +66,14 @@ class SignIn extends Component {
 
         }
 
+    }
+    async storeItem(key, item) {
+        try {
+            let jsonOfItem = await AsyncStorage.setItem(key, item);
+            return jsonOfItem;
+        } catch (error) {
+            console.log(error.message);
+        }
     }
     componentDidMount(){
     }

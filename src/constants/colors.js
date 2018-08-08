@@ -13,7 +13,7 @@ export default {
     warningText: '#666804',
     noticeBackground: tintColor,
     noticeText: '#fff',
-    mainColor: '#EBB70A',
+    mainColor: '#6483F7',
     fadedMainColor: '#F5D97D',
     secondaryColor: secondCol,
     smoothGray: '#F2F3F5'
