@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, ListView, FlatList} from 'react-native';
-import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon, Title, Body, Button, ActivityIndicator } from 'native-base';
+import {StyleSheet, View, FlatList} from 'react-native';
+import { Container, Content, List, ListItem, Text, Left, Right, Icon, ActivityIndicator } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
+import AppTemplate from "../appTemplate";
 
 
 export default class Categories extends React.Component {
@@ -26,30 +27,31 @@ export default class Categories extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Container>
-                    <Content>
-                        <List>
-                            <FlatList
-                                data={this.state.cloneCategory}
-                                renderItem={({item}) => (
-                                    <ListItem>
-                                        <Left>
-                                            <Icon type="Ionicons" name='person' />
-                                            <Text> {item.name}</Text>
-                                        </Left>
-                                        <Right>
-                                            <Icon type="Ionicons" name="arrow-dropright" />
-                                        </Right>
-                                    </ListItem>
-                                )}
-                                keyExtractor = { (item, index) => index.toString() }
-                            />
-                        </List>
-                    </Content>
-                </Container>
-
-            </View>
+            <AppTemplate navigation={this.props.navigation} title="Categories">
+                <View style={styles.container}>
+                    <Container>
+                        <Content>
+                            <List>
+                                <FlatList
+                                    data={this.state.cloneCategory}
+                                    renderItem={({item}) => (
+                                        <ListItem>
+                                            <Left>
+                                                <Icon type="Ionicons" name='person' />
+                                                <Text> {item.name}</Text>
+                                            </Left>
+                                            <Right>
+                                                <Icon type="Ionicons" name="arrow-dropright" />
+                                            </Right>
+                                        </ListItem>
+                                    )}
+                                    keyExtractor = { (item, index) => index.toString() }
+                                />
+                            </List>
+                        </Content>
+                    </Container>
+                </View>
+            </AppTemplate>
         );
     }
 }

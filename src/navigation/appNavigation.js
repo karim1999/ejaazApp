@@ -1,14 +1,64 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation';
+import {createMaterialTopTabNavigator } from 'react-navigation';
 import Home from '../screens/app/Home';
+import {Icon, Text} from "native-base";
+import Interface from "../screens/app/Interface";
+import Categories from "../screens/app/Categories";
+import Favourites from "../screens/app/Favourites";
+import Profile from "../screens/app/Profile";
+import Color from "../constants/colors";
 
-const AppStack = createStackNavigator(
+const AppStack = createMaterialTopTabNavigator (
     {
-        Home: Home
+        Interface,
+        Categories,
+        Favourites,
+        Profile
     },
     {
-        headerMode: 'none',
-        initialRouteName: 'Home',
+        navigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused, tintColor }) => {
+                const { routeName } = navigation.state;
+                let iconName;
+                if (routeName === 'Interface') {
+                    iconName = 'paper';
+                } else if (routeName === 'Categories') {
+                    iconName = 'apps';
+                }
+                else if (routeName === 'Favourites') {
+                    iconName = 'heart';
+                }
+                else if (routeName === 'Profile') {
+                    iconName = 'person';
+                }
+
+                // You can return any component that you like here! We usually use an
+                // icon component from react-native-vector-icons
+                return <Icon name={iconName} style={{color: tintColor, fontSize: 30}} type="Ionicons" />;
+            },
+        }),
+        tabBarPosition: 'bottom',
+        animationEnabled: false,
+        swipeEnabled: true,
+
+        tabBarOptions: {
+            showLabel: false,
+            showIcon: true,
+            activeTintColor: Color.mainColor,
+            inactiveTintColor: 'black',
+            tabStyle: {
+                width: 100,
+            },
+            style: {
+                backgroundColor: 'white',
+            },
+            indicatorStyle: {
+                backgroundColor: Color.mainColor,
+                height: 3
+            }
+        },
+
+        initialRouteName: 'Interface',
     }
 );
 export default AppStack;

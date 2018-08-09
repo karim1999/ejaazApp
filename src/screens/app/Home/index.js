@@ -12,7 +12,7 @@ import Profile from "../Profile";
 export default class Home extends Component {
     render() {
         return (
-            <AppTemplate>
+            <AppTemplate navigation={this.props.navigation} title="News feed">
                 <Container style={{width: '100%', height: '100%'}}>
                     <Tabs>
                         <Tab heading={ <TabHeading><Icon name="paper" /></TabHeading>}>

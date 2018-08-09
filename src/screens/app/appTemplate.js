@@ -6,20 +6,20 @@ export default class AppTemplate extends Component {
     render() {
         return (
             <Container>
-                <Header noShadow
+                <Header hasTabs noShadow
                         style={{ backgroundColor: Color.mainColor }}
                         androidStatusBarColor={Color.mainColor}
                 >
                     <Left>
                         {
                             (this.props.back)&&
-                                <Button transparent>
+                                <Button transparent onPress={() => this.props.navigation.goBack()}>
                                     <Icon name='arrow-back' />
                                 </Button>
                         }
                     </Left>
                     <Body>
-                    <Title>Ejaaz</Title>
+                    <Title>{this.props.title}</Title>
                     </Body>
                     <Right>
                         <Button transparent>
