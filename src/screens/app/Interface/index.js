@@ -1,41 +1,120 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
-import { Container, Content, Card, CardItem, Text, Body, H3 } from 'native-base';
+import { StyleSheet, Image, View } from 'react-native';
+import { Container, Content, Card, CardItem, Button, Icon, Text, Body, H2 } from 'native-base';
 import AppTemplate from "../appTemplate";
 
 export default class Interface extends Component {
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="News feed">
-                <Container style={{width: '100%'}}>
-                    <Content>
-                        <View style={{flex: 1, flexDirection: "row", justifyContent: 'space-between'}}>
-                            <Card style={{flex: 1}}>
-                                <CardItem>
-                                    <Body>
-                                    <Image source={require("../../../images/Background.png")} style={{height: 200, width: 200, flex: 1}}/>
-                                    <H3 style={{padding: 10}}>
-                                        Learn how to take care of your health
-                                    </H3>
-                                    <Text>Hamada</Text>
-                                    </Body>
-                                </CardItem>
-                            </Card>
-                            <Card style={{flex: 1}}>
-                                <CardItem>
-                                    <Body>
-                                    <Image source={require("../../../images/Background.png")} style={{height: 200, width: 200, flex: 1}}/>
-                                    <H3 style={{padding: 10}}>
-                                        Learn how to take care of your health
-                                    </H3>
-                                    <Text>Hamada</Text>
-                                    </Body>
-                                </CardItem>
-                            </Card>
-                        </View>
-                    </Content>
-                </Container>
+                <Container>
+                  <Content>
+                    <View style={styles.container}>
+                      <H2 style={styles.containerH1}>New and Noteworth</H2>
+
+                      <View style={styles.viewDirection}>
+                        <Card style={styles.card}>
+                          <CardItem cardBody>
+                            <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
+                            </CardItem>
+                            <CardItem header>
+                            <Text style={styles.cardText}>Learn how to take care of your health</Text>
+                          </CardItem>
+            
+                          <View>
+                              <Text style={styles.carditemText}>
+                                Abdelrahman
+                              </Text>
+                          </View>
+                        
+                          <View style={styles.viewContentStar}>
+                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <Text style={styles.viewContentStarText}>4.6</Text>
+                          </View>
+            
+                          <View footer style={styles.footer}>
+                            <Button transparent>
+                              <Text style={styles.footerText}>20</Text> 
+                              <Text style={styles.footerIcon}>$</Text>
+                            </Button>
+                          </View>
+                        </Card>
+          
+                    
+                      </View>
+                    </View>
+                    
+                  </Content>
+              </Container>
             </AppTemplate>
         );
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding:5,
+  },
+  containerH1:{
+    marginLeft:10
+  },
+  viewDirection:{
+    flexDirection:'row',
+  },
+  card:{
+    width:200,
+    marginLeft:10,
+    borderRadius:10,
+  },
+  image:{
+    height: 120, 
+    width: 200, 
+    borderTopLeftRadius:10,
+    borderTopRightRadius:10,
+    flex: 1
+  },
+  cardText:{
+    color:'#000',
+    fontSize:15,
+  },
+  carditemText:{
+    color: '#1e1e1e',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    paddingLeft: 20,
+    paddingBottom: 5
+  },
+  viewContentStar:{
+      flexDirection: 'row',
+      alignSelf: 'flex-start',
+      paddingLeft: 15,
+  },
+  star:{
+    color: '#b8d533'
+  },
+  viewContentStarText:{
+    fontSize: 12,
+    color: '#5f5f5f',
+    paddingTop: 7,
+    paddingLeft: 6
+  },
+  footer:{
+    alignSelf:'flex-end',
+    marginRight: 10,
+  },
+  footerText:{
+    backgroundColor:'#ebebec',
+    borderTopLeftRadius:5,
+    borderBottomLeftRadius:5,
+  },
+  footerIcon:{
+    backgroundColor:'#cbb6b6',
+    borderTopRightRadius:5,
+    borderBottomRightRadius:5,
+  }
+
+});

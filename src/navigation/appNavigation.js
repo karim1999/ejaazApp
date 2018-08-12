@@ -6,6 +6,9 @@ import Interface from "../screens/app/Interface";
 import Categories from "../screens/app/Categories";
 import Favourites from "../screens/app/Favourites";
 import Profile from "../screens/app/Profile";
+import Settings from "../screens/app/Settings";
+import CourseView from "../screens/app/CourseView";
+import ProfileInfo from "../screens/app/ProfileInfo";
 import Color from "../constants/colors";
 
 const AppStack = createMaterialTopTabNavigator (
@@ -13,7 +16,10 @@ const AppStack = createMaterialTopTabNavigator (
         Interface,
         Categories,
         Favourites,
-        Profile
+        Profile,
+        Settings,
+        CourseView,
+        ProfileInfo
     },
     {
         navigationOptions: ({ navigation }) => ({

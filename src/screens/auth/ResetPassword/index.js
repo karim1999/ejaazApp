@@ -79,7 +79,8 @@ export default class ResetPassword extends Component {
         return (
             <AuthTemplate>
                 <Form>
-                    <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
+                    <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}
+                    onPress={()=> this.props.navigation.navigate('SignIn')}/>
                     <Item rounded style={styles.input}>
                         <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({email: val})}/>
