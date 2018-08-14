@@ -9,6 +9,8 @@ import Profile from "../screens/app/Profile";
 import Settings from "../screens/app/Settings";
 import CourseView from "../screens/app/CourseView";
 import ProfileInfo from "../screens/app/ProfileInfo";
+import Search from "../screens/app/Search";
+import CourseName from "../screens/app/CourseName";
 import Color from "../constants/colors";
 
 const AppStack = createMaterialTopTabNavigator (
@@ -19,7 +21,9 @@ const AppStack = createMaterialTopTabNavigator (
         Profile,
         Settings,
         CourseView,
-        ProfileInfo
+        ProfileInfo,
+        Search,
+        CourseName
     },
     {
         navigationOptions: ({ navigation }) => ({

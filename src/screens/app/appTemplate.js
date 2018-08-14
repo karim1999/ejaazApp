@@ -23,7 +23,7 @@ export default class AppTemplate extends Component {
                     </Body>
                     <Right>
                         <Button transparent>
-                            <Icon name='md-search' />
+                            <Icon onPress={()=> this.props.navigation.navigate('Search')} name='md-search' />
                         </Button>
                         <Button transparent>
                             <Icon name='md-cart' />
