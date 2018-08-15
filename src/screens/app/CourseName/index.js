@@ -18,10 +18,7 @@ export default class CourseName extends Component {
 
   render() {
     return (
-          <Video
-            source={require('./broadchurch.mp4')}
-           
-          />
+          <Text>sadasd</Text>
       
     );
   }
