@@ -4,7 +4,7 @@ import Home from '../screens/app/Home';
 import {Icon, Text} from "native-base";
 import Interface from "../screens/app/Interface";
 import Categories from "../screens/app/Categories";
-import Favourites from "../screens/app/Favourites";
+import Favorites from "../screens/app/Favorites";
 import Profile from "../screens/app/Profile";
 import Settings from "../screens/app/Settings";
 import CourseView from "../screens/app/CourseView";
@@ -17,13 +17,13 @@ const AppStack = createMaterialTopTabNavigator (
     {
         Interface,
         Categories,
-        Favourites,
+        Favorites,
         Profile,
         Settings,
         CourseView,
         ProfileInfo,
         Search,
-        CourseName
+        CourseName,
     },
     {
         navigationOptions: ({ navigation }) => ({
@@ -35,7 +35,7 @@ const AppStack = createMaterialTopTabNavigator (
                 } else if (routeName === 'Categories') {
                     iconName = 'apps';
                 }
-                else if (routeName === 'Favourites') {
+                else if (routeName === 'Favorites') {
                     iconName = 'heart';
                 }
                 else if (routeName === 'Profile') {

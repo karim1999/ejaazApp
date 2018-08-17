@@ -24,6 +24,7 @@ export default class CourseName extends Component {
                }}
                style={styles.backgroundVideo}
         />
+        // <Text>sd</Text>
 
     );
   }

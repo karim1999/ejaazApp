@@ -62,25 +62,15 @@ export default class ResetPassword extends Component {
         });
         }
     }
-    componentDidMount(){
-        // Imprtant Read it --------------------------------->
-        /*
-        (here we use fetch function to get data from server and we set it into
-        state via function called setState
-        and we have constant for the server imported
-        use it  : server.url
-      )
-        --hint
-        please note that hint is created for you to search for the names mentioned here
-        and don't always ask project owner make google your best friend
-        */
-    }
+
     render() {
         return (
             <AuthTemplate>
                 <Form>
-                    <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}
-                    onPress={()=> this.props.navigation.navigate('SignIn')}/>
+                    <Image 
+                    source={require("../../../images/Logosampletwo.png")}
+                     style={{height: 200, width: 200,alignSelf: 'center', }}
+                    />
                     <Item rounded style={styles.input}>
                         <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({email: val})}/>
@@ -91,6 +81,9 @@ export default class ResetPassword extends Component {
                         <ActivityIndicator style={{}} size="small" color="#000000" />
                     )}
                     </Button>
+                    <TouchableOpacity style={{alignItems: 'center',}} onPress={()=> this.props.navigation.navigate('SignIn')}>
+                        <Text style={styles.loginButton}>Back to login?</Text>
+                    </TouchableOpacity>
                 </Form>
 
             </AuthTemplate>
@@ -121,5 +114,10 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#fff',
         textAlign: 'center',
+    },
+    loginButton:{
+        color:'#367fa9',
+        fontSize: 16,
+        fontWeight: '500',
     }
 });

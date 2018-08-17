@@ -1,9 +1,30 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, FlatList } from 'react-native';
 import { Container, Content, Card, CardItem, Button, Icon, Text, Body, H2 } from 'native-base';
+import axios from "axios";
+import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
 
 export default class Interface extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      isLoading: true,
+      cloneInterface:[]
+    }
+  }
+
+  componentDidMount(){
+    return axios.get(Server.url + 'api/auth/courses/1').then(response => {
+      this.setState({
+        isLoading: false,
+        cloneInterface: response.data
+      });
+    }).catch(error => {
+      alert(error.data)
+    })
+  }
+
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="News feed">
@@ -11,41 +32,47 @@ export default class Interface extends Component {
                   <Content>
                     <View style={styles.container}>
                       <H2 style={styles.containerH1}>New and Noteworth</H2>
-
-                      <View style={styles.viewDirection}>
-                        <Card style={styles.card}>
-                          <CardItem cardBody>
-                            <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
-                            </CardItem>
-                            <CardItem header>
-                            <Text style={styles.cardText}>Learn how to take care of your health</Text>
-                          </CardItem>
-            
-                          <View>
-                              <Text style={styles.carditemText}>
-                                Abdelrahman
-                              </Text>
-                          </View>
+                      <FlatList 
+                      data={this.state.cloneInterface}
+                      renderItem={({item}) => (
                         
-                          <View style={styles.viewContentStar}>
-                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                            <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                            <Text style={styles.viewContentStarText}>4.6</Text>
-                          </View>
-            
-                          <View footer style={styles.footer}>
-                            <Button transparent>
-                              <Text style={styles.footerText}>20</Text> 
-                              <Text style={styles.footerIcon}>$</Text>
-                            </Button>
-                          </View>
-                        </Card>
-          
-                    
+                        <View style={styles.viewDirection}>
+                          <Card style={styles.card}>
+                            <CardItem cardBody>
+                              <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
+                              </CardItem>
+                              <CardItem header>
+                              <Text style={styles.cardText}>{item.title}</Text>
+                            </CardItem>
+              
+                            <View>
+                                <Text style={styles.carditemText}>
+                                  {item.user_name}
+                                </Text>
+                            </View>
+                          
+                            <View style={styles.viewContentStar}>
+                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                              <Text style={styles.viewContentStarText}>4.6</Text>
+                            </View>
+              
+                            <View footer style={styles.footer}>
+                              <Button transparent>
+                                <Text style={styles.footerText}>{item.price}</Text> 
+                                <Text style={styles.footerIcon}>$</Text>
+                              </Button>
+                            </View>
+                          </Card>
+
                       </View>
+                      )}
+
+                      keyExtractor = { (item, index) => index.toString() }
+                      />
                     </View>
                     
                   </Content>
