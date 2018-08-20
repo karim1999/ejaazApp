@@ -15,7 +15,7 @@ export default class Interface extends Component {
   }
 
   componentDidMount(){
-    return axios.get(Server.url + 'api/auth/courses/1').then(response => {
+    return axios.get(Server.url + 'api/auth/courses').then(response => {
       this.setState({
         isLoading: false,
         cloneInterface: response.data
@@ -42,7 +42,8 @@ export default class Interface extends Component {
                               <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
                               </CardItem>
                               <CardItem header>
-                              <Text style={styles.cardText}>{item.title}</Text>
+                              <Text onPress={()=> this.props.navigation.navigate('CourseView')} style={styles.cardText}>
+                              {item.title}</Text>
                             </CardItem>
               
                             <View>

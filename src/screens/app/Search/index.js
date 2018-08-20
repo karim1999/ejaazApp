@@ -5,6 +5,22 @@ import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
 
 export default class Search extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            isSearch:false,
+            search:""
+        }
+    }
+
+    onSearchPressed(){
+        return axios.post(Server.url + 'api/auth/search',{
+            search: this.state.search
+        }).then(response => {
+
+        })
+    }
+
     render() {
         return (
             <Container style={styles.all}>

@@ -1,58 +1,129 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
-import { Container, Content, Card, CardItem, Button, Icon, Text, Body, H2, H3 } from 'native-base';
+import { StyleSheet, Image, View, FlatList, ActivityIndicator } from 'react-native';
+import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast } from 'native-base';
 import AppTemplate from "../appTemplate";
+import axios from "axios";
+import Server from "../../../constants/config";
 
 export default class CourseView extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      isLoading: true,
+      cloneCourseView:[],
+      isCommented: false,
+      comment: "",
+    }
+  }
+
+   onCommentPressed(){
+        if(this.state.comment == ""){
+            
+            Toast.show({
+                text: 'comment cannot be empty.',
+                type: "danger",
+                buttonText: 'Okay'
+            });
+        
+        }else{
+             this.setState({
+                isCommented:true
+            });
+
+        return axios.post(Server.url+'api/auth/comment/1/1',{
+
+            comment: this.state.comment
+            
+        }).then(response => {
+            Toast.show({
+                text: 'Successfully commented.',
+                type: 'success',
+                buttonText: 'Okay'
+            });
+            this.setState({
+                isCommented: false,
+            });
+        });
+      }
+    }
+
+  componentDidMount(){
+    return axios.get(Server.url + 'api/auth/courses').then(response => {
+      this.setState({
+        isLoading: false,
+        cloneCourseView: response.data
+      });
+    }).catch(error => {
+      alert(error.data)
+    })
+  }
+
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="News feed">
                 <Container style={styles.all}>
                   <Content>
-                    <View style={styles.container}>
-                        <View style={styles.paddingContent}>
-                            <H2 style={styles.viewH2}>UI Design Course</H2>
-                            <Text style={styles.viewText}>
-                            lorem ipsum is simply dummy text of the printing and typesetting industry.
-                            </Text>
+                    <FlatList 
+                      data={this.state.cloneCourseView}
+                      renderItem={({item}) => (
+                        <View style={styles.container}>
+                            <View style={styles.paddingContent}>
+                                <H2 style={styles.viewH2}>{item.title}</H2>
+                                <Text style={styles.viewText}>
+                                {item.description}
+                                </Text>
 
-                            <H2 style={styles.viewH2Padd}>Trainer</H2>
-                            <Text style={styles.viewText}>
-                            Lorem Ipsum has been the industry's.
-                            </Text>
-                        </View>
-                        <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
+                                <H2 style={styles.viewH2Padd}>{item.user_name}</H2>
+                                <Text style={styles.viewText}>
+                                Lorem Ipsum has been the industry's.
+                                </Text>
+                            </View>
+                            <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
 
-                        <View style={styles.paddingContent}>
-                            <H2 >Price</H2>
-                            <Button transparent>
-                              <Text style={styles.footerText}>200</Text> 
-                              <Text style={styles.footerIcon}>$</Text>
-                            </Button>
-                            <H2>Rating</H2>
-                            <View style={styles.viewContentStar}>
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                            <View style={styles.paddingContent}>
+                                <H2 >Price</H2>
+                                <Button transparent>
+                                  <Text style={styles.footerText}>{item.price}</Text> 
+                                  <Text style={styles.footerIcon}>$</Text>
+                                </Button>
+                                <H2>Rating</H2>
+                                <View style={styles.viewContentStar}>
+                                  <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
+                                </View>
+                              <Button style={styles.button}><Text> Buy </Text></Button>
+                              <Text style={styles.viewH2Padd}>Reviews and comments</Text>
+                              <Item regular style={styles.input}>
+                                  <Input style={styles.inputText} placeholder="Write comment..." placeholderTextColor="#ccc5c5"
+                                    onChangeText={(val) => this.setState({comment: val})}/>
+                              </Item>
+                              <Button info style={styles.button} onPress={this.onCommentPressed.bind(this)}>
+                                <Text style={styles.buttonText}> Submit </Text>
+                                {this.state.isCommented && (
+                                    <ActivityIndicator style={{}} size="small" color="#000000" />
+                                )}
+                              </Button>
+                              {/* <View style={styles.reviewComment}>
+                                <Image source={require("../../../images/images.png")} style={styles.imageComment}/>
+                                <Text style={styles.commentName}>Abdelrahman Labib</Text>
+                                <View style={styles.viewContentStarComment}>
+                                  <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
+                                  <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
+                                </View>
+                              </View>
+                              <Text style={styles.commentText}>Lsdasdasdsdsdasd</Text> */}
                             </View>
-                          <Button style={styles.button}><Text> Buy </Text></Button>
-                          <Text style={styles.viewH2Padd}>Reviews and comments</Text>
-                          <View style={styles.reviewComment}>
-                            <Image source={require("../../../images/images.png")} style={styles.imageComment}/>
-                            <Text style={styles.commentName}>Abdelrahman Labib</Text>
-                            <View style={styles.viewContentStarComment}>
-                              <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.starComment} type="MaterialCommunityIcons" name="star" /> 
-                            </View>
-                          </View>
-                          <Text style={styles.commentText}>Lsdasdasdsdsdasd</Text>
                         </View>
-                    </View>
+                        )}
+                        
+                      keyExtractor = { (item, index) => index.toString() }
+                    />
                   </Content>
               </Container>
             </AppTemplate>
@@ -64,11 +135,11 @@ const styles = StyleSheet.create({
   all:{
       backgroundColor: '#fde9e9',
       padding:20,
+      height: '100%',
   },
   container: {
     alignSelf: 'center',
     width: '100%',
-    height: '100%',
     backgroundColor: '#fff',
   },
   paddingContent:{
@@ -139,5 +210,18 @@ const styles = StyleSheet.create({
   commentText:{
     paddingTop: 5
   },
+  input:{
+    width: 350,
+    marginBottom: 10,
+    marginTop: 10,
+    padding: 10,
+    height: 40,
+    alignSelf: 'center',
+    borderColor: '#000'
+},
+inputText:{
+    color: '#000',
+    fontSize: 16
+},
 
 });

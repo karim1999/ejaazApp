@@ -18,13 +18,13 @@ export default class CourseName extends Component {
 
   render() {
     return (
-        <Video source={{uri: "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"}}   // Can be a URL or a local file.
-               ref={(ref) => {
-                   this.player = ref
-               }}
-               style={styles.backgroundVideo}
-        />
-        // <Text>sd</Text>
+        // <Video source={{uri: "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"}}   // Can be a URL or a local file.
+        //        ref={(ref) => {
+        //            this.player = ref
+        //        }}
+        //        style={styles.backgroundVideo}
+        // />
+        <Text>sd</Text>
 
     );
   }
