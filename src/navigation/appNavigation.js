@@ -51,7 +51,7 @@ const AppStack = createMaterialTopTabNavigator (
         }),
         tabBarPosition: 'bottom',
         animationEnabled: false,
-        swipeEnabled: true,
+        swipeEnabled: false,
 
         tabBarOptions: {
             showLabel: false,

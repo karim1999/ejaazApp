@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import Server from "../constants/config";
 import {connect} from "react-redux";
-import {setUser} from "../reducers";
+import {setUser, setCategories} from "../reducers";
 
 class AuthLoadingScreen extends React.Component {
     constructor(props) {
@@ -21,7 +21,8 @@ class AuthLoadingScreen extends React.Component {
         const userToken = await AsyncStorage.getItem('token');
         if(userToken){
             return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
-                this.props.setUser(response.data);
+                this.props.setUser(response.data.user);
+                this.props.setCategories(response.data.categories);
                 this.props.navigation.navigate('App');
             }).catch(error => {
                 // return AsyncStorage.removeItem('token').then(()=>{
@@ -58,7 +59,8 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = {
-    setUser
+    setUser,
+    setCategories
 };
 export default connect(
     mapStateToProps,

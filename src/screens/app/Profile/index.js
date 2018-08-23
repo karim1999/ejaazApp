@@ -1,57 +1,67 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, AsyncStorage} from 'react-native';
 import { Container, Content, Text, Button, Icon, H2, } from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
+import {connect} from "react-redux";
+import {setUser} from "../../../reducers";
 
-export default class Profile extends Component {
+class Profile extends Component {
+    logout(){
+        return AsyncStorage.removeItem('token').then(()=>{
+            this.props.navigation.navigate('Auth');
+        });
+    }
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="Profile">
-               
-                        <View style={styles.container}>
-                            <Icon active style={styles.setting} type="MaterialCommunityIcons" name="settings" 
-                            onPress={()=> this.props.navigation.navigate('Settings')}/>
-                            <H2 style={styles.containerH2}>Zac Efron</H2>
-                            <Icon active style={styles.edit} type="FontAwesome" name="edit" />
-                        </View>
-                        <View style={styles.viewImage}>
-                            <Image style={styles.image} source={require("../../../images/trend-kid-com-ROUND.jpg")} />
-                            <Text style={styles.viewImageText}>UI Trainer</Text>
-                        </View>
-                        <View style={styles.courseFollow}>
-                            <View style={styles.course}>
-                                <Text style={styles.text}>Courses</Text>
-                                <Text style={styles.text}>30</Text>
-                            </View>
-                            <Text style={styles.separate}></Text>
-                            <View style={styles.follow}>
-                                <Text style={styles.text}>Followers</Text>
-                                <Text style={styles.text}>1000</Text>
-                            </View>
-                        </View>
-                        <Hr lineColor="#e5e3e3" width={1} />
-                        <View style={styles.Profile}>
-                            <Text style={styles.textProfil}>Profile info</Text>
-                            <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"
-                            onPress={()=> this.props.navigation.navigate('ProfileInfo')} />
-                        </View>
-                        <Hr lineColor="#e5e3e3" width={1} />
-                        <View style={styles.Profile}>
-                            <Text style={styles.textProfil}>Courses</Text>
-                            <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
-                        </View>
-                        <Hr lineColor="#e5e3e3" width={1} />
-                        <View style={styles.Profile}>
-                            <Text style={styles.textProfil}>Messages</Text>
-                            <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
-                        </View>
-                        <Hr lineColor="#e5e3e3" width={1} />
-                        <View style={styles.Profile}>
-                            <Text style={styles.textProfil}>Testimonials</Text>
-                            <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
-                        </View>
-                        
+
+                <View style={styles.container}>
+                    <Icon active style={styles.setting} type="MaterialCommunityIcons" name="settings"
+                          onPress={()=> this.props.navigation.navigate('Settings')}/>
+                    <H2 style={styles.containerH2}>{this.props.user.name}</H2>
+                    <Icon active style={styles.edit} type="FontAwesome" name="edit" />
+                </View>
+                <View style={styles.viewImage}>
+                    <Image style={styles.image} source={require("../../../images/trend-kid-com-ROUND.jpg")} />
+                    <Text style={styles.viewImageText}>UI Trainer</Text>
+                </View>
+                <View style={styles.courseFollow}>
+                    <View style={styles.course}>
+                        <Text style={styles.text}>Courses</Text>
+                        <Text style={styles.text}>30</Text>
+                    </View>
+                    <Text style={styles.separate}></Text>
+                    <View style={styles.follow}>
+                        <Text style={styles.text}>Followers</Text>
+                        <Text style={styles.text}>1000</Text>
+                    </View>
+                </View>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <View style={styles.Profile}>
+                    <Text style={styles.textProfil}>Profile info</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"
+                          onPress={()=> this.props.navigation.navigate('ProfileInfo')} />
+                </View>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <View style={styles.Profile}>
+                    <Text style={styles.textProfil}>Courses</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
+                </View>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <View style={styles.Profile}>
+                    <Text style={styles.textProfil}>Messages</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
+                </View>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <TouchableOpacity
+                    onPress={() => this.logout()}>
+                    <View style={styles.Profile}>
+                        <Text style={styles.textProfil}>Logout</Text>
+                        <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
+                    </View>
+                </TouchableOpacity>
+
             </AppTemplate>
         );
     }
@@ -73,7 +83,7 @@ const styles = StyleSheet.create({
         left: 20
     },
     edit:{
-        fontSize: 20, 
+        fontSize: 20,
         position: 'absolute',
         top: 20,
         right: 20,
@@ -102,12 +112,12 @@ const styles = StyleSheet.create({
         color: '#515151',
         alignSelf: 'center'
     },
-    separate:{   
+    separate:{
         marginLeft: 75,
-        marginRight: 65,    
+        marginRight: 65,
         borderStyle: 'solid',
         borderRightWidth: 1,
-        borderRightColor: '#e5e3e3', 
+        borderRightColor: '#e5e3e3',
     },
     Profile:{
         height: 60,
@@ -125,4 +135,15 @@ const styles = StyleSheet.create({
         top: 17,
         right: 30
     }
-})
+});
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Profile);

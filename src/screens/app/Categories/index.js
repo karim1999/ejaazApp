@@ -1,28 +1,21 @@
 import React from 'react';
-import {StyleSheet, View, FlatList} from 'react-native';
+import {StyleSheet, View, FlatList, AsyncStorage} from 'react-native';
 import { Container, Content, List, ListItem, Text, Left, Right, Icon, ActivityIndicator } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
+import {connect} from "react-redux";
+import {setCategories} from "../../../reducers";
 
 
-export default class Categories extends React.Component {
+class Categories extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
-            cloneCategory:[]
         }
     }
     componentDidMount(){
-        return axios.get(Server.url + 'api/auth/category').then(response => {
-            this.setState({
-                isLoading:false,
-                cloneCategory: response.data
-            });
-        }).catch(error => {
-            alert(error.data)
-        })
     }
 
     render() {
@@ -33,7 +26,7 @@ export default class Categories extends React.Component {
                         <Content>
                             <List>
                                 <FlatList
-                                    data={this.state.cloneCategory}
+                                    data={this.props.categories}
                                     renderItem={({item}) => (
                                         <ListItem>
                                             <Left>
@@ -63,3 +56,14 @@ const styles = StyleSheet.create({
     },
 
 });
+const mapStateToProps = ({ categories }) => ({
+    categories
+});
+
+const mapDispatchToProps = {
+    setCategories
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Categories);

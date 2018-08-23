@@ -5,7 +5,7 @@ import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
 import axios from "axios";
-import {setUser} from "../../../reducers";
+import {setUser, setCategories} from "../../../reducers";
 import {connect} from "react-redux";
 
 class SignIn extends Component {
@@ -43,13 +43,14 @@ class SignIn extends Component {
                 password: this.state.password,
             }).then(response => {
                 this.props.setUser(response.data.user, response.data.access_token);
+                this.props.setCategories(response.data.categories);
                 let item= this.storeItem('token', response.data.access_token);
                 Toast.show({
                     text: 'Logged in successfully',
                     type: "success",
                     buttonText: 'Okay'
                 });
-                this.props.navigation.navigate('Home');
+                this.props.navigation.navigate('App');
                 this.setState({
                     isSigningIn: false
                 });
@@ -157,7 +158,8 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = {
-    setUser
+    setUser,
+    setCategories
 };
 export default connect(
     mapStateToProps,

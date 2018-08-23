@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, FlatList, ActivityIndicator } from 'react-native';
+import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage} from 'react-native';
 import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast } from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
@@ -30,7 +30,7 @@ export default class CourseView extends Component {
                 isCommented:true
             });
 
-        return axios.post(Server.url+'api/auth/comment/1/1',{
+        return axios.post(Server.url+'api/course/1/comment',{
 
             comment: this.state.comment
             
@@ -48,14 +48,17 @@ export default class CourseView extends Component {
     }
 
   componentDidMount(){
-    return axios.get(Server.url + 'api/auth/courses').then(response => {
-      this.setState({
-        isLoading: false,
-        cloneCourseView: response.data
+      AsyncStorage.getItem('token').then(userToken => {
+          return axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
+              this.setState({
+                  isLoading: false,
+                  cloneInterface: response.data
+              });
+          }).catch(error => {
+              // alert(error.data)
+          })
       });
-    }).catch(error => {
-      alert(error.data)
-    })
+
   }
 
     render() {

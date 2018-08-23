@@ -14,7 +14,7 @@ export default class Search extends Component {
     }
 
     onSearchPressed(){
-        return axios.post(Server.url + 'api/auth/search',{
+        return axios.post(Server.url + 'api/search',{
             search: this.state.search
         }).then(response => {
 
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#627ffb',
         marginTop: 20
     }
-})
+});

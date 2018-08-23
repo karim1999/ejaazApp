@@ -1,148 +1,104 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, FlatList } from 'react-native';
+import {StyleSheet, Image, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity} from 'react-native';
 import { Container, Content, Card, CardItem, Button, Icon, Text, Body, H2 } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
+import Course from "../../../components/course";
+import Carousel from "react-native-snap-carousel";
+
 
 export default class Interface extends Component {
-  constructor(props){
-    super(props);
-    this.state={
-      isLoading: true,
-      cloneInterface:[]
+    constructor(props){
+        super(props);
+        this.state={
+            isLoading: false,
+            cloneInterface:[]
+        }
     }
-  }
-
-  componentDidMount(){
-    return axios.get(Server.url + 'api/auth/courses').then(response => {
-      this.setState({
-        isLoading: false,
-        cloneInterface: response.data
-      });
-    }).catch(error => {
-      alert(error.data)
-    })
-  }
+    _onLoad(){
+        this.setState({
+            isLoading: true
+        });
+        return AsyncStorage.getItem('token').then(userToken => {
+            return axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
+                this.setState({
+                    isLoading: false,
+                    cloneInterface: response.data
+                });
+            }).catch(error => {
+                alert(error.data)
+            })
+        }).then(() => {
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+    async componentDidMount(){
+        await this._onLoad();
+    }
+    _renderItem ({item, index}) {
+        return (
+            <View>
+                <Text>{ item.title }</Text>
+            </View>
+        );
+    }
+    wp (percentage) {
+        const Screen = Dimensions.get('window');
+        const value = (percentage * Screen.width) / 100;
+        return Math.round(value);
+    }
 
     render() {
         return (
-            <AppTemplate navigation={this.props.navigation} title="News feed">
+            <AppTemplate interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="News feed">
                 <Container>
-                  <Content>
-                    <View style={styles.container}>
-                      <H2 style={styles.containerH1}>New and Noteworth</H2>
-                      <FlatList 
-                      data={this.state.cloneInterface}
-                      renderItem={({item}) => (
-                        
-                        <View style={styles.viewDirection}>
-                          <Card style={styles.card}>
-                            <CardItem cardBody>
-                              <Image source={require("../../../images/graphic-design-courses.jpg")} style={styles.image}/>
-                              </CardItem>
-                              <CardItem header>
-                              <Text onPress={()=> this.props.navigation.navigate('CourseView')} style={styles.cardText}>
-                              {item.title}</Text>
-                            </CardItem>
-              
-                            <View>
-                                <Text style={styles.carditemText}>
-                                  {item.user_name}
-                                </Text>
+                    <Content>
+                        <View>
+                            <View style={styles.container}>
+                                <H2 style={styles.containerH1}>New and Noteworth</H2>
                             </View>
-                          
-                            <View style={styles.viewContentStar}>
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" /> 
-                              <Text style={styles.viewContentStarText}>4.6</Text>
-                            </View>
-              
-                            <View footer style={styles.footer}>
-                              <Button transparent>
-                                <Text style={styles.footerText}>{item.price}</Text> 
-                                <Text style={styles.footerIcon}>$</Text>
-                              </Button>
-                            </View>
-                          </Card>
+                            <Carousel
+                                layout={'default'}
+                                ref={(c) => { this._carousel = c; }}
+                                data={this.state.cloneInterface}
+                                renderItem={({item}) => (
+                                    <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                        <Course {...item} user_name={item.user.name} />
+                                    </TouchableOpacity>
+                                )}
+                                sliderWidth={this.wp(100)}
+                                itemWidth={this.wp(40)}
+                                contentContainerCustomStyle	={{justifyContent:'center'}}
+                                containerCustomStyle={{paddingVertical: 20}}
+                                inactiveSlideScale={0.95}
+                                inactiveSlideOpacity={.6}
+                                activeSlideAlignment={'start'}
+                                loop={true}
 
-                      </View>
-                      )}
-
-                      keyExtractor = { (item, index) => index.toString() }
-                      />
-                    </View>
-                    
-                  </Content>
-              </Container>
+                                activeAnimationType={'spring'}
+                                onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                                activeAnimationOptions={{
+                                    friction: 1,
+                                    tension: 1
+                                }}
+                            />
+                        </View>
+                    </Content>
+                </Container>
             </AppTemplate>
         );
     }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding:5,
-  },
-  containerH1:{
-    marginLeft:10
-  },
-  viewDirection:{
-    flexDirection:'row',
-  },
-  card:{
-    width:200,
-    marginLeft:10,
-    borderRadius:10,
-  },
-  image:{
-    height: 120, 
-    width: 200, 
-    borderTopLeftRadius:10,
-    borderTopRightRadius:10,
-    flex: 1
-  },
-  cardText:{
-    color:'#000',
-    fontSize:15,
-  },
-  carditemText:{
-    color: '#1e1e1e',
-    fontSize: 12,
-    alignSelf: 'flex-start',
-    paddingLeft: 20,
-    paddingBottom: 5
-  },
-  viewContentStar:{
-      flexDirection: 'row',
-      alignSelf: 'flex-start',
-      paddingLeft: 15,
-  },
-  star:{
-    color: '#b8d533'
-  },
-  viewContentStarText:{
-    fontSize: 12,
-    color: '#5f5f5f',
-    paddingTop: 7,
-    paddingLeft: 6
-  },
-  footer:{
-    alignSelf:'flex-end',
-    marginRight: 10,
-  },
-  footerText:{
-    backgroundColor:'#ebebec',
-    borderTopLeftRadius:5,
-    borderBottomLeftRadius:5,
-  },
-  footerIcon:{
-    backgroundColor:'#cbb6b6',
-    borderTopRightRadius:5,
-    borderBottomRightRadius:5,
-  }
-
+    container: {
+        padding:5,
+    },
+    containerH1:{
+        marginLeft:10
+    }
 });
