@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity} from 'react-native';
-import { Container, Content, Card, CardItem, Button, Icon, Text, Body, H2 } from 'native-base';
+import { Container, Content, Card, CardItem, Button, Icon, Text, H2, Fab } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
@@ -54,39 +54,51 @@ export default class Interface extends Component {
     render() {
         return (
             <AppTemplate interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="News feed">
-                <Container>
+                <Container style={styles.all}>
                     <Content>
-                        <View>
-                            <View style={styles.container}>
-                                <H2 style={styles.containerH1}>New and Noteworth</H2>
-                            </View>
-                            <Carousel
-                                layout={'default'}
-                                ref={(c) => { this._carousel = c; }}
-                                data={this.state.cloneInterface}
-                                renderItem={({item}) => (
-                                    <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                                        <Course {...item} user_name={item.user.name} />
-                                    </TouchableOpacity>
-                                )}
-                                sliderWidth={this.wp(100)}
-                                itemWidth={this.wp(40)}
-                                contentContainerCustomStyle	={{justifyContent:'center'}}
-                                containerCustomStyle={{paddingVertical: 20}}
-                                inactiveSlideScale={0.95}
-                                inactiveSlideOpacity={.6}
-                                activeSlideAlignment={'start'}
-                                loop={true}
+                        <FlatList
+                            data={this.state.cloneInterface}
+                            renderItem={({item}) => (
+                            <View>
+                                <View style={styles.container}>
+                                    <H2 style={styles.containerH1}>{item.name}</H2>
+                                </View>
+                                <Carousel
+                                    layout={'default'}
+                                    ref={(c) => { this._carousel = c; }}
+                                    data={item.courses}
+                                    renderItem={({item}) => (
+                                        <TouchableOpacity
+                                        onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                            <Course {...item} user_name={item.user.name} />
+                                        </TouchableOpacity>
+                                    )}
+                                    sliderWidth={this.wp(100)}
+                                    itemWidth={this.wp(40)}
+                                    contentContainerCustomStyle	={{justifyContent:'center'}}
+                                    containerCustomStyle={{paddingVertical: 20}}
+                                    inactiveSlideScale={0.95}
+                                    inactiveSlideOpacity={.6}
+                                    activeSlideAlignment={'start'}
+                                    loop={false}
 
-                                activeAnimationType={'spring'}
-                                onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                                activeAnimationOptions={{
-                                    friction: 1,
-                                    tension: 1
-                                }}
-                            />
-                        </View>
+                                    activeAnimationType={'spring'}
+                                    onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                                    activeAnimationOptions={{
+                                        friction: 1,
+                                        tension: 1
+                                    }}
+                                />
+                            </View>
+                            )}
+                            keyExtractor = { (item, index) => index.toString() }
+                        />
+                        <Fab
+                            style={{ backgroundColor: '#5067FF' }}
+                            position="bottomRight"
+                            onPress={() => this.props.navigation.navigate('AddCourse')}>
+                            <Icon name="share" />
+                        </Fab>
                     </Content>
                 </Container>
             </AppTemplate>
@@ -95,6 +107,9 @@ export default class Interface extends Component {
 }
 
 const styles = StyleSheet.create({
+    all:{
+        height: '100%'
+    },
     container: {
         padding:5,
     },

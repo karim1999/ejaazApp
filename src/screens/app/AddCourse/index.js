@@ -6,7 +6,7 @@ import {removeUser} from "../../../reducers";
 import {connect} from "react-redux";
 import axios from "axios"
 
-export default class Certificates extends Component {
+export default class AddCourse extends Component {
     constructor(props) {
         super(props);
         this.state = { chosenDate: new Date() };
@@ -21,47 +21,46 @@ export default class Certificates extends Component {
             <Container style={styles.all}>
                 <View style={styles.container}>
                     <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Name</Text>
+                        <Text style={styles.contentTxt}>Course title</Text>
                         <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="Name of your certificates..." placeholderTextColor="#ccc5c5"
+                            <Input style={styles.inputText} placeholder="Course title..." placeholderTextColor="#ccc5c5"
                             onChangeText={(val) => this.setState({Name: val})}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.contentTxt}>from</Text>
+                        <Text style={styles.contentTxt}>Number of hours</Text>
                         <Item regular style={styles.input}>
-                            <Input style={styles.inputText} keyboardType='numeric' placeholder="ex: From 5 years" placeholderTextColor="#ccc5c5"
+                            <Input style={styles.inputText} keyboardType='numeric' placeholder="ex:33h..." placeholderTextColor="#ccc5c5"
+                            onChangeText={(val) => this.setState({institution: val})}/>
+                        </Item>
+                    </View>
+                    <View style={styles.content}>
+                        <Text style={styles.contentTxt}>Budget</Text>
+                        <Item regular style={styles.input}>
+                            <Input style={styles.inputText} keyboardType='numeric' placeholder="Budget..." placeholderTextColor="#ccc5c5"
+                            onChangeText={(val) => this.setState({institution: val})}/>
+                        </Item>
+                    </View>
+                    <View style={styles.content}>
+                        <Text style={styles.contentTxt}>Category</Text>
+                        <Item regular style={styles.input}>
+                            <Input style={styles.inputText} placeholder="Category..." placeholderTextColor="#ccc5c5"
+                            onChangeText={(val) => this.setState({institution: val})}/>
+                        </Item>
+                    </View>
+                    <View style={styles.content}>
+                        <Text style={styles.contentTxt}>Course picture</Text>
+                        <Item regular style={styles.input}>
+                            <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
                             onChangeText={(val) => this.setState({institution: val})}/>
                         </Item>
                     </View>
                     <View style={styles.contentDescription}>
                         <Text style={styles.contentTxt}>Description</Text>
                         <Item regular style={styles.inputDescription}>
-                            <Input style={styles.inputText} placeholder="Description of your certificates..." placeholderTextColor="#ccc5c5"
+                            <Input style={styles.inputText} placeholder="Description..." placeholderTextColor="#ccc5c5"
                             onChangeText={(val) => this.setState({institution: val})}/>
                         </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>received_date</Text>
-                        <View style={styles.date}>
-                            <DatePicker
-                            defaultDate={new Date()}
-                            minimumDate={new Date(1990, 1, 1)}
-                            maximumDate={new Date(2018, 12, 31)}
-                            locale={"en"}
-                            timeZoneOffsetInMinutes={undefined}
-                            modalTransparent={false}
-                            animationType={"fade"}
-                            androidMode={"default"}
-                            placeHolderText="Select date"
-                            textStyle={{ color: "green" }}
-                            placeHolderTextStyle={{ color: "#cacaca" }}
-                            onDateChange={this.setDate}
-                            />
-                            {/* <Text>
-                            Date: {this.state.chosenDate.toString().substr(4, 12)}
-                            </Text> */}
-                        </View>  
                     </View>
                     <Button info style={styles.button} >
                         <Text style={styles.buttonText}> Submit </Text>
@@ -79,13 +78,10 @@ const styles = StyleSheet.create({
     all:{
         padding:20,
         backgroundColor: '#f1f1f1',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     container:{
         width: 370,
-        height: 350,
+        height: 500,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,
@@ -97,9 +93,6 @@ const styles = StyleSheet.create({
         marginBottom:25,
     },
     contentDescription:{
-        flexDirection: 'row',
-        height: 60,
-        marginBottom:25,
     },
     input:{
         width: 200,
@@ -110,12 +103,11 @@ const styles = StyleSheet.create({
         right: 0,
     },
     inputDescription:{
-        width: 200,
+        width: 300,
         padding: 10,
-        height:70,
+        height:120,
         borderRadius: 5,
-        position: 'absolute',
-        right: 0,
+        marginTop: 7
     },
     inputText:{
         color: '#918f8f',

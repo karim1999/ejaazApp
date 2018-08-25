@@ -20,7 +20,8 @@ class Profile extends Component {
                     <Icon active style={styles.setting} type="MaterialCommunityIcons" name="settings"
                           onPress={()=> this.props.navigation.navigate('Settings')}/>
                     <H2 style={styles.containerH2}>{this.props.user.name}</H2>
-                    <Icon active style={styles.edit} type="FontAwesome" name="edit" />
+                    <Icon active style={styles.edit} type="FontAwesome" name="edit" 
+                    onPress={()=> this.props.navigation.navigate('UserInfo')}/>
                 </View>
                 <View style={styles.viewImage}>
                     <Image style={styles.image} source={require("../../../images/trend-kid-com-ROUND.jpg")} />

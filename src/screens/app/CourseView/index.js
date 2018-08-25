@@ -9,10 +9,7 @@ export default class CourseView extends Component {
   constructor(props){
     super(props);
     this.state={
-      isLoading: true,
-      cloneCourseView:[],
-      isCommented: false,
-      comment: "",
+      course: this.props.navigation.state.params
     }
   }
 
@@ -47,36 +44,21 @@ export default class CourseView extends Component {
       }
     }
 
-  componentDidMount(){
-      AsyncStorage.getItem('token').then(userToken => {
-          return axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
-              this.setState({
-                  isLoading: false,
-                  cloneInterface: response.data
-              });
-          }).catch(error => {
-              // alert(error.data)
-          })
-      });
 
-  }
 
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="News feed">
                 <Container style={styles.all}>
                   <Content>
-                    <FlatList 
-                      data={this.state.cloneCourseView}
-                      renderItem={({item}) => (
                         <View style={styles.container}>
                             <View style={styles.paddingContent}>
-                                <H2 style={styles.viewH2}>{item.title}</H2>
+                                <H2 style={styles.viewH2}>{this.state.course.title}</H2>
                                 <Text style={styles.viewText}>
-                                {item.description}
+                                {this.state.course.description}
                                 </Text>
 
-                                <H2 style={styles.viewH2Padd}>{item.user_name}</H2>
+                                <H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>
                                 <Text style={styles.viewText}>
                                 Lorem Ipsum has been the industry's.
                                 </Text>
@@ -86,7 +68,7 @@ export default class CourseView extends Component {
                             <View style={styles.paddingContent}>
                                 <H2 >Price</H2>
                                 <Button transparent>
-                                  <Text style={styles.footerText}>{item.price}</Text> 
+                                  <Text style={styles.footerText}>{this.state.course.price}</Text> 
                                   <Text style={styles.footerIcon}>$</Text>
                                 </Button>
                                 <H2>Rating</H2>
@@ -123,10 +105,6 @@ export default class CourseView extends Component {
                               <Text style={styles.commentText}>Lsdasdasdsdsdasd</Text> */}
                             </View>
                         </View>
-                        )}
-                        
-                      keyExtractor = { (item, index) => index.toString() }
-                    />
                   </Content>
               </Container>
             </AppTemplate>

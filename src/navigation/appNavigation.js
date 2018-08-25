@@ -1,5 +1,5 @@
 import React from 'react';
-import {createMaterialTopTabNavigator } from 'react-navigation';
+import {createMaterialTopTabNavigator, createStackNavigator } from 'react-navigation';
 import Home from '../screens/app/Home';
 import {Icon, Text} from "native-base";
 import Interface from "../screens/app/Interface";
@@ -11,36 +11,68 @@ import CourseView from "../screens/app/CourseView";
 import ProfileInfo from "../screens/app/ProfileInfo";
 import Search from "../screens/app/Search";
 import CourseName from "../screens/app/CourseName";
+import UserCourses from '../screens/app/UserCourses';
+import UserInfo from '../screens/app/UserInfo';
+import Cart from '../screens/app/Cart';
+import AddCourse from '../screens/app/AddCourse';
 import Color from "../constants/colors";
 import SignUp from '../screens/auth/SignUp';
 
+const HomeStack = createStackNavigator({
+    Interface,
+    Search,
+    CourseName,
+    CourseView,
+    AddCourse
+},{
+    headerMode: 'none',
+});
+
+const ProfileStack = createStackNavigator({
+    Profile,
+    Settings,
+    ProfileInfo,
+    UserInfo
+
+},{
+    headerMode: 'none',
+});
+
+const CategoriesStack = createStackNavigator({
+    UserCourses,
+    Cart
+
+},{
+    headerMode: 'none',
+});
+
+const FavoriteStack = createStackNavigator({
+    Favorites,
+},{
+    headerMode: 'none',
+});
+
 const AppStack = createMaterialTopTabNavigator (
     {
-        Interface,
-        Categories,
-        Favorites,
-        Profile,
-        Settings,
-        CourseView,
-        ProfileInfo,
-        Search,
-        CourseName,
-        SignUp
+        HomeStack,
+        CategoriesStack,
+        FavoriteStack,
+        ProfileStack
     },
     {
         navigationOptions: ({ navigation }) => ({
             tabBarIcon: ({ focused, tintColor }) => {
                 const { routeName } = navigation.state;
                 let iconName;
-                if (routeName === 'Interface') {
+                if (routeName === 'HomeStack') {
                     iconName = 'paper';
-                } else if (routeName === 'Categories') {
+                } else if (routeName === 'CategoriesStack') {
                     iconName = 'apps';
                 }
-                else if (routeName === 'Favorites') {
+                else if (routeName === 'FavoriteStack') {
                     iconName = 'heart';
                 }
-                else if (routeName === 'Profile') {
+                else if (routeName === 'ProfileStack') {
                     iconName = 'person';
                 }
 
@@ -70,7 +102,7 @@ const AppStack = createMaterialTopTabNavigator (
             }
         },
 
-        initialRouteName: 'Interface',
+        initialRouteName: 'HomeStack',
     }
 );
 export default AppStack;

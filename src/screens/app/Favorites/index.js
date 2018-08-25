@@ -12,21 +12,21 @@ class Favorites extends Component {
         super(props);
         this.state={
             isLoading: true,
-            // cloneFavorites:[]
+            cloneFavorites:[]
         }
     }
 
     componentDidMount(){
-        // AsyncStorage.getItem('token').then(userToken => {
-        //     return axios.get(Server.url + 'api/user/favorites?token='+userToken).then(response => {
-        //         this.setState({
-        //             isLoading:false,
-        //             cloneFavorites: response.data
-        //         });
-        //     }).catch(error => {
-        //         // alert(error.data)
-        //     })
-        // })
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.get(Server.url + 'api/user/favorites?token='+userToken).then(response => {
+                this.setState({
+                    isLoading:false,
+                    cloneFavorites: response.data
+                });
+            }).catch(error => {
+                alert(error.data)
+            })
+        })
     }
     render() {
         return (
@@ -37,14 +37,14 @@ class Favorites extends Component {
                             ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add courses to favorites first</Text>
                             }
-                            data={this.props.user.courses}
+                            data={this.state.cloneFavorites}
                             renderItem={({item}) => (
 
                                 <View style={styles.container}>
                                     <ImageBackground source={require('../../../images/Web-Designing.jpg')} style={styles.image}>
                                         <View style={styles.viewContent}>
-                                            <Text style={styles.viewContentTxt}>{item.courses_title}</Text>
-                                            <Text style={styles.viewContentText}>{item.user_name}</Text>
+                                            <Text style={styles.viewContentTxt}>{item.title}</Text>
+                                            <Text style={styles.viewContentText}>{item.user.name}</Text>
                                             <View style={styles.viewContentStar}>
                                                 <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
                                                 <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
@@ -53,7 +53,7 @@ class Favorites extends Component {
                                                 <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
                                             </View>
                                             <Button transparent style={styles.footer}>
-                                                <Text style={styles.footerText}>{item.courses_price}</Text>
+                                                <Text style={styles.footerText}>{item.price}</Text>
                                                 <Text style={styles.footerIcon}>$</Text>
                                             </Button>
                                         </View>

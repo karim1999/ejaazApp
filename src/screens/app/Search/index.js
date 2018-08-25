@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, TextInput, } from 'react-native';
-import { Container, Content, Header, Body, Text, Button, Icon, H3, } from 'native-base';
+import { Container, Content, Header, Text, Button, Icon, H3, } from 'native-base';
 import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
 

@@ -10,8 +10,6 @@ import Security from "./Security";
 export default class Settings extends Component {
     render() {
         return (
-            <AppTemplate navigation={this.props.navigation} title="Setting">
-                <Container>
                     <Tabs>
                     <Tab heading="Education">
                         <Education />
@@ -26,8 +24,7 @@ export default class Settings extends Component {
                         <Security />
                     </Tab>
                     </Tabs>
-                </Container>
-                {/* <Container>
+                /* <Container>
                   <Content>
                     <Form>
                         <View>
@@ -59,8 +56,7 @@ export default class Settings extends Component {
                     </Form>
                     
                   </Content>
-              </Container> */}
-            </AppTemplate>
+              </Container> */
         );
     }
 }

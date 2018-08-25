@@ -67,7 +67,7 @@ class AppTemplate extends Component {
                             <Icon onPress={()=> this.props.navigation.navigate('Search')} name='md-search' />
                         </Button>
                         <Button transparent>
-                            <Icon name='md-cart' />
+                            <Icon onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
                         </Button>
                     </Right>
                 </Header>
