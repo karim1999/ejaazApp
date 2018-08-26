@@ -1,19 +1,40 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, } from 'react-native';
+import { StyleSheet, View, ActivityIndicator,AsyncStorage, FlatList } from 'react-native';
 import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, } from 'native-base';
 import Server from "../../../constants/config"
 import {removeUser} from "../../../reducers";
 import {connect} from "react-redux";
 import axios from "axios"
+import {setUser} from "../../../reducers";
 
-export default class UserInfo extends Component {
+class UserInfo extends Component {
     constructor(props) {
         super(props);
-        this.state = { chosenDate: new Date() };
-        this.setDate = this.setDate.bind(this);
+        this.state = {  
+            name:this.props.user.name,
+            country:this.props.user.country,
+            city:this.props.user.city,
+            address:this.props.user.address,
+            phone:this.props.user.phone,
+        };
       }
-      setDate(newDate) {
-        this.setState({ chosenDate: newDate });
+
+      componentDidMount(){
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
+                this.props.setUser(response.data.user);
+            }).catch(error => {
+                Toast.show({
+                    text: 'Error reaching the server.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+            })
+        }).then(() => {
+            this.setState({
+                refreshing: false
+            });
+        });
       }
 
     render() {
@@ -24,35 +45,35 @@ export default class UserInfo extends Component {
                         <Text style={styles.contentTxt}>Name</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({Name: val})}/>
+                            onChangeText={(val) => this.setState({Name: val})} value={this.state.name}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Country</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                            onChangeText={(val) => this.setState({institution: val})} value={this.state.country}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>City</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                            onChangeText={(val) => this.setState({institution: val})} value={this.state.city}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Address</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                            onChangeText={(val) => this.setState({institution: val})} value={this.state.address}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Phone number</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} keyboardType='numeric' placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                            onChangeText={(val) => this.setState({institution: val})} value={this.state.phone}/>
                         </Item>
                     </View>
                     <Button info style={styles.button} >
@@ -111,3 +132,15 @@ const styles = StyleSheet.create({
         bottom: 10
     },
 });
+
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserInfo);
