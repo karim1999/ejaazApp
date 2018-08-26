@@ -13,6 +13,12 @@ export const currentUser= (state = initialState, action) => {
         case "SET_CATEGORIES":
             return { ...state, categories: action.categories };
             break;
+        case "SET_FAVORITES":
+            return { ...state, user: {...state.user, favorites: action.favorites} };
+            break;
+        case "SET_CART":
+            return { ...state, user: {...state.user, cart: action.cart} };
+            break;
         case "REMOVE_USER":
             return { ...state, user: {}, loggedIn: false };
         default:
@@ -28,6 +34,14 @@ export const setUser = (user, token) => ({
 export const setCategories = (categories) => ({
     type: 'SET_CATEGORIES',
     categories
+});
+export const setFavorites = (favorites) => ({
+    type: 'SET_FAVORITES',
+    favorites
+});
+export const setCart = (cart) => ({
+    type: 'SET_CART',
+    cart
 });
 export const removeUser = () => ({
     type: 'REMOVE_USER'

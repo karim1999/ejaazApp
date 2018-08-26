@@ -7,6 +7,10 @@ import Categories from "../screens/app/Categories";
 import Favorites from "../screens/app/Favorites";
 import Profile from "../screens/app/Profile";
 import Settings from "../screens/app/Settings";
+import Education from "../screens/app/Settings/Education";
+import Certificates from "../screens/app/Settings/Certificates";
+import Jobs from "../screens/app/Settings/Jobs";
+import Security from "../screens/app/Settings/Security";
 import CourseView from "../screens/app/CourseView";
 import ProfileInfo from "../screens/app/ProfileInfo";
 import Search from "../screens/app/Search";
@@ -16,7 +20,6 @@ import UserInfo from '../screens/app/UserInfo';
 import Cart from '../screens/app/Cart';
 import AddCourse from '../screens/app/AddCourse';
 import Color from "../constants/colors";
-import SignUp from '../screens/auth/SignUp';
 
 const HomeStack = createStackNavigator({
     Interface,
@@ -32,6 +35,10 @@ const ProfileStack = createStackNavigator({
     Profile,
     Settings,
     ProfileInfo,
+    Education,
+    Security,
+    Jobs,
+    Certificates,
     UserInfo
 
 },{

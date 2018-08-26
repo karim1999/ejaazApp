@@ -4,6 +4,8 @@ import android.app.Application;
 import com.brentvatne.react.ReactVideoPackage;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -25,6 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
+            new ReactNativeDocumentPicker(),
            new ReactVideoPackage(),
             new RNI18nPackage()
       );

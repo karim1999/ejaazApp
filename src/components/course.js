@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import {Button, Card, CardItem, Icon, Text} from 'native-base';
 import {Image, StyleSheet, View} from "react-native";
+import Server from "../constants/config";
+import _ from "lodash";
 export default class Course extends Component {
     render() {
         return (
             <View style={styles.viewDirection}>
                 <Card style={styles.card}>
                     <CardItem cardBody>
-                        <Image source={require("../images/graphic-design-courses.jpg")} style={styles.image}/>
+                        <Image source={{uri: Server.storage+this.props.img}} style={styles.image}/>
                     </CardItem>
                     <CardItem header style={{paddingTop: 5, paddingBottom: 0}}>
-                        <Text style={styles.cardText}>{this.props.title}</Text>
+                        <Text style={styles.cardText}>{_.truncate(this.props.title)}</Text>
                     </CardItem>
                     <View>
                         <Text style={styles.carditemText}>
-                            {this.props.user_name}
+                            {_.truncate(this.props.user_name)}
                         </Text>
                     </View>
 

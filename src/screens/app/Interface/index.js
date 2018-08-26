@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import {StyleSheet, Image, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity} from 'react-native';
-import { Container, Content, Card, CardItem, Button, Icon, Text, H2, Fab } from 'native-base';
+import {StyleSheet, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { Content, Text, H2 } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
 import Course from "../../../components/course";
 import Carousel from "react-native-snap-carousel";
+import Color from "../../../constants/colors";
 
 
 export default class Interface extends Component {
@@ -27,7 +28,7 @@ export default class Interface extends Component {
                     cloneInterface: response.data
                 });
             }).catch(error => {
-                alert(error.data)
+                // alert("karim")
             })
         }).then(() => {
             this.setState({
@@ -53,54 +54,61 @@ export default class Interface extends Component {
 
     render() {
         return (
-            <AppTemplate interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="News feed">
-                <Container style={styles.all}>
-                    <Content>
-                        <FlatList
-                            data={this.state.cloneInterface}
-                            renderItem={({item}) => (
+            <AppTemplate fab interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
+                <View style={styles.all}>
+                    {
+                        (this.state.isLoading)? (
                             <View>
-                                <View style={styles.container}>
-                                    <H2 style={styles.containerH1}>{item.name}</H2>
-                                </View>
-                                <Carousel
-                                    layout={'default'}
-                                    ref={(c) => { this._carousel = c; }}
-                                    data={item.courses}
-                                    renderItem={({item}) => (
-                                        <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                                            <Course {...item} user_name={item.user.name} />
-                                        </TouchableOpacity>
-                                    )}
-                                    sliderWidth={this.wp(100)}
-                                    itemWidth={this.wp(40)}
-                                    contentContainerCustomStyle	={{justifyContent:'center'}}
-                                    containerCustomStyle={{paddingVertical: 20}}
-                                    inactiveSlideScale={0.95}
-                                    inactiveSlideOpacity={.6}
-                                    activeSlideAlignment={'start'}
-                                    loop={false}
-
-                                    activeAnimationType={'spring'}
-                                    onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                                    activeAnimationOptions={{
-                                        friction: 1,
-                                        tension: 1
-                                    }}
-                                />
+                                <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
                             </View>
-                            )}
-                            keyExtractor = { (item, index) => index.toString() }
-                        />
-                        <Fab
-                            style={{ backgroundColor: '#5067FF' }}
-                            position="bottomRight"
-                            onPress={() => this.props.navigation.navigate('AddCourse')}>
-                            <Icon name="share" />
-                        </Fab>
-                    </Content>
-                </Container>
+                        ): (
+                            <FlatList
+                                ListEmptyComponent={
+                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                                }
+                                data={this.state.cloneInterface}
+                                renderItem={({item}) => (
+                                    <View style={{padding: 0}}>
+                                        <View style={styles.container}>
+                                            <H2 style={styles.containerH1}>{item.name}</H2>
+                                        </View>
+                                        {
+                                            (item.courses && (
+                                                <Carousel
+                                                    layout={'default'}
+                                                    ref={(c) => { this._carousel = c; }}
+                                                    data={item.courses}
+                                                    renderItem={({item}) => (
+                                                        <TouchableOpacity
+                                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                                            <Course {...item} user_name={item.user.name} />
+                                                        </TouchableOpacity>
+                                                    )}
+                                                    sliderWidth={this.wp(100)}
+                                                    itemWidth={this.wp(40)}
+                                                    contentContainerCustomStyle	={{justifyContent:'center'}}
+                                                    containerCustomStyle={{paddingVertical: 20}}
+                                                    inactiveSlideScale={0.95}
+                                                    inactiveSlideOpacity={.6}
+                                                    activeSlideAlignment={'start'}
+                                                    loop={false}
+
+                                                    activeAnimationType={'spring'}
+                                                    onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                                                    activeAnimationOptions={{
+                                                        friction: 1,
+                                                        tension: 1
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                    </View>
+                                )}
+                                keyExtractor = { (item, index) => index.toString() }
+                            />
+                        )
+                    }
+                </View>
             </AppTemplate>
         );
     }
@@ -108,12 +116,23 @@ export default class Interface extends Component {
 
 const styles = StyleSheet.create({
     all:{
-        height: '100%'
+        height: '100%',
+        paddingLeft: 0,
+        marginLeft: 0
     },
     container: {
-        padding:5,
     },
     containerH1:{
-        marginLeft:10
+        alignSelf: 'flex-start',
+        backgroundColor: '#6483f7',
+        padding: 10,
+        marginTop: 15,
+        color: '#fff',
+        alignItems: 'flex-start',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        fontWeight: "bold",
+        fontFamily: "times new roman",
+        fontSize: 16,
     }
 });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, AsyncStorage} from 'react-native';
-import { Container, Content, Text, Button, Icon, H2, } from 'native-base';
+import {Container, Content, Text, Button, Icon, H2, ListItem,} from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import {connect} from "react-redux";
@@ -27,7 +27,7 @@ class Profile extends Component {
                     <Image style={styles.image} source={require("../../../images/trend-kid-com-ROUND.jpg")} />
                     <Text style={styles.viewImageText}>UI Trainer</Text>
                 </View>
-                <View style={styles.courseFollow}>
+                <TouchableOpacity style={styles.courseFollow}>
                     <View style={styles.course}>
                         <Text style={styles.text}>Courses</Text>
                         <Text style={styles.text}>30</Text>
@@ -37,23 +37,42 @@ class Profile extends Component {
                         <Text style={styles.text}>Followers</Text>
                         <Text style={styles.text}>1000</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
-                <View style={styles.Profile}>
+                <TouchableOpacity
+                    onPress={()=> this.props.navigation.navigate('ProfileInfo')}
+                    style={styles.Profile}>
                     <Text style={styles.textProfil}>Profile info</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"
-                          onPress={()=> this.props.navigation.navigate('ProfileInfo')} />
-                </View>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
-                <View style={styles.Profile}>
-                    <Text style={styles.textProfil}>Courses</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
-                </View>
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Education")}
+                    style={styles.Profile}>
+                    <Text style={styles.textProfil}>Education</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
-                <View style={styles.Profile}>
-                    <Text style={styles.textProfil}>Messages</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right" />
-                </View>
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Jobs")}
+                    style={styles.Profile}>
+                    <Text style={styles.textProfil}>Jobs</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                </TouchableOpacity>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Certificates")}
+                    style={styles.Profile}>
+                    <Text style={styles.textProfil}>Certificates</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                </TouchableOpacity>
+                <Hr lineColor="#e5e3e3" width={1} />
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("Security")}
+                    style={styles.Profile}>
+                    <Text style={styles.textProfil}>Security</Text>
+                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
                     onPress={() => this.logout()}>

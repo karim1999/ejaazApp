@@ -1,75 +1,224 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, } from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, } from 'native-base';
-import Server from "../../../constants/config"
-import {removeUser} from "../../../reducers";
+import {StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
+import {Container, Button, Item, Text, Input, Form, Icon, Label, Textarea, Picker, Toast} from 'native-base';
+import AppTemplate from "../appTemplate";
+import ImagePicker from "react-native-image-picker";
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import {connect} from "react-redux";
-import axios from "axios"
+import {setCategories} from "../../../reducers";
+import axios from "axios/index";
+import Server from "../../../constants/config";
+import UserCourses from "../UserCourses";
 
-export default class AddCourse extends Component {
+class AddCourse extends Component {
     constructor(props) {
         super(props);
-        this.state = { chosenDate: new Date() };
+        this.state = {
+            osLoading: "",
+            title: "",
+            description: "",
+            price: "",
+            category: 1,
+            hours: "",
+            img: "",
+            video: ""
+        };
         this.setDate = this.setDate.bind(this);
-      }
-      setDate(newDate) {
+    }
+    setDate(newDate) {
         this.setState({ chosenDate: newDate });
-      }
+    }
+    selectImage(){
+        let options = {
+            title: "Course Image",
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                console.log(response.data);
+                this.setState({
+                    img: response.uri
+                });
+            }
+        });
 
+    }
+    selectVideo(){
+        DocumentPicker.show({
+            filetype: [DocumentPickerUtil.allFiles()],
+        },(error,res) => {
+            this.setState({
+                video: res.uri
+            });
+        })
+    }
+    addOrEdit(){
+        this.setState({
+            isLoading: true
+        });
+        return AsyncStorage.getItem('token').then(userToken => {
+            let data = new FormData();
+            data.append('title', this.state.title);
+            data.append('price', this.state.price);
+            data.append('category', this.state.category);
+            data.append('description', this.state.description);
+            data.append('hours', this.state.hours);
+            if (this.state.img) {
+                data.append('img', {
+                    name: "img",
+                    uri: this.state.img,
+                    type: 'image/png'
+                });
+            }
+            if (this.state.video) {
+                data.append('video', {
+                    name: "video",
+                    uri: this.state.video,
+                    type: 'image/png'
+                });
+            }
+            return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
+                this.setState({
+                    isLoading: false,
+                });
+                Toast.show({
+                    text: "A Course was added successfully",
+                    buttonText: "Ok",
+                    type: "success"
+                });
+                this.props.navigation.navigate("UserCourses");
+            }).catch(error => {
+                alert(error.data)
+            })
+        }).then(() => {
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
     render() {
         return (
-            <Container style={styles.all}>
-                <View style={styles.container}>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Course title</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="Course title..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({Name: val})}/>
+            <AppTemplate back navigation={this.props.navigation} title="Add Course">
+                <View style={styles.all}>
+                    <Form style={styles.container}>
+                        <Item style={{height: 70}}>
+                            <Icon type="FontAwesome" name='pencil' />
+                            <Label>Title</Label>
+                            <Input onChangeText={(title) => this.setState({title})}
+                                   value={this.state.title}
+                                   placeholder="ex:Web Development..."
+                                   placeholderTextColor="#ccc5c5"
+                            />
                         </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Number of hours</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} keyboardType='numeric' placeholder="ex:33h..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                        <Item style={{height: 70}}>
+                            <Icon name='md-time' />
+                            <Label>Number of hours</Label>
+                            <Input onChangeText={(hours) => this.setState({hours})}
+                                   value={this.state.hours}
+                                   keyboardType='numeric'
+                                   placeholder="ex:33..."
+                                   placeholderTextColor="#ccc5c5"
+                            />
                         </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Budget</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} keyboardType='numeric' placeholder="Budget..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                        <Item style={{height: 70}}>
+                            <Icon type="FontAwesome" name='dollar' />
+                            <Label>Price</Label>
+                            <Input onChangeText={(price) => this.setState({price})}
+                                   value={this.state.price}
+                                   keyboardType='numeric' placeholder="ex:33h..."
+                                   placeholder="ex:100..."
+                                   placeholderTextColor="#ccc5c5"
+                            />
                         </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Category</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="Category..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                        <Item style={{height: 70}}>
+                            <Icon name='ios-folder-open' />
+                            <Label>Categories</Label>
+                            <Picker
+                                mode="dropdown"
+                                iosIcon={<Icon name="ios-arrow-down-outline" />}
+                                style={{ width: undefined }}
+                                placeholder="Select your Category"
+                                placeholderStyle={{ color: "#bfc6ea" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.category}
+                                onValueChange={(itemValue, itemIndex) => this.setState({ category: itemValue})}
+                            >
+                                {this.props.categories.map((category) => (
+                                    <Picker.Item key={category.id} label={category.name} value={category.id} />
+                                ))}
+                            </Picker>
                         </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Course picture</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                        <Item style={{height: 70}}>
+                            <Icon name='md-images' />
+                            <Label>Image</Label>
+                            <Button
+                                style={{alignSelf: "center"}}
+                                onPress={() => this.selectImage()} light>
+                                <Text>
+                                    {
+                                        (this.state.img) && (
+                                            <Icon name="md-checkmark-circle" style={{color: "green", fontSize: 17, marginRight: 10}} />
+                                        )
+                                    }
+                                     Select</Text>
+                            </Button>
                         </Item>
-                    </View>
-                    <View style={styles.contentDescription}>
-                        <Text style={styles.contentTxt}>Description</Text>
-                        <Item regular style={styles.inputDescription}>
-                            <Input style={styles.inputText} placeholder="Description..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                        <Item style={{height: 70}}>
+                            <Icon name='ios-videocam' />
+                            <Label>Orientation Video</Label>
+                            <Button
+                                style={{alignSelf: "center"}}
+                                onPress={() => this.selectVideo()} light>
+                                <Text>
+                                    {
+                                        (this.state.video) && (
+                                            <Icon name="md-checkmark-circle" style={{color: "green", fontSize: 17, marginRight: 10}} />
+                                        )
+                                    }
+                                     Select</Text>
+                            </Button>
                         </Item>
-                    </View>
-                    <Button info style={styles.button} >
-                        <Text style={styles.buttonText}> Submit </Text>
-                        {this.state.isCommented && (
-                            <ActivityIndicator style={{}} size="small" color="#000000" />
-                        )}
-                    </Button>
+                        <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+                            <Icon type="FontAwesome" name='info' />
+                            <Text>Description</Text>
+                        </Item>
+                        <Item style={{marginBottom: 20}}>
+                            <Textarea
+                                style={{height: 200, paddingTop: 0, marginTop: 0}}
+                                style={{flex: 1}}
+                                rowSpan={5}
+                                bordered
+                                onChangeText={(description) => this.setState({description})}
+                                placeholder="Write more about the course"
+                                placeholderTextColor="#ccc5c5"
+                                value={this.state.description}
+                            />
+                        </Item>
+                        <Button
+                            onPress={() => this.addOrEdit()}
+                            style={{flexDirection: "row"}}
+                            block light>
+                            <Text>Save</Text>
+                            {this.state.isLoading && (
+                                <ActivityIndicator style={{}} size="small" color="#000000" />
+                            )}
+                        </Button>
+                    </Form>
                 </View>
-            </Container>
+            </AppTemplate>
         );
     }
 }
@@ -80,8 +229,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#f1f1f1',
     },
     container:{
-        width: 370,
-        height: 500,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,
@@ -113,14 +260,25 @@ const styles = StyleSheet.create({
         color: '#918f8f',
         fontSize: 14,
     },
-    date:{  
+    date:{
         position: 'absolute',
         right: 15,
     },
     button:{
         backgroundColor: '#6483f7',
         position: 'absolute',
-        right: 20, 
+        right: 20,
         bottom: 10
     },
 });
+const mapStateToProps = ({ categories }) => ({
+    categories
+});
+
+const mapDispatchToProps = {
+    setCategories
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddCourse);

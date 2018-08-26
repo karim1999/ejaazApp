@@ -6,6 +6,7 @@ import axios from "axios";
 import Server from "../../../constants/config";
 import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
+import _ from "lodash";
 
 class Favorites extends Component {
     constructor(props){
@@ -37,13 +38,13 @@ class Favorites extends Component {
                             ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add courses to favorites first</Text>
                             }
-                            data={this.state.cloneFavorites}
+                            data={this.props.user.favorites}
                             renderItem={({item}) => (
 
                                 <View style={styles.container}>
-                                    <ImageBackground source={require('../../../images/Web-Designing.jpg')} style={styles.image}>
+                                    <ImageBackground source={{uri: Server.storage+item.img}} style={styles.image}>
                                         <View style={styles.viewContent}>
-                                            <Text style={styles.viewContentTxt}>{item.title}</Text>
+                                            <Text style={styles.viewContentTxt}>{_.truncate(item.title)}</Text>
                                             <Text style={styles.viewContentText}>{item.user.name}</Text>
                                             <View style={styles.viewContentStar}>
                                                 <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />

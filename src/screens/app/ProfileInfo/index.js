@@ -6,7 +6,7 @@ import AppTemplate from "../appTemplate";
 export default class ProfileInfo extends Component {
     render() {
         return (
-            <AppTemplate navigation={this.props.navigation} title="Profile info">
+            <AppTemplate back navigation={this.props.navigation} title="Profile info">
                 <View style={styles.all}>
                         <View style={styles.container}>
                             <View style={styles.trainer}>
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
     commentText:{
       paddingTop: 5
     },
-})
+});
