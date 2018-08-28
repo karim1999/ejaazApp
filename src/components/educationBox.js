@@ -8,6 +8,7 @@ export default class EducationBox extends Component {
         super(props);
         this.state = {
             isLoading: false,
+            id: this.props.id,
             name: this.props.name,
             institution: this.props.institution,
             description: this.props.description,
@@ -55,7 +56,7 @@ export default class EducationBox extends Component {
                         onChangeText={(val) => this.setState({end_date: val})} value={this.state.end_date}/>
                 </Item>
             </View>
-            <Button info style={styles.button} onPress={() => this.props.onEducationPressed()}>
+            <Button info style={styles.button} onPress={() => this.props.onEducationPressed(this.state.id, this.state.name, this.state.institution, this.state.description, this.state.start_date, this.state.end_date)}>
                 <Text style={styles.buttonText}> Submit </Text>
                 {this.state.isLoading && (
                     <ActivityIndicator style={{}} size="small" color="#000000" />

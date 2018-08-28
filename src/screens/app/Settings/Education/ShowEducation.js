@@ -36,34 +36,28 @@ export default class ShowEducation extends Component {
     }
 
     onEducationPressed(id,name,institution,description,start_date,end_date){
-
         return AsyncStorage.getItem('token').then(userToken => {
             return axios.post(Server.url + 'api/editEducation/'+id+'?token='+userToken, {
                 name,
                 institution,
                 description,
-                start_date: new Date(start_date).toLocaleDateString(),
-                end_date: new Date(end_date).toLocaleDateString(),
+                start_date,
+                end_date,
             }).then(response => {
                 Toast.show({
                     text: 'Successfully',
                     type: "success",
                     buttonText: 'Okay'
                 });
-                this.setState({
-                    isLoading: false
-                });
             }).catch(error => {
+                alert(error);
                 Toast.show({
                     text: 'Error.',
                     type: "danger",
                     buttonText: 'Okay'
                 });
-                this.setState({
-                    isLoading: false
-                });
             });
-        });
+        })
     }
 
     removeFromCart(id){
@@ -105,8 +99,7 @@ export default class ShowEducation extends Component {
                     data={this.state.cloneEducation}
                     renderItem={({item}) => (
                             <EducationBox removeFromCart={() => this.removeFromCart(item.id)} 
-                            onEducationPressed={() => 
-                            this.onEducationPressed(item.id,item.name,item.institution,item.description,item.start_date,item.end_date)} {...item}/>
+                            onEducationPressed={this.onEducationPressed} {...item}/>
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                     />
