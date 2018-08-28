@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, View, TextInput } from 'react-native';
 import { Container, Content, Form, Item, Button, Icon, Text, Body, H2, Input, Tabs, Tab } from 'native-base';
 import AppTemplate from "../appTemplate";
-import Education from "./Education";
-import Jobs from "./Jobs";
-import Certificates from "./Certificates";
+import Education from "./Education/Education";
+import Jobs from "./Jobs/Jobs";
+import Certificates from "./Certificates/Certificates";
 import Security from "./Security";
 
 export default class Settings extends Component {

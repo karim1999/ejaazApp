@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
 import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast} from 'native-base';
-import Server from "../../../constants/config"
-import {removeUser} from "../../../reducers";
+import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
-import AppTemplate from "../appTemplate";
+import AppTemplate from "../../appTemplate";
 
 export default class Education extends Component {
     constructor(props) {
@@ -41,7 +40,7 @@ export default class Education extends Component {
                 isLoading: true
             });
             return AsyncStorage.getItem('token').then(userToken => {
-                return axios.post(Server.url + 'api/editEducation?token='+userToken, {
+                return axios.post(Server.url + 'api/addEducation?token='+userToken, {
                     name: this.state.name,
                     institution: this.state.institution,
                     description: this.state.description,
@@ -73,7 +72,7 @@ export default class Education extends Component {
 
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Add Course">
+            <AppTemplate back navigation={this.props.navigation} title="Education">
                 <Container style={styles.all}>
                     <View style={styles.container}>
                         <View style={styles.content}>

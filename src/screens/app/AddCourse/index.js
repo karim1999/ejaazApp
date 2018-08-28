@@ -14,7 +14,7 @@ class AddCourse extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            osLoading: "",
+            isLoading: "",
             title: "",
             description: "",
             price: "",
@@ -112,7 +112,7 @@ class AddCourse extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Add Course">
-                <View style={styles.all}>
+                <Container style={styles.all}>
                     <Form style={styles.container}>
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name='pencil' />
@@ -217,7 +217,7 @@ class AddCourse extends Component {
                             )}
                         </Button>
                     </Form>
-                </View>
+                </Container>
             </AppTemplate>
         );
     }

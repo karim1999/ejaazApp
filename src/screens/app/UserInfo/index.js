@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator,AsyncStorage, FlatList } from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, } from 'native-base';
+import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast} from 'native-base';
 import Server from "../../../constants/config"
 import {removeUser} from "../../../reducers";
 import {connect} from "react-redux";
@@ -11,12 +11,43 @@ class UserInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {  
+            isLoading: false,
             name:this.props.user.name,
             country:this.props.user.country,
             city:this.props.user.city,
             address:this.props.user.address,
             phone:this.props.user.phone,
         };
+      }
+
+      onupdateUserPressed(){
+        return AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url + 'api/auth/updateUser/?token='+userToken, {
+                name: this.state.name,
+                country: this.state.country,
+                city: this.state.city,
+                address: this.state.address,
+                phone: this.state.phone,
+            }).then(response => {
+                Toast.show({
+                    text: 'Successfully',
+                    type: "success",
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isLoading: false
+                });
+            }).catch(error => {
+                Toast.show({
+                    text: 'Error.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isLoading: false
+                });
+            });
+        });
       }
 
       componentDidMount(){
@@ -45,40 +76,40 @@ class UserInfo extends Component {
                         <Text style={styles.contentTxt}>Name</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({Name: val})} value={this.state.name}/>
+                            onChangeText={(val) => this.setState({name: val})} value={this.state.item.name}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Country</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})} value={this.state.country}/>
+                            onChangeText={(val) => this.setState({country: val})} value={this.state.country}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>City</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})} value={this.state.city}/>
+                            onChangeText={(val) => this.setState({city: val})} value={this.state.city}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Address</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})} value={this.state.address}/>
+                            onChangeText={(val) => this.setState({address: val})} value={this.state.address}/>
                         </Item>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentTxt}>Phone number</Text>
                         <Item regular style={styles.input}>
                             <Input style={styles.inputText} keyboardType='numeric' placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})} value={this.state.phone}/>
+                            onChangeText={(val) => this.setState({phone: val})} value={this.state.phone}/>
                         </Item>
                     </View>
                     <Button info style={styles.button} >
-                        <Text style={styles.buttonText}> Submit </Text>
-                        {this.state.isCommented && (
+                        <Text style={styles.buttonText} onPress={this.onupdateUserPressed.bind(this)}> Submit </Text>
+                        {this.state.isLoading && (
                             <ActivityIndicator style={{}} size="small" color="#000000" />
                         )}
                     </Button>
