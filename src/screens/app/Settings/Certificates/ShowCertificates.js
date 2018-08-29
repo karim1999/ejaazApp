@@ -5,6 +5,7 @@ import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
 import AppTemplate from "../../appTemplate";
+import CertificatesBox from "../../../../components/certificatesBox";
 
 export default class ShowCertificates extends Component {
     constructor(props) {
@@ -13,10 +14,6 @@ export default class ShowCertificates extends Component {
             chosenDate: new Date(),
             isLoading: false,
             cloneCertificates: [],
-            name: "",
-            institution: "",
-            description: "",
-            received_date: 0,
         };
         // this.setDate = this.setDate.bind(this);
     }
@@ -41,14 +38,13 @@ export default class ShowCertificates extends Component {
         })
     }
 
-    onCertificatesPressed(){
+    onCertificatesPressed(id,name,from,description,start_date,end_date){
 
         return AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url + 'api/editCertificates/'+this.state.course.id+'?token='+userToken, {
-                name: this.state.name,
-                institution: this.state.institution,
-                description: this.state.description,
-                received_date: new Date(this.state.received_date).toLocaleDateString(),
+            return axios.post(Server.url + 'api/editCertificates/'+id+'?token='+userToken, {
+                name,
+                from,
+                description,
             }).then(response => {
                 Toast.show({
                     text: 'Successfully',
@@ -81,42 +77,8 @@ export default class ShowCertificates extends Component {
                             }
                     data={this.state.cloneCertificates}
                     renderItem={({item}) => (
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <Text style={styles.contentTxt}>Name</Text>
-                                <Item regular style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="Name of your Certificates..." placeholderTextColor="#ccc5c5"
-                                        onChangeText={(val) => this.setState({name: val})} value={this.state.name}/>
-                                </Item>
-                            </View>
-                            <View style={styles.content}>
-                                <Text style={styles.contentTxt}>institution</Text>
-                                <Item regular style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="institution of your Certificates..." placeholderTextColor="#ccc5c5"
-                                        onChangeText={(val) => this.setState({institution: val})} value={item.institution}/>
-                                </Item>
-                            </View>
-                            <View style={styles.contentDescription}>
-                                <Text style={styles.contentTxt}>Description</Text>
-                                <Item regular style={styles.inputDescription}>
-                                    <Input style={styles.inputText} placeholder="Description of your Certificates..." placeholderTextColor="#ccc5c5"
-                                        onChangeText={(val) => this.setState({description: val})} value={item.description}/>
-                                </Item>
-                            </View>
-                            <View style={styles.content}>
-                                <Text style={styles.contentTxt}>Received_date</Text>
-                                <Item regular style={styles.input}>
-                                    <Input style={styles.inputText} placeholder="institution of your Certificates..." placeholderTextColor="#ccc5c5"
-                                        onChangeText={(val) => this.setState({received_date: val})} value={item.received_date}/>
-                                </Item>
-                            </View>
-                            <Button info style={styles.button} onPress={this.onCertificatesPressed.bind(this)}>
-                                <Text style={styles.buttonText}> Submit </Text>
-                                {this.state.isLoading && (
-                                    <ActivityIndicator style={{}} size="small" color="#000000" />
-                                )}
-                            </Button>
-                        </View>
+                        <CertificatesBox removeFromCart={() => this.removeFromCart(item.id)} 
+                        onCertificatesPressed={this.onCertificatesPressed} {...item}/>
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                     />
@@ -135,8 +97,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container:{
-        width: 370,
-        height: 350,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,

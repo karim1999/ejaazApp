@@ -22,6 +22,7 @@ import UserCourses from '../screens/app/UserCourses';
 import UserInfo from '../screens/app/UserInfo';
 import Cart from '../screens/app/Cart';
 import AddCourse from '../screens/app/AddCourse';
+import EditCourse from '../screens/app/CourseView/editCourse';
 import Color from "../constants/colors";
 
 const HomeStack = createStackNavigator({
@@ -29,7 +30,8 @@ const HomeStack = createStackNavigator({
     Search,
     CourseName,
     CourseView,
-    AddCourse
+    AddCourse,
+    EditCourse
 },{
     headerMode: 'none',
 });

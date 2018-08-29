@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage} from 'react-native';
-import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast } from 'native-base';
+import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast, Picker } from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
@@ -72,11 +72,22 @@ class CourseView extends Component {
     }
     render() {
         return (
-            <AppTemplate favorite course_id={this.state.course.id} back navigation={this.props.navigation} title="News feed">
+            <AppTemplate favorite course_id={this.state.course.id} back navigation={this.props.navigation} title={this.state.course.title}>
                 <Container style={styles.all}>
                     <Content>
                         <View style={styles.container}>
                             <View style={styles.paddingContent}>
+                            {/* <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="ios-arrow-down-outline" />}
+              style={{ width: undefined }}
+              selectedValue={this.state.selected}
+            >
+              <Picker.Item label="Edit" value="key0" onPress={()=>this.props.navigation.navigate('EditCourse')}/>
+              <Picker.Item label="Delete" value="key1" onPress={()=>onDeleteCoursePressed()}/>
+              <Picker.Item label="Upload" value="key2" onPress={()=>onUploadCoursePressed()}/>
+            </Picker> */}
+            <Button onPress={()=>this.props.navigation.navigate('EditCourse', {...this.state.course})}><Text> Click </Text></Button>
                                 <H2 style={styles.viewH2}>{this.state.course.title}</H2>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}

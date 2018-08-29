@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, } from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, } from 'native-base';
+import { StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
+import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast} from 'native-base';
 import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
@@ -14,7 +14,7 @@ export default class Jobs extends Component {
             chosenDate: new Date(),
             isLoading: false,
             name: "",
-            institution: "",
+            from: "",
             description: "",
             received_date: 0,
         };
@@ -27,7 +27,7 @@ export default class Jobs extends Component {
 
        onCertificatesPressed(){
 
-        if(this.state.name == "" || this.state.institution == "" || this.state.description == "" || this.state.received_date == "")
+        if(this.state.name == "" || this.state.from == "" || this.state.description == "" || this.state.received_date == "")
         {
             Toast.show({
                 text: 'Please fill out fields.',
@@ -43,7 +43,7 @@ export default class Jobs extends Component {
             return AsyncStorage.getItem('token').then(userToken => {
                 return axios.post(Server.url + 'api/addCertificates?token='+userToken, {
                     name: this.state.name,
-                    institution: this.state.institution,
+                    from: this.state.from,
                     description: this.state.description,
                     received_date: new Date(this.state.received_date).toLocaleDateString(),
                 }).then(response => {
@@ -83,10 +83,10 @@ export default class Jobs extends Component {
                         </Item>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.contentTxt}>institution</Text>
+                        <Text style={styles.contentTxt}>from</Text>
                         <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="institution of your certificates..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
+                            <Input style={styles.inputText} keyboardType='numeric' placeholder="from of your certificates..." placeholderTextColor="#ccc5c5"
+                            onChangeText={(val) => this.setState({from: val})}/>
                         </Item>
                     </View>
                     <View style={styles.contentDescription}>
