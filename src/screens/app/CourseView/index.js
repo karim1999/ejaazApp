@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage} from 'react-native';
-import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast, Picker } from 'native-base';
+import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast, Picker, Form } from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
@@ -13,9 +13,15 @@ class CourseView extends Component {
         super(props);
         this.state={
             course: this.props.navigation.state.params,
-            isLoading: false
+            isLoading: false,
         }
     }
+
+    onValueChange() {
+        this.setState({
+          selected: this.props.navigation.navigate('EditCourse', {...this.state.course})
+        });
+      }
 
     onCommentPressed(){
         if(this.state.comment == ""){
@@ -77,17 +83,19 @@ class CourseView extends Component {
                     <Content>
                         <View style={styles.container}>
                             <View style={styles.paddingContent}>
-                            {/* <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="ios-arrow-down-outline" />}
-              style={{ width: undefined }}
-              selectedValue={this.state.selected}
-            >
-              <Picker.Item label="Edit" value="key0" onPress={()=>this.props.navigation.navigate('EditCourse')}/>
-              <Picker.Item label="Delete" value="key1" onPress={()=>onDeleteCoursePressed()}/>
-              <Picker.Item label="Upload" value="key2" onPress={()=>onUploadCoursePressed()}/>
-            </Picker> */}
-            <Button onPress={()=>this.props.navigation.navigate('EditCourse', {...this.state.course})}><Text> Click </Text></Button>
+                            <Form>
+                                <Picker
+                                note
+                                mode="dropdown"
+                                style={{ width: 50, position:'absolute', right:0, top:0}}
+                                selectedValue={this.state.selected}
+                                onValueChange={this.onValueChange.bind(this)}
+                                >
+                                <Picker.Item label="Select" value="key0" />
+                                <Picker.Item label="Edit" value="key1" />
+                                <Picker.Item label="Delete" value="key2" />
+                                </Picker>
+                            </Form>
                                 <H2 style={styles.viewH2}>{this.state.course.title}</H2>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}

@@ -60,7 +60,6 @@ export default class EditCourse extends Component {
                             <Icon type="FontAwesome" name='pencil' />
                             <Label>Title</Label>
                             <Input onChangeText={(title) => this.setState({title})}
-                                   value={this.state.title}
                                    placeholder="ex:Web Development..."
                                    placeholderTextColor="#ccc5c5"
                                    value={this.state.course.title}
@@ -70,7 +69,6 @@ export default class EditCourse extends Component {
                             <Icon type="FontAwesome" name='dollar' />
                             <Label>Price</Label>
                             <Input onChangeText={(price) => this.setState({price})}
-                                   value={this.state.price}
                                    keyboardType='numeric' placeholder="ex:33h..."
                                    placeholder="ex:100..."
                                    placeholderTextColor="#ccc5c5"
@@ -110,7 +108,7 @@ export default class EditCourse extends Component {
                         </Item>
                         <Button
                             onPress={() => this.EditCourse(this.state.course.id)}
-                            style={{flexDirection: "row"}}
+                            style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                             block light>
                             <Text>Save</Text>
                             {this.state.isLoading && (

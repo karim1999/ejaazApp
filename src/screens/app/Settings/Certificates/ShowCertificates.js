@@ -70,7 +70,6 @@ export default class ShowCertificates extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Certificates">
-                <Container style={styles.all}>
                     <FlatList
                         ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add Your certificates first</Text>
@@ -82,7 +81,6 @@ export default class ShowCertificates extends Component {
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                     />
-                </Container>
             </AppTemplate>
         );
     }

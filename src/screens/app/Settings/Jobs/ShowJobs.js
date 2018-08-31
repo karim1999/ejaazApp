@@ -69,7 +69,6 @@ export default class ShowJobs extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Jobs">
-                <Container style={styles.all}>
                     <FlatList
                         ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add Your jobs first</Text>
@@ -82,7 +81,6 @@ export default class ShowJobs extends Component {
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                     />
-                </Container>
             </AppTemplate>
         );
     }

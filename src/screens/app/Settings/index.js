@@ -10,7 +10,8 @@ import Security from "./Security";
 export default class Settings extends Component {
     render() {
         return (
-                    <Tabs>
+            <AppTemplate back navigation={this.props.navigation} title ="Settings">
+                <Tabs>
                     <Tab heading="Education">
                         <Education />
                     </Tab>
@@ -23,7 +24,8 @@ export default class Settings extends Component {
                     <Tab heading="Security">
                         <Security />
                     </Tab>
-                    </Tabs>
+                </Tabs>
+            </AppTemplate>
                 /* <Container>
                   <Content>
                     <Form>

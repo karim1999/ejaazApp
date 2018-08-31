@@ -84,12 +84,11 @@ export default class ShowEducation extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Education">
-                        <View style={styles.container}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                                 onPress={() => {this.props.removeFromCart()}}
                                 style={{paddingBottom: 0}}>
                                 <Icon style={{fontSize: 10}} type="FontAwesome" name="times" />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                     <FlatList
                         ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add Your education first</Text>
@@ -101,7 +100,6 @@ export default class ShowEducation extends Component {
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                     />
-                        </View>
             </AppTemplate>
         );
     }

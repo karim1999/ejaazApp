@@ -68,13 +68,6 @@ class Profile extends Component {
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Security")}
-                    style={styles.Profile}>
-                    <Text style={styles.textProfil}>Security</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
-                </TouchableOpacity>
-                <Hr lineColor="#e5e3e3" width={1} />
-                <TouchableOpacity
                     onPress={() => this.logout()}>
                     <View style={styles.Profile}>
                         <Text style={styles.textProfil}>Logout</Text>

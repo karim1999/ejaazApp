@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, } from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, } from 'native-base';
+import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label, Toast} from 'native-base';
 import Server from "../../../constants/config"
 import {removeUser} from "../../../reducers";
 import {connect} from "react-redux";
@@ -19,35 +19,32 @@ export default class Security extends Component {
     render() {
         return (
             <Container style={styles.all}>
-                <View style={styles.container}>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Last password</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} secureTextEntry={true} placeholder="Enter previous pass..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({Name: val})}/>
-                        </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>New password</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} secureTextEntry={true} keyboardType='numeric' placeholder="Enter new pass..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
-                        </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Confirm password</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} secureTextEntry={true} placeholder="Confirm pass..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
-                        </Item>
-                    </View>
-                    <Button info style={styles.button} >
-                        <Text style={styles.buttonText}> Submit </Text>
-                        {this.state.isCommented && (
+                <Form style={styles.container}>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='lock' />
+                        <Label>New password</Label>
+                        <Input onChangeText={(newPassword) => this.setState({newPassword})}
+                            placeholder="Enter previous pass..."
+                            placeholderTextColor="#ccc5c5"
+                        />
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='lock' />
+                        <Label>Confirm password</Label>
+                        <Input onChangeText={(confPasswrod) => this.setState({confPasswrod})}
+                            keyboardType='numeric' placeholder="Enter new pass..."
+                            placeholderTextColor="#ccc5c5"
+                        />
+                    </Item>
+                    <Button
+                        style={{flexDirection: "row", backgroundColor: '#6483f7'}}
+                        block light>
+                        <Text>Save</Text>
+                        {this.state.isLoading && (
                             <ActivityIndicator style={{}} size="small" color="#000000" />
                         )}
                     </Button>
-                </View>
+                </Form>
             </Container>
         );
     }
@@ -57,44 +54,47 @@ const styles = StyleSheet.create({
     all:{
         padding:20,
         backgroundColor: '#f1f1f1',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     container:{
-        width: 370,
-        height: 260,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
-        padding: 10,
-        paddingTop: 30
+        padding: 20
     },
     content:{
         flexDirection: 'row',
-        marginBottom:35,
+        marginBottom:25,
+    },
+    contentDescription:{
     },
     input:{
         width: 200,
         padding: 10,
-        height:40,
+        height:30,
         borderRadius: 5,
         position: 'absolute',
         right: 0,
+    },
+    inputDescription:{
+        width: 300,
+        padding: 10,
+        height:120,
+        borderRadius: 5,
+        marginTop: 7
     },
     inputText:{
         color: '#918f8f',
         fontSize: 14,
     },
-    date:{  
+    date:{
         position: 'absolute',
         right: 15,
     },
     button:{
         backgroundColor: '#6483f7',
         position: 'absolute',
-        right: 20, 
+        right: 20,
         bottom: 10
     },
 });

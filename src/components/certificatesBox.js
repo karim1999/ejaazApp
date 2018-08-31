@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Icon, Text, Input, Item} from 'native-base';
+import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label} from 'native-base';
 import {AsyncStorage, Image, StyleSheet, TouchableOpacity, View} from "react-native";
 
 export default class CertificatesBox extends Component {
@@ -19,42 +19,62 @@ export default class CertificatesBox extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.content}>
-                    <Text style={styles.contentTxt}>Name</Text>
-                    <Item regular style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Name of your Certificates..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({name: val})} value={this.state.name}/>
+            <Container style={styles.all}>
+                <Form style={styles.container}>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='pencil' />
+                        <Label>Title</Label>
+                        <Input onChangeText={(name) => this.setState({name})}
+                            value={this.state.name}
+                            placeholder="Name of your Certificates...."
+                            placeholderTextColor="#ccc5c5"
+                        />
                     </Item>
-                </View>
-                <View style={styles.content}>
-                    <Text style={styles.contentTxt}>from</Text>
-                    <Item regular style={styles.input}>
-                        <Input style={styles.inputText} placeholder="from of your Certificates..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({from: val})} value={this.state.from}/>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='institution' />
+                        <Label>institution</Label>
+                        <Input onChangeText={(institution) => this.setState({institution})}
+                            value={this.state.institution}
+                            keyboardType='numeric' placeholder="institution of your Certificates...."
+                            placeholderTextColor="#ccc5c5"
+                        />
                     </Item>
-                </View>
-                <View style={styles.contentDescription}>
-                    <Text style={styles.contentTxt}>Description</Text>
-                    <Item regular style={styles.inputDescription}>
-                        <Input style={styles.inputText} placeholder="Description of your Certificates..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({description: val})} value={this.state.description}/>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='hourglass' />
+                        <Label>Received_date</Label>
+                        <Input onChangeText={(received_date) => this.setState({received_date})}
+                            value={this.state.received_date}
+                            keyboardType='numeric' placeholder="received_date of your Certificates...."
+                            placeholderTextColor="#ccc5c5"
+                        />
                     </Item>
-                </View>
-                <View style={styles.content}>
-                    <Text style={styles.contentTxt}>Received_date</Text>
-                    <Item regular style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Received_date of your Certificates..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({received_date: val})} value={this.state.received_date}/>
+                    <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+                        <Icon type="FontAwesome" name='info' />
+                        <Text>Description</Text>
                     </Item>
-                </View>
-                <Button info style={styles.button} onPress={() => this.props.onJobsPressed(this.state.id, this.state.name, this.state.from, this.state.description, this.state.received_date)}>
-                    <Text style={styles.buttonText}> Submit </Text>
-                    {this.state.isLoading && (
-                        <ActivityIndicator style={{}} size="small" color="#000000" />
-                    )}
-                </Button>
-            </View>
+                    <Item style={{marginBottom: 20}}>
+                        <Textarea
+                            style={{height: 200, paddingTop: 0, marginTop: 0}}
+                            style={{flex: 1}}
+                            rowSpan={5}
+                            bordered
+                            onChangeText={(description) => this.setState({description})}
+                            placeholder="Write more about the course"
+                            placeholderTextColor="#ccc5c5"
+                            value={this.state.description}
+                        />
+                    </Item>
+                    <Button
+                        onPress={() => this.props.onCertificatesPressed(this.state.id, this.state.name, this.state.institution, this.state.description, this.state.received_date)}
+                        style={{flexDirection: "row", backgroundColor: '#6483f7'}}
+                        block light>
+                        <Text>Save</Text>
+                        {this.state.isLoading && (
+                            <ActivityIndicator style={{}} size="small" color="#000000" />
+                        )}
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 }
@@ -63,13 +83,8 @@ const styles = StyleSheet.create({
     all:{
         padding:20,
         backgroundColor: '#f1f1f1',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     container:{
-        width: 370,
-        height: 350,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,
@@ -81,9 +96,6 @@ const styles = StyleSheet.create({
         marginBottom:25,
     },
     contentDescription:{
-        flexDirection: 'row',
-        height: 60,
-        marginBottom:25,
     },
     input:{
         width: 200,
@@ -94,12 +106,11 @@ const styles = StyleSheet.create({
         right: 0,
     },
     inputDescription:{
-        width: 200,
+        width: 300,
         padding: 10,
-        height:70,
+        height:120,
         borderRadius: 5,
-        position: 'absolute',
-        right: 0,
+        marginTop: 7
     },
     inputText:{
         color: '#918f8f',

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast} from 'native-base';
+import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label, DatePicker, Toast} from 'native-base';
 import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
@@ -26,7 +26,7 @@ export default class Jobs extends Component {
         this.setState({ chosenDate: newDate });
       }
 
-       onJobPressed(){
+       onJobsPressed(){
 
         if(this.state.name == "" || this.state.institution == "" || this.state.description == "" || this.state.start_date == ""|| this.state.end_date == "")
         {
@@ -74,37 +74,31 @@ export default class Jobs extends Component {
 
     render() {
         return (
-        <AppTemplate back navigation={this.props.navigation} title="Jobs">
             <Container style={styles.all}>
-                <View style={styles.container}>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>Name</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="Name of your Jobs..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({name: val})}/>
-                        </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>institution</Text>
-                        <Item regular style={styles.input}>
-                            <Input style={styles.inputText} placeholder="institution of your Jobs..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({institution: val})}/>
-                        </Item>
-                    </View>
-                    <View style={styles.contentDescription}>
-                        <Text style={styles.contentTxt}>Description</Text>
-                        <Item regular style={styles.inputDescription}>
-                            <Input style={styles.inputText} placeholder="Description of your Jobs..." placeholderTextColor="#ccc5c5"
-                            onChangeText={(val) => this.setState({description: val})}/>
-                        </Item>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>start_date</Text>
-                        <View style={styles.date}>
-                            <DatePicker
-                            defaultDate={new Date()}
-                            minimumDate={new Date(1990, 1, 1)}
-                            maximumDate={new Date(2018, 12, 31)}
+                <Form style={styles.container}>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='pencil' />
+                        <Label>Title</Label>
+                        <Input onChangeText={(name) => this.setState({name})}
+                            placeholder="Name of your Jobs...."
+                            placeholderTextColor="#ccc5c5"
+                        />
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='institution' />
+                        <Label>institution</Label>
+                        <Input onChangeText={(institution) => this.setState({institution})}
+                            keyboardType='numeric' placeholder="institution of your Jobs...."
+                            placeholderTextColor="#ccc5c5"
+                        />
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='hourglass-start' />
+                        <Label>Start_date</Label>
+                        <DatePicker
+                            defaultDate={new Date().getTime()}
+                            minimumDate={new Date(1990, 1, 1).getTime()}
+                            maximumDate={new Date(2018, 12, 31).getTime()}
                             locale={"en"}
                             timeZoneOffsetInMinutes={undefined}
                             modalTransparent={false}
@@ -114,19 +108,15 @@ export default class Jobs extends Component {
                             textStyle={{ color: "green" }}
                             placeHolderTextStyle={{ color: "#cacaca" }}
                             onDateChange={(val) => this.setState({start_date: val})}
-                            />
-                            {/* <Text>
-                            Date: {this.state.chosenDate.toString().substr(4, 12)}
-                            </Text> */}
-                        </View>                        
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentTxt}>end_date</Text>
-                        <View style={styles.date}>
-                            <DatePicker
-                            defaultDate={new Date()}
-                            minimumDate={new Date(1990, 1, 1)}
-                            maximumDate={new Date(2018, 12, 31)}
+                    />
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='hourglass-end' />
+                        <Label>End_date</Label>
+                        <DatePicker
+                            defaultDate={new Date().getTime()}
+                            minimumDate={new Date(1990, 1, 1).getTime()}
+                            maximumDate={new Date(2018, 12, 31).getTime()}
                             locale={"en"}
                             timeZoneOffsetInMinutes={undefined}
                             modalTransparent={false}
@@ -136,21 +126,35 @@ export default class Jobs extends Component {
                             textStyle={{ color: "green" }}
                             placeHolderTextStyle={{ color: "#cacaca" }}
                             onDateChange={(val) => this.setState({end_date: val})}
-                            />
-                            {/* <Text>
-                            Date: {this.state.chosenDate.toString().substr(4, 12)}
-                            </Text> */}
-                        </View>  
-                    </View>
-                    <Button info style={styles.button} onPress={this.onJobPressed.bind(this)}>
-                        <Text style={styles.buttonText}> Submit </Text>
+                    />
+                    </Item>
+                    <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+                        <Icon type="FontAwesome" name='info' />
+                        <Text>Description</Text>
+                    </Item>
+                    <Item style={{marginBottom: 20}}>
+                        <Textarea
+                            style={{height: 200, paddingTop: 0, marginTop: 0}}
+                            style={{flex: 1}}
+                            rowSpan={5}
+                            bordered
+                            onChangeText={(description) => this.setState({description})}
+                            placeholder="Write more about your jobs"
+                            placeholderTextColor="#ccc5c5"
+                            value={this.state.description}
+                        />
+                    </Item>
+                    <Button
+                        onPress={this.onJobsPressed.bind(this)}
+                        style={{flexDirection: "row", backgroundColor: '#6483f7'}}
+                        block light>
+                        <Text>Save</Text>
                         {this.state.isLoading && (
                             <ActivityIndicator style={{}} size="small" color="#000000" />
                         )}
                     </Button>
-                </View>
+                </Form>
             </Container>
-        </AppTemplate>
         );
     }
 }
@@ -159,13 +163,8 @@ const styles = StyleSheet.create({
     all:{
         padding:20,
         backgroundColor: '#f1f1f1',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     container:{
-        width: 370,
-        height: 350,
         backgroundColor: '#fff',
         borderRadius: 10,
         borderTopRightRadius: 10,
@@ -177,9 +176,6 @@ const styles = StyleSheet.create({
         marginBottom:25,
     },
     contentDescription:{
-        flexDirection: 'row',
-        height: 60,
-        marginBottom:25,
     },
     input:{
         width: 200,
@@ -190,25 +186,24 @@ const styles = StyleSheet.create({
         right: 0,
     },
     inputDescription:{
-        width: 200,
+        width: 300,
         padding: 10,
-        height:70,
+        height:120,
         borderRadius: 5,
-        position: 'absolute',
-        right: 0,
+        marginTop: 7
     },
     inputText:{
         color: '#918f8f',
         fontSize: 14,
     },
-    date:{  
+    date:{
         position: 'absolute',
         right: 15,
     },
     button:{
         backgroundColor: '#6483f7',
         position: 'absolute',
-        right: 20, 
+        right: 20,
         bottom: 10
     },
 });
