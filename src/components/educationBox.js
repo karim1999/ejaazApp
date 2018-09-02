@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label} from 'native-base';
+import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label, DatePicker} from 'native-base';
 import {AsyncStorage, Image, StyleSheet, TouchableOpacity, View} from "react-native";
 
 export default class EducationBox extends Component {
@@ -43,19 +43,37 @@ export default class EducationBox extends Component {
                     <Item style={{height: 70}}>
                         <Icon type="FontAwesome" name='hourglass-start' />
                         <Label>Start_date</Label>
-                        <Input onChangeText={(start_date) => this.setState({start_date})}
-                            value={this.state.start_date}
-                            keyboardType='numeric' placeholder="start_date of your education...."
-                            placeholderTextColor="#ccc5c5"
+                        <DatePicker
+                            defaultDate={new Date(this.state.start_date)}
+                            minimumDate={new Date(1990, 1, 1).getTime()}
+                            maximumDate={new Date(2018, 12, 31).getTime()}
+                            locale={"en"}
+                            timeZoneOffsetInMinutes={undefined}
+                            modalTransparent={false}
+                            animationType={"fade"}
+                            androidMode={"default"}
+                            placeHolderText={new Date(this.state.start_date).toLocaleDateString('en-GB')}
+                            textStyle={{ color: "green" }}
+                            placeHolderTextStyle={{ color: "#cacaca" }}
+                            onDateChange={(val) => this.setState({start_date: val})}
                         />
                     </Item>
                     <Item style={{height: 70}}>
                         <Icon type="FontAwesome" name='hourglass-end' />
                         <Label>End_date</Label>
-                        <Input onChangeText={(end_date) => this.setState({end_date})}
-                            value={this.state.end_date}
-                            keyboardType='numeric' placeholder="end_date of your education...."
-                            placeholderTextColor="#ccc5c5"
+                        <DatePicker
+                            defaultDate={new Date(this.state.end_date)}
+                            minimumDate={new Date(1990, 1, 1).getTime()}
+                            maximumDate={new Date(2018, 12, 31).getTime()}
+                            locale={"en"}
+                            timeZoneOffsetInMinutes={undefined}
+                            modalTransparent={false}
+                            animationType={"fade"}
+                            androidMode={"default"}
+                            placeHolderText={new Date(this.state.end_date).toLocaleDateString('en-GB')}
+                            textStyle={{ color: "green" }}
+                            placeHolderTextStyle={{ color: "#cacaca" }}
+                            onDateChange={(val) => this.setState({end_date: val})}
                         />
                     </Item>
                     <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>

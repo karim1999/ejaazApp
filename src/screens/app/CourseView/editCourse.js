@@ -54,7 +54,7 @@ export default class EditCourse extends Component {
     render() {
         return (
             <AppTemplate course_id={this.state.course.id} back navigation={this.props.navigation} title={this.state.course.title}>
-                <Container style={styles.all}>
+                <View style={styles.all}>
                     <Form style={styles.container}>
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name='pencil' />
@@ -116,7 +116,7 @@ export default class EditCourse extends Component {
                             )}
                         </Button>
                     </Form>
-                </Container>
+                </View>
             </AppTemplate>
         );
     }

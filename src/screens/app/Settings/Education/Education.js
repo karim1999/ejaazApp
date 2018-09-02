@@ -44,8 +44,8 @@ export default class Education extends Component {
                     name: this.state.name,
                     institution: this.state.institution,
                     description: this.state.description,
-                    start_date: new Date(this.state.start_date).toLocaleDateString(),
-                    end_date: new Date(this.state.end_date).toLocaleDateString(),
+                    start_date: new Date(this.state.start_date).toLocaleDateString('en-GB'),
+                    end_date: new Date(this.state.end_date).toLocaleDateString('en-GB'),
                 }).then(response => {
                     Toast.show({
                         text: 'Successfully',

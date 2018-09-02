@@ -1,17 +1,82 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, AsyncStorage} from 'react-native';
-import {Container, Content, Text, Button, Icon, H2, ListItem,} from 'native-base';
+import {Container, Content, Text, Button, Icon, H2, ListItem, Toast,} from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
+import Server from "../../../constants/config";
+import ImagePicker from "react-native-image-picker";
+import axios from 'axios';
 
 class Profile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            source: Server.storage+this.props.user.img,
+        };
+    }
     logout(){
         return AsyncStorage.removeItem('token').then(()=>{
             this.props.navigation.navigate('Auth');
         });
     }
+    changeImg(){
+        let options = {
+            title: "Avatar",
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                this.setState({
+                    isLoading: true
+                });
+                let uri = response.uri;
+                let data = new FormData();
+                data.append('img', {
+                    name: "img",
+                    uri,
+                    type: 'image/png'
+                });
+                AsyncStorage.getItem('token').then(userToken => {
+                    axios.post(Server.url+'api/user/img'+'?token='+userToken, data).then((resp) => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        this.props.setUser(resp.data.user);
+                    }).catch((err) => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        Toast.show({
+                            text: "Unknown error has occurred",
+                            buttonText: "OK",
+                            type: "danger"
+                        })
+                    })
+                });
+                this.setState({
+                    source: response.uri
+                });
+            }
+        });
+    }
+
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="Profile">
@@ -24,7 +89,11 @@ class Profile extends Component {
                     onPress={()=> this.props.navigation.navigate('UserInfo')}/>
                 </View>
                 <View style={styles.viewImage}>
-                    <Image style={styles.image} source={require("../../../images/trend-kid-com-ROUND.jpg")} />
+                    <TouchableOpacity
+                        onPress={() => this.changeImg()}
+                    >
+                        <Image style={styles.image} source={{uri: this.state.source}} />
+                    </TouchableOpacity>
                     <Text style={styles.viewImageText}>UI Trainer</Text>
                 </View>
                 <TouchableOpacity style={styles.courseFollow}>

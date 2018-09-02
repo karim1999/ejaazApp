@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
-import {Container, Button, Item, Text, Input, Form, Icon, Label, Textarea, Picker, Toast} from 'native-base';
+import {
+    Container,
+    Button,
+    Item,
+    Text,
+    Input,
+    Form,
+    Icon,
+    Label,
+    Textarea,
+    Picker,
+    Toast,
+    ListItem,
+    Right, Radio, Left
+} from 'native-base';
 import AppTemplate from "../appTemplate";
 import ImagePicker from "react-native-image-picker";
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
@@ -18,6 +32,7 @@ class AddCourse extends Component {
             title: "",
             description: "",
             price: "",
+            type: 1,
             category: 1,
             hours: "",
             img: "",
@@ -72,6 +87,7 @@ class AddCourse extends Component {
         return AsyncStorage.getItem('token').then(userToken => {
             let data = new FormData();
             data.append('title', this.state.title);
+            data.append('type', this.state.type);
             data.append('price', this.state.price);
             data.append('category', this.state.category);
             data.append('description', this.state.description);
@@ -191,6 +207,30 @@ class AddCourse extends Component {
                                      Select</Text>
                             </Button>
                         </Item>
+                        <ListItem
+                            onPress={(type) => {this.setState({type: 1})}}
+                        >
+                            <Left>
+                                <Text>In Door</Text>
+                            </Left>
+                            <Right>
+                                <Radio selected={this.state.type === 1}
+                                       onPress={(type) => {this.setState({type: 1})}}
+                                />
+                            </Right>
+                        </ListItem>
+                        <ListItem
+                            onPress={(type) => {this.setState({type: 2})}}
+                        >
+                            <Left>
+                                <Text>Online</Text>
+                            </Left>
+                            <Right>
+                                <Radio selected={this.state.type === 2}
+                                       onPress={(type) => {this.setState({type: 2})}}
+                                />
+                            </Right>
+                        </ListItem>
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="FontAwesome" name='info' />
                             <Text>Description</Text>

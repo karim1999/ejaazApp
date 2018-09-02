@@ -7,6 +7,7 @@ import Server from "../../../constants/config";
 import Course from "../../../components/course";
 import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
+import CourseBox from "../../../components/courseBox"
 
 class UserCourses extends Component {
     constructor(props){
@@ -30,7 +31,7 @@ class UserCourses extends Component {
                     renderItem={({item}) => (
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                            <Course {...item} user_name={item.user.name} />
+                            <CourseBox {...item} user_name={item.user.name} />
                         </TouchableOpacity>
                     )}
 

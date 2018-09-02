@@ -24,6 +24,8 @@ import Cart from '../screens/app/Cart';
 import AddCourse from '../screens/app/AddCourse';
 import ShowCategories from '../screens/app/Categories/ShowCategories';
 import EditCourse from '../screens/app/CourseView/editCourse';
+import AddVideos from '../screens/app/CourseView/AddVideos';
+import Videos from '../screens/app/CourseView/Videos';
 import Color from "../constants/colors";
 
 const HomeStack = createStackNavigator({
@@ -33,7 +35,9 @@ const HomeStack = createStackNavigator({
     CourseView,
     AddCourse,
     ShowCategories,
-    EditCourse
+    EditCourse,
+    AddVideos,
+    Videos
 },{
     headerMode: 'none',
 });

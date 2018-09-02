@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator,} from 'react-native';
-import {Container, Content, Header, Text, Toast} from 'native-base';
+import {Button, Container, Content, Header, Text, Toast} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Color from "../../../constants/colors";
-import {setCart} from "../../../reducers";
+import {setCart, setUser} from "../../../reducers";
 import {connect} from "react-redux";
 import CoursBox from "../../../components/courseBox"
 import Hr from "react-native-hr-component";
 import axios from "axios/index";
 import Server from "../../../constants/config";
+import _ from "lodash";
+
+
 class Cart extends Component {
     constructor(props){
         super(props);
         this.state={
             isLoading: false,
+            isBuying: false
         }
     }
     removeFromCart(id){
@@ -39,6 +43,31 @@ class Cart extends Component {
         });
     }
 
+    buy(){
+        this.setState({
+            isBuying: true
+        });
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url+'api/buy?token='+userToken).then(response => {
+                this.props.setUser(response.data.user);
+                Toast.show({
+                    text: "You can now access your courses.",
+                    buttonText: "Ok",
+                    type: "success"
+                })
+            }).catch(error => {
+                Toast.show({
+                    text: "Error reaching the server.",
+                    buttonText: "Ok",
+                    type: "danger"
+                })
+            }).then(() => {
+                this.setState({
+                    isBuying: false,
+                });
+            })
+        });
+    }
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Cart">
@@ -64,6 +93,20 @@ class Cart extends Component {
                                     )}
                                     keyExtractor = { (item, index) => index.toString() }
                                 />
+                            )
+                        }
+                        {
+                            !_.isEmpty(this.props.user.cart) && (
+                                <Button
+                                    onPress={() => this.buy()}
+                                    style={{flexDirection: "row"}}
+                                    block success
+                                >
+                                    <Text>Buy</Text>
+                                    {this.state.isBuying && (
+                                        <ActivityIndicator size="small" color="#000000" />
+                                    )}
+                                </Button>
                             )
                         }
                     </View>
@@ -138,7 +181,8 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = {
-    setCart
+    setCart,
+    setUser
 };
 export default connect(
     mapStateToProps,

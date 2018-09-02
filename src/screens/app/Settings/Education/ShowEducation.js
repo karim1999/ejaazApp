@@ -41,6 +41,8 @@ export default class ShowEducation extends Component {
                 name,
                 institution,
                 description,
+                start_date: new Date(start_date).toLocaleDateString('en-GB'),
+                end_date: new Date(end_date).toLocaleDateString('en-GB'),
             }).then(response => {
                 Toast.show({
                     text: 'Successfully',

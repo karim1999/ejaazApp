@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage} from 'react-native';
+import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage, Alert, Slider} from 'react-native';
 import {
     Container,
     Content,
@@ -14,14 +14,16 @@ import {
     Toast,
     Picker,
     Form,
-    CardItem, Left, Thumbnail
+    CardItem, Left, Thumbnail, List, ListItem, Right, Textarea, Label
 } from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
 import _ from "lodash";
-import {setCart} from "../../../reducers";
+import {setCart, setUser} from "../../../reducers";
 import {connect} from "react-redux";
+import Color from "../../../constants/colors";
+import VideoPlayer from "react-native-video-controls";
 
 class CourseView extends Component {
     constructor(props){
@@ -29,6 +31,13 @@ class CourseView extends Component {
         this.state={
             course: this.props.navigation.state.params,
             isLoading: false,
+            isReviewing: false,
+            isGettingReviews: false,
+            reviews: [],
+            rate: 1,
+            review: "",
+            isSetting: false,
+            isDeleting: false
         }
     }
 
@@ -37,6 +46,67 @@ class CourseView extends Component {
             selected: this.props.navigation.navigate('EditCourse', {...this.state.course})
         });
     }
+
+    componentDidMount(){
+        this.setState({
+            isGettingReviews: true
+        });
+        return axios.get(Server.url+'api/course/'+this.state.course.id+'/reviews').then(response => {
+            this.setState({
+                reviews: response.data
+            });
+        }).catch(error => {
+            Toast.show({
+                text: "Unknown error hs occurred",
+                buttonText: "Ok",
+                type: "danger"
+            })
+        }).then(() => {
+            this.setState({
+                isGettingReviews: false,
+            });
+        })
+    }
+    deleteCourse(){
+        Alert.alert(
+            "Are you sure?",
+            "No one will be able to access this course after deleting",
+            [
+                {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
+                {text: "Ok", onPress: () => {
+                        this.setState({
+                            isDeleting: true,
+                        });
+                        AsyncStorage.getItem('token').then(userToken => {
+                            return axios.delete(Server.url+'api/course/'+this.state.course.id+'?token='+userToken).then(response => {
+                                // alert(response.data);
+                                this.props.navigation.navigate("Interface");
+                                this.props.setUser(response.data.user);
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "The course was deleted successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                })
+                            }).catch(error => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Unknown error hs occurred",
+                                    buttonText: "Ok",
+                                    type: "danger"
+                                })
+                            })
+                        });
+                    }},
+            ],
+            { cancelable: false }
+        )
+    }
+
 
     onCommentPressed(){
         if(this.state.comment == ""){
@@ -91,26 +161,117 @@ class CourseView extends Component {
             })
         });
     }
+    createRating(rate){
+        let i;
+        let stars= [];
+        for(i =0; i< rate; i++ ){
+            stars.push(<Icon key={i} active style={styles.star} type="MaterialCommunityIcons" name="star" />);
+        }
+        for(i; i<5; i++){
+            stars.push(<Icon key={i} active style={styles.star2} type="MaterialCommunityIcons" name="star" />);
+        }
+        return stars;
+    }
+    addReview(){
+        this.setState({
+            isReviewing: true,
+        });
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url+'api/course/'+this.state.course.id+'/addReview?token='+userToken, {
+                rate: this.state.rate,
+                review: this.state.review
+            }).then(response => {
+                this.componentDidMount();
+                this.setState({
+                    isReviewing: false,
+                });
+            }).catch(error => {
+                this.setState({
+                    isReviewing: false,
+                });
+                Toast.show({
+                    text: "Error reaching the server.",
+                    buttonText: "Ok",
+                    type: "danger"
+                })
+            })
+        });
+    }
     render() {
         return (
             <AppTemplate favorite course_id={this.state.course.id} back navigation={this.props.navigation} title={this.state.course.title}>
-                <Container style={styles.all}>
+                {
+                    !_.find(this.props.user.courses, course => course.id == this.state.course.id) ? (
+                        _.find(this.props.jointcourses, course => course.id == this.state.course.id) ? (
+                                <Button
+                                    primary
+                                    onPress={() => this.props.navigation.navigate("CourseName")}
+                                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Open Course </Text>
+                                    <Icon name="folder-video" type="Entypo" style={{color: "white", fontSize: 25}}/>
+                                </Button>
+                            ) :
+                            !_.find(this.props.user.cart, course => course.id == this.state.course.id) ? (
+                                <Button
+                                    success
+                                    onPress={() => this.addToCart()}
+                                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add to cart </Text>
+                                    {this.state.isLoading && (
+                                        <ActivityIndicator size="small" color="#000000" />
+                                    )}
+                                    <Icon name="ios-cart" style={{color: "#FFFFFF", fontSize: 25}}/>
+                                </Button>
+                            ) : (
+                                <Button
+                                    primary
+                                    onPress={() => this.props.navigation.navigate("Cart")}
+                                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Go To Cart </Text>
+                                    <Icon name="ios-cart" style={{color: "#FFFFFF", fontSize: 25}}/>
+                                </Button>
+                            )
+                    ) : (
+                        <Button onPress={() => this.setState({isSetting: !this.state.isSetting})} style={{width: "100%", alignItems: "center"}} dark><Text style={{flex: 1}}> Settings </Text>
+                            <Icon name={this.state.isSetting? "ios-arrow-dropup-circle": "ios-arrow-dropdown-circle"} style={{color: "#FFFFFF", fontSize: 25}}/>
+                        </Button>
+                    )
+                }
+                {
+                    (this.state.isSetting) && (
+                        <List style={{backgroundColor: "#FFFFFF", right: 0}}>
+                            <ListItem
+                                onPress={() => this.props.navigation.navigate("Videos", {...this.state.course})}
+                            >
+                                <Text>Videos</Text>
+                            </ListItem>
+                            <ListItem
+                                onPress={() => this.props.navigation.navigate("EditCourse", {...this.state.course})}
+                            >
+                                <Text>Edit Course</Text>
+                            </ListItem>
+                            <ListItem
+                                onPress={() => this.deleteCourse()}
+                            >
+                                <Text>Delete Course</Text>
+                            </ListItem>
+                        </List>
+                    )
+                }
+
+                <View style={styles.all}>
                     <Content>
                         <View style={styles.container}>
+                            {/*<Form>*/}
+                            {/*<Picker*/}
+                            {/*note*/}
+                            {/*style={{ width: undefined}}*/}
+                            {/*selectedValue={this.state.selected}*/}
+                            {/*onValueChange={this.onValueChange.bind(this)}*/}
+                            {/*>*/}
+                            {/*<Picker.Item label="select" value="key0" />*/}
+                            {/*<Picker.Item label="Edit" value="key1" />*/}
+                            {/*<Picker.Item label="Delete" value="key2" />*/}
+                            {/*</Picker>*/}
+                            {/*</Form>*/}
                             <View style={styles.paddingContent}>
-                                <Form>
-                                    <Picker
-                                        note
-                                        mode="dropdown"
-                                        style={{ width: 50, position:'absolute', right:0, top:0}}
-                                        selectedValue={this.state.selected}
-                                        onValueChange={this.onValueChange.bind(this)}
-                                    >
-                                        <Picker.Item label="Select" value="key0" />
-                                        <Picker.Item label="Edit" value="key1" />
-                                        <Picker.Item label="Delete" value="key2" />
-                                    </Picker>
-                                </Form>
                                 <CardItem style={{ paddingBottom: 30, paddingLeft: 0 }}>
                                     <Left>
                                         <Thumbnail source={{uri: Server.storage+this.state.course.img}} />
@@ -127,43 +288,135 @@ class CourseView extends Component {
 
                                 {/*<H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>*/}
                                 {/*<Text style={styles.viewText}>*/}
-                                    {/*{this.state.course.description}*/}
+                                {/*{this.state.course.description}*/}
                                 {/*</Text>*/}
                             </View>
                             <Image source={{uri: Server.storage+this.state.course.img}} style={styles.image}/>
 
+                            <View style={styles.paddingContent}>
+                                <H2 >Orientation Video</H2>
+                                <VideoPlayer source={{uri: "https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"}}   // Can be a URL or a local file.
+                                             ref={(ref) => {
+                                                 this.player = ref
+                                             }}
+                                             style={styles.backgroundVideo}
+                                             onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                                             onEnd={this.onEnd}                      // Callback when playback finishes
+                                             onError={this.videoError}
+                                             playInBackground={false}
+                                             paused={true}
+                                             selectedTextTrack={{
+                                                 type: "title",
+                                                 value: "Dubbing"
+                                             }}
+                                />
+
+                            </View>
                             <View style={styles.paddingContent}>
                                 <H2 >Price</H2>
                                 <Button transparent>
                                     <Text style={styles.footerText}>{this.state.course.price}</Text>
                                     <Text style={styles.footerIcon}>$</Text>
                                 </Button>
-                                <H2>Rating</H2>
-                                <View style={styles.viewContentStar}>
-                                    <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                    <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                    <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                    <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                    <Icon active style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                </View>
-                                {
-                                    (_.find(this.props.user.courses, course => course.id == this.state.course.id)) && (
-                                        !_.find(this.props.user.cart, course => course.id == this.state.course.id) ? (
-                                            <Button
-                                                onPress={() => this.addToCart()}
-                                                style={styles.button}><Text> Add To Cart </Text>
-                                                {this.state.isLoading && (
-                                                    <ActivityIndicator style={{}} size="small" color="#000000" />
-                                                )}
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                onPress={() => this.props.navigation.navigate("Cart")}
-                                                style={styles.button}><Text> Go To Cart </Text></Button>
-                                        )
-                                    )
+                                <H2>Reviews</H2>
 
-                                }
+                                <List>
+                                    {
+                                        ((!_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (!_.find(this.props.user.courses, course => course.id == this.state.course.id)) && (_.find(this.props.user.jointcourses, course => course.id == this.state.course.id))) && (
+                                            <Form>
+                                                <Item style={{height: 70}}>
+                                                    <Icon type="MaterialIcons" name='rate-review' />
+                                                    <Label>Rate</Label>
+                                                    <Slider
+                                                        value={Number(this.state.rate)}
+                                                        onValueChange={(rate) => this.setState({rate})}
+                                                        style={{flex: 1}} step={1} maximumValue={5} minimumValue={1}/>
+                                                </Item>
+                                                <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+                                                    <Icon type="FontAwesome" name='info' />
+                                                    <Text>Description</Text>
+                                                </Item>
+                                                <Item style={{marginBottom: 20}}>
+                            <Textarea
+                                style={{height: 200, paddingTop: 0, marginTop: 0, flex: 1}}
+                                rowSpan={5}
+                                bordered
+                                onChangeText={(review) => this.setState({review})}
+                                placeholder="Write your review"
+                                placeholderTextColor="#ccc5c5"
+                                value={this.state.description}
+                            />
+                                                </Item>
+                                                <Button
+                                                    onPress={() => this.addReview()}
+                                                    style={{flexDirection: "row"}}
+                                                    block light
+                                                >
+                                                    <Text>add</Text>
+                                                    {this.state.isReviewing && (
+                                                        <ActivityIndicator size="small" color="#000000" />
+                                                    )}
+                                                </Button>
+                                            </Form>
+
+                                        )
+                                    }
+
+                                    {
+                                        (this.state.isGettingReviews)? (
+                                            <View>
+                                                <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                                            </View>
+                                        ): (
+                                            <View>
+                                                <FlatList
+                                                    ListEmptyComponent={
+                                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No reviews were found</Text>
+                                                    }
+                                                    data={_.reverse(this.state.reviews)}
+                                                    renderItem={({item}) => (
+                                                        <ListItem avatar>
+                                                            <Left>
+                                                                <Thumbnail source={{uri: Server.storage+item.user.img}} />
+                                                            </Left>
+                                                            <Body>
+                                                            <Text>{item.user.name}</Text>
+                                                            <View style={styles.viewContentStar}>
+                                                                {
+                                                                    this.createRating(item.rate)
+                                                                }
+                                                            </View>
+                                                            <Text note>{item.review}</Text>
+                                                            </Body>
+                                                        </ListItem>
+                                                    )}
+                                                    keyExtractor = { (item, index) => index.toString() }
+                                                />
+                                            </View>
+                                        )
+                                    }
+                                </List>
+
+
+
+                                {/*{*/}
+                                {/*(_.find(this.props.user.courses, course => course.id == this.state.course.id)) && (*/}
+                                {/*!_.find(this.props.user.cart, course => course.id == this.state.course.id) ? (*/}
+                                {/*<Button*/}
+                                {/*onPress={() => this.addToCart()}*/}
+                                {/*style={styles.button}><Text> Add To Cart </Text>*/}
+                                {/*{this.state.isLoading && (*/}
+                                {/*<ActivityIndicator style={{}} size="small" color="#000000" />*/}
+                                {/*)}*/}
+                                {/*</Button>*/}
+                                {/*) : (*/}
+                                {/*<Button*/}
+                                {/*onPress={() => this.props.navigation.navigate("Cart")}*/}
+                                {/*style={styles.button}><Text> Go To Cart </Text></Button>*/}
+                                {/*)*/}
+                                {/*)*/}
+
+                                {/*}*/}
                                 {/*<Text style={styles.viewH2Padd}>Reviews and comments</Text>*/}
                                 {/*<Item regular style={styles.input}>*/}
                                 {/*<Input style={styles.inputText} placeholder="Write comment..." placeholderTextColor="#ccc5c5"*/}
@@ -190,7 +443,7 @@ class CourseView extends Component {
                             </View>
                         </View>
                     </Content>
-                </Container>
+                </View>
             </AppTemplate>
         );
     }
@@ -240,7 +493,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     star:{
-        color: '#b8d533'
+        color: '#b8d533',
+        fontSize: 17
+    },
+    star2:{
+        color: '#d7d7d7',
+        fontSize: 17
     },
     button:{
         backgroundColor: '#6483f7',
@@ -291,11 +549,13 @@ const styles = StyleSheet.create({
 
 });
 const mapStateToProps = ({ categories, user }) => ({
-    user
+    user,
+    jointcourses: user.jointcourses
 });
 
 const mapDispatchToProps = {
     setCart,
+    setUser
 };
 export default connect(
     mapStateToProps,

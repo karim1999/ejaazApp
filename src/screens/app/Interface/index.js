@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
-import { Content, Text, H2 } from 'native-base';
+import { Text, H2 } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
-import Course from "../../../components/course";
-import Carousel from "react-native-snap-carousel";
 import Color from "../../../constants/colors";
 import CourseBox from "../../../components/courseBox"
 
@@ -40,19 +38,6 @@ export default class Interface extends Component {
     async componentDidMount(){
         await this._onLoad();
     }
-    _renderItem ({item, index}) {
-        return (
-            <View>
-                <Text>{ item.title }</Text>
-            </View>
-        );
-    }
-    wp (percentage) {
-        const Screen = Dimensions.get('window');
-        const value = (percentage * Screen.width) / 100;
-        return Math.round(value);
-    }
-
     render() {
         return (
             <AppTemplate fab interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
