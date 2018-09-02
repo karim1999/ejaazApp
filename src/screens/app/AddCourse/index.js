@@ -14,7 +14,7 @@ class AddCourse extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: "",
+            isLoading: false,
             title: "",
             description: "",
             price: "",
@@ -112,7 +112,7 @@ class AddCourse extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Add Course">
-                <Container style={styles.all}>
+                <View style={styles.all}>
                     <Form style={styles.container}>
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name='pencil' />
@@ -138,8 +138,8 @@ class AddCourse extends Component {
                             <Label>Price</Label>
                             <Input onChangeText={(price) => this.setState({price})}
                                    value={this.state.price}
-                                   keyboardType='numeric' placeholder="ex:33h..."
-                                   placeholder="ex:100..."
+                                   keyboardType='numeric'
+                                   placeholder="ex:33h..."
                                    placeholderTextColor="#ccc5c5"
                             />
                         </Item>
@@ -197,8 +197,7 @@ class AddCourse extends Component {
                         </Item>
                         <Item style={{marginBottom: 20}}>
                             <Textarea
-                                style={{height: 200, paddingTop: 0, marginTop: 0}}
-                                style={{flex: 1}}
+                                style={{height: 200, paddingTop: 0, marginTop: 0, flex: 1}}
                                 rowSpan={5}
                                 bordered
                                 onChangeText={(description) => this.setState({description})}
@@ -210,14 +209,15 @@ class AddCourse extends Component {
                         <Button
                             onPress={() => this.addOrEdit()}
                             style={{flexDirection: "row"}}
-                            block light>
+                            block light
+                        >
                             <Text>Save</Text>
                             {this.state.isLoading && (
-                                <ActivityIndicator style={{}} size="small" color="#000000" />
+                                <ActivityIndicator size="small" color="#000000" />
                             )}
                         </Button>
                     </Form>
-                </Container>
+                </View>
             </AppTemplate>
         );
     }
@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor: '#fff',
         borderRadius: 10,
+        flex: 1,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         padding: 20
