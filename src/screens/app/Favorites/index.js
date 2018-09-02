@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ImageBackground, FlatList, AsyncStorage } from 'react-native';
+import { StyleSheet, View, ImageBackground, FlatList, AsyncStorage, TouchableOpacity } from 'react-native';
 import { Container, Content, Button, Icon, Text, } from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
@@ -42,6 +42,8 @@ class Favorites extends Component {
                             renderItem={({item}) => (
 
                                 <View style={styles.container}>
+                                <TouchableOpacity
+                                     onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
                                     <ImageBackground source={{uri: Server.storage+item.img}} style={styles.image}>
                                         <View style={styles.viewContent}>
                                             <Text style={styles.viewContentTxt}>{_.truncate(item.title)}</Text>
@@ -59,6 +61,7 @@ class Favorites extends Component {
                                             </Button>
                                         </View>
                                     </ImageBackground>
+                                    </TouchableOpacity>
                                 </View>
 
                             )}

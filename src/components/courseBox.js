@@ -63,9 +63,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 5,
     },
-    contentDet2Txt:{
-        marginTop: 20
-    },
     trainer:{
         color: '#9b9b9b',
     },

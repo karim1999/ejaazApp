@@ -21,8 +21,11 @@ class UserCourses extends Component {
 
     render() {
         return (
-            <AppTemplate navigation={this.props.navigation} title="Courses">
+            <AppTemplate navigation={this.props.navigation} title="My courses">
                 <FlatList
+                ListEmptyComponent={
+                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No courses were found</Text>
+                }
                     data={this.props.user.jointcourses}
                     renderItem={({item}) => (
                         <TouchableOpacity
