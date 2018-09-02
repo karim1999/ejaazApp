@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage} from 'react-native';
-import { Container, Content, Button, Icon, Text, Body, H2, H3, Item, Input, Toast, Picker, Form } from 'native-base';
+import {
+    Container,
+    Content,
+    Button,
+    Icon,
+    Text,
+    Body,
+    H2,
+    H3,
+    Item,
+    Input,
+    Toast,
+    Picker,
+    Form,
+    CardItem, Left, Thumbnail
+} from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
@@ -19,9 +34,9 @@ class CourseView extends Component {
 
     onValueChange() {
         this.setState({
-          selected: this.props.navigation.navigate('EditCourse', {...this.state.course})
+            selected: this.props.navigation.navigate('EditCourse', {...this.state.course})
         });
-      }
+    }
 
     onCommentPressed(){
         if(this.state.comment == ""){
@@ -83,28 +98,37 @@ class CourseView extends Component {
                     <Content>
                         <View style={styles.container}>
                             <View style={styles.paddingContent}>
-                            <Form>
-                                <Picker
-                                note
-                                mode="dropdown"
-                                style={{ width: 50, position:'absolute', right:0, top:0}}
-                                selectedValue={this.state.selected}
-                                onValueChange={this.onValueChange.bind(this)}
-                                >
-                                <Picker.Item label="Select" value="key0" />
-                                <Picker.Item label="Edit" value="key1" />
-                                <Picker.Item label="Delete" value="key2" />
-                                </Picker>
-                            </Form>
+                                <Form>
+                                    <Picker
+                                        note
+                                        mode="dropdown"
+                                        style={{ width: 50, position:'absolute', right:0, top:0}}
+                                        selectedValue={this.state.selected}
+                                        onValueChange={this.onValueChange.bind(this)}
+                                    >
+                                        <Picker.Item label="Select" value="key0" />
+                                        <Picker.Item label="Edit" value="key1" />
+                                        <Picker.Item label="Delete" value="key2" />
+                                    </Picker>
+                                </Form>
+                                <CardItem style={{ paddingBottom: 30, paddingLeft: 0 }}>
+                                    <Left>
+                                        <Thumbnail source={{uri: Server.storage+this.state.course.img}} />
+                                        <Body>
+                                        <Text>{this.state.course.user_name}</Text>
+                                        <Text note>{this.state.course.created_at}</Text>
+                                        </Body>
+                                    </Left>
+                                </CardItem>
                                 <H2 style={styles.viewH2}>{this.state.course.title}</H2>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}
                                 </Text>
 
-                                <H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>
-                                <Text style={styles.viewText}>
-                                    {this.state.course.description}
-                                </Text>
+                                {/*<H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>*/}
+                                {/*<Text style={styles.viewText}>*/}
+                                    {/*{this.state.course.description}*/}
+                                {/*</Text>*/}
                             </View>
                             <Image source={{uri: Server.storage+this.state.course.img}} style={styles.image}/>
 

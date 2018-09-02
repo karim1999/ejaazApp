@@ -7,6 +7,7 @@ import AppTemplate from "../appTemplate";
 import Course from "../../../components/course";
 import Carousel from "react-native-snap-carousel";
 import Color from "../../../constants/colors";
+import CourseBox from "../../../components/courseBox"
 
 
 export default class Interface extends Component {
@@ -62,50 +63,53 @@ export default class Interface extends Component {
                                 <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
                             </View>
                         ): (
-                            <FlatList
-                                ListEmptyComponent={
-                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
-                                }
-                                data={this.state.cloneInterface}
-                                renderItem={({item}) => (
-                                    <View style={{padding: 0}}>
-                                        <View style={styles.container}>
-                                            <H2 style={styles.containerH1}>{item.name}</H2>
-                                        </View>
-                                        {
-                                            (item.courses && (
-                                                <Carousel
-                                                    layout={'default'}
-                                                    ref={(c) => { this._carousel = c; }}
-                                                    data={item.courses}
-                                                    renderItem={({item}) => (
-                                                        <TouchableOpacity
-                                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                                                            <Course {...item} user_name={item.user.name} />
-                                                        </TouchableOpacity>
-                                                    )}
-                                                    sliderWidth={this.wp(100)}
-                                                    itemWidth={this.wp(40)}
-                                                    contentContainerCustomStyle	={{justifyContent:'center'}}
-                                                    containerCustomStyle={{paddingVertical: 20}}
-                                                    inactiveSlideScale={0.95}
-                                                    inactiveSlideOpacity={.6}
-                                                    activeSlideAlignment={'start'}
-                                                    loop={false}
+                            <View>
+                                <FlatList
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    contentContainerStyle ={styles.searchTitle}
+                                    data={this.state.cloneInterface}
+                                    renderItem={({item}) => (
+                                        <TouchableOpacity
+                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})} style={{alignSelf: 'flex-start'}}>
+                                            <Text style={styles.searchName}>{item.name}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                    keyExtractor = { (item, index) => index.toString() }
+                                />
 
-                                                    activeAnimationType={'spring'}
-                                                    onSnapToItem={(index) => this.setState({ activeSlide: index }) }
-                                                    activeAnimationOptions={{
-                                                        friction: 1,
-                                                        tension: 1
-                                                    }}
-                                                />
-                                            ))
-                                        }
-                                    </View>
-                                )}
-                                keyExtractor = { (item, index) => index.toString() }
-                            />
+                                <FlatList
+                                    ListEmptyComponent={
+                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                                    }
+                                    data={this.state.cloneInterface}
+                                    renderItem={({item}) => (
+                                        <View style={{padding: 0}}>
+                                            <View style={styles.container}>
+                                                <H2 style={styles.containerH1}>{item.name}</H2>
+                                            </View>
+                                            {
+                                                (item.courses && (
+                                                    <FlatList
+                                                        ListEmptyComponent={
+                                                            <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses to your cart first</Text>
+                                                        }
+                                                        data={item.courses}
+                                                        renderItem={({item}) => (
+                                                            <TouchableOpacity
+                                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                                                <CourseBox {...item} user_name={item.user.name} />
+                                                            </TouchableOpacity>
+                                                        )}
+                                                        keyExtractor = { (item, index) => index.toString() }
+                                                    />
+                                                ))
+                                            }
+                                        </View>
+                                    )}
+                                    keyExtractor = { (item, index) => index.toString() }
+                                />
+                            </View>
                         )
                     }
                 </View>
@@ -134,5 +138,19 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontFamily: "times new roman",
         fontSize: 16,
-    }
+    },
+    searchName:{
+        color: '#fff',
+        backgroundColor: '#6483f7',
+        padding: 5,
+        borderRadius: 6,
+        alignSelf: 'flex-start',
+        fontSize: 16,
+        marginLeft: 5
+    },
+    searchTitle:{
+        flexDirection: 'row',
+        padding: 10
+    },
+
 });
