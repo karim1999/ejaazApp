@@ -7,7 +7,7 @@ export default class AuthTemplate extends Component {
         return (
             <Container>
                 <ImageBackground source={require('../../images/Background.png')} style={{height: '100%', width: '100%', }}>
-                    <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
+                    <Content contentContainerStyle={{ justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
                         { this.props.children }
                     </Content>
                 </ImageBackground>

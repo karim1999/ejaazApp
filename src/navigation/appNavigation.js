@@ -26,8 +26,8 @@ import EditCourse from '../screens/app/CourseView/editCourse';
 import Color from "../constants/colors";
 
 const HomeStack = createStackNavigator({
-    CourseName,
     Interface,
+    CourseName,
     Search,
     CourseView,
     AddCourse,

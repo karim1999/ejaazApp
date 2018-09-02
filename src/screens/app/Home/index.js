@@ -6,7 +6,6 @@ import AppTemplate from "../appTemplate";
 import Colors from "../../../constants/colors";
 import Interface from "../Interface";
 import Categories from "../Categories";
-import Favourites from "../Favourites";
 import Profile from "../Profile";
 
 export default class Home extends Component {
@@ -20,9 +19,6 @@ export default class Home extends Component {
                         </Tab>
                         <Tab heading={ <TabHeading><Icon name="apps" /></TabHeading>}>
                             <Categories />
-                        </Tab>
-                        <Tab heading={ <TabHeading><Icon name="heart" /></TabHeading>}>
-                            <Favourites />
                         </Tab>
                         <Tab heading={ <TabHeading><Icon name="person" /></TabHeading>}>
                             <Profile />

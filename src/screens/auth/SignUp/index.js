@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Button, Toast} from 'native-base';
+import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
@@ -9,10 +9,11 @@ export default class SignUp extends Component {
     constructor(props){
         super(props);
         this.state = {
-           isSignUp: false,
-           name: "",
-           email: "",
-           password: "",
+            isSignUp: false,
+            name: "",
+            email: "",
+            password: "",
+            type: 1,
             categories:[{
                 id:1,
                 name:'first category'
@@ -21,51 +22,52 @@ export default class SignUp extends Component {
     }
     onRegisterPressed(){
         if(this.state.name == "" || this.state.email == "" || this.state.password == ""){
-            
+
             Toast.show({
                 text: 'Fields cannot be empty.',
                 type: "danger",
                 buttonText: 'Okay'
             });
-        
+
         }else{
-             this.setState({
+            this.setState({
                 isSignUp:true
             });
 
-        return axios.post(Server.url+'api/auth/register',{
+            return axios.post(Server.url+'api/auth/register',{
 
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
-            
-        }).then(response => {
-            Toast.show({
-                text: 'Register successfully',
-                type: 'success',
-                buttonText: 'Okay'
+                name: this.state.name,
+                email: this.state.email,
+                password: this.state.password,
+                type: this.state.type
+
+            }).then(response => {
+                Toast.show({
+                    text: 'Register successfully',
+                    type: 'success',
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isSignUp: false
+                });
+            }).catch(error => {
+                let text= "No Internet Connection.";
+                if(error.response.status == 400 && error.response.data && error.response.data.type == "validation" && error.response.data.error){
+                    if(error.response.data.error.name){
+                        text= error.response.data.error.name[0];
+                    }else if(error.response.data.error.email){
+                        text= error.response.data.error.email[0];
+                    }
+                }
+                Toast.show({
+                    text,
+                    type: 'danger',
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isSignUp: false
+                });
             });
-            this.setState({
-                isSignUp: false
-            });
-        }).catch(error => {
-            let text= "No Internet Connection.";
-            if(error.response.status == 400 && error.response.data && error.response.data.type == "validation" && error.response.data.error){
-                if(error.response.data.error.name){
-                    text= error.response.data.error.name[0];
-                }else if(error.response.data.error.email){
-                    text= error.response.data.error.email[0];
-                }    
-            }
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
-            this.setState({
-                isSignUp: false
-            });
-        });
         }
     }
     componentDidMount(){
@@ -87,7 +89,7 @@ export default class SignUp extends Component {
                 <Form>
                     <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Username" placeholderTextColor="#fff"
+                        <Input style={styles.inputText} placeholder="Name" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({name: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
@@ -98,11 +100,43 @@ export default class SignUp extends Component {
                         <Input style={styles.inputText} placeholder="Password" placeholderTextColor="#fff" secureTextEntry={true}
                                onChangeText={(val) => this.setState({password: val})}/>
                     </Item>
+                    <ListItem
+                        style={{height: 70, width: 300, justifyContent: "center", alignItems: "center", alignSelf: "center", borderBottomColor: "transparent"}}
+                    >
+                        <View
+                            style={{width: "50%", height: 70, flex: 1, flexDirection: "row", padding: 10}}
+                            onPress={(type) => {this.setState({type: 1})}}
+                        >
+                            <Left>
+                                <Text style={{color: "white"}}>Trainee</Text>
+                            </Left>
+                            <Right>
+                                <Radio selected={this.state.type === 1}
+                                       color="white"
+                                       onPress={(type) => {this.setState({type: 1})}}
+                                />
+                            </Right>
+                        </View>
+                        <View
+                            style={{width: "50%", height: 70, flex: 1, flexDirection: "row", padding: 10}}
+                            onPress={(type) => {this.setState({type: 2})}}
+                        >
+                            <Left>
+                                <Text style={{color: "white"}}>Trainer</Text>
+                            </Left>
+                            <Right>
+                                <Radio selected={this.state.type === 2}
+                                       color="white"
+                                       onPress={(type) => {this.setState({type: 2})}}
+                                />
+                            </Right>
+                        </View>
+                    </ListItem>
                     <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}>
-                    <Text style={styles.buttonText}> Signup </Text>
-                    {this.state.isSignUp && (
-                        <ActivityIndicator style={{}} size="small" color="#000000" />
-                    )}
+                        <Text style={styles.buttonText}> Signup </Text>
+                        {this.state.isSignUp && (
+                            <ActivityIndicator style={{}} size="small" color="#000000" />
+                        )}
                     </Button>
                 </Form>
                 <View style={styles.signupTextCont}>
