@@ -52,10 +52,10 @@ export default class Education extends Component {
 
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Education">
+            <AppTemplate interface onLoad={()=> this._onLoad()} back navigation={this.props.navigation} title="Education">
                 <Button
                     dark
-                    onPress={() => this.props.navigation.navigate("AddEducation", {...this.props.item})}
+                    onPress={() => this.props.navigation.navigate("AddEducation", {isEducation: false})}
                     style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Education </Text>
                     {this.state.isLoading && (
                         <ActivityIndicator size="small" color="#000000" />
