@@ -15,16 +15,15 @@ class ProfileInfo extends Component {
         this.state = {  
             isLoading: true,
             profile:this.props.navigation.state.params,
-            profielData: [],
+            profileData: [],
         };
       }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url+'api/auth/profile/'+this.state.profile.user_id+'?token='+userToken).then(response => {
-                profielData: response.data
+            return axios.get(Server.url+'api/auth/profile/'+this.state.profile.user_id+'?token='+userToken).then(response => {
                 this.setState({
-                    isLoading: false
+                    profileData: response.data,
                 });
             }).catch(error => {
                 Toast.show({
@@ -52,20 +51,19 @@ class ProfileInfo extends Component {
                 <View style={styles.all}>
                         <View style={styles.container}>
                             <View style={styles.trainer}>
-                                <H3 style={styles.trainerH3}>{this.state.profielData.user.name}</H3>
+                                <H3 style={styles.trainerH3}>{this.state.profileData.user.name}</H3>
                                 <H3 style={styles.trainerH3}>UI Trainer</H3>
                             </View>
                             <View style={styles.content}>
 
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Joined</H3>
-                                    <Text style={styles.titleName}>{this.state.profielData.user.created_at}</Text>
+                                    <Text style={styles.titleName}>{this.state.profileData.user.created_at}</Text>
                                 </View>
 
                                 <FlatList
-                                data={this.props.profielData.education}
+                                data={this.state.profileData.education}
                                 renderItem={({item}) => (
-
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Education</H3>
                                     <Text style={styles.titleNameMajor}>{item.name}</Text>
