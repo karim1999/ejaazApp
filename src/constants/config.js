@@ -1,5 +1,5 @@
-const SERVER_URL = 'http://10.5.50.247/'; // dev
-const STORAGE_URL = 'http://10.5.50.247/storage/'; // dev
+const SERVER_URL = 'http://192.168.1.3:8000/'; // dev
+const STORAGE_URL = 'http://192.168.1.3:8000/storage/'; // dev
 
 export default {
     url:SERVER_URL,

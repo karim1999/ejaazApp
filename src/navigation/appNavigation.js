@@ -8,11 +8,11 @@ import Favorites from "../screens/app/Favorites";
 import Profile from "../screens/app/Profile";
 import Settings from "../screens/app/Settings";
 import Education from "../screens/app/Settings/Education/Education";
-import ShowEducation from "../screens/app/Settings/Education/ShowEducation";
+import AddEducation from "../screens/app/Settings/Education/AddEducation";
 import Certificates from "../screens/app/Settings/Certificates/Certificates";
-import ShowCertificates from "../screens/app/Settings/Certificates/ShowCertificates";
+import AddCertificates from "../screens/app/Settings/Certificates/AddCertificates";
 import Jobs from "../screens/app/Settings/Jobs/Jobs";
-import ShowJobs from "../screens/app/Settings/Jobs/ShowJobs";
+import AddJobs from "../screens/app/Settings/Jobs/AddJobs";
 import Security from "../screens/app/Settings/Security";
 import CourseView from "../screens/app/CourseView";
 import ProfileInfo from "../screens/app/ProfileInfo";
@@ -47,12 +47,12 @@ const ProfileStack = createStackNavigator({
     Settings,
     ProfileInfo,
     Education,
-    ShowEducation,
+    AddEducation,
     Security,
     Jobs,
-    ShowJobs,
+    AddJobs,
     Certificates,
-    ShowCertificates,
+    AddCertificates,
     UserInfo
 
 },{

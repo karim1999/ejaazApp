@@ -1,28 +1,68 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, } from 'react-native';
+import { StyleSheet, View, Image, AsyncStorage} from 'react-native';
 import { Container, Content, Text, Button, Icon, H3, } from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
-export default class ProfileInfo extends Component {
+import Server from "../../../constants/config";
+import {connect} from "react-redux";
+import {setUser} from "../../../reducers";
+import axios from "axios";
+
+class ProfileInfo extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  
+            isLoading: false,
+            name:this.props.user.name,
+            created_at:this.props.user.created_at,
+            education:this.props.user.education.name,
+            jobs:this.props.user.jobs.name,
+            certificates:this.props.user.certificates.name,
+            phone:this.props.user.phone,
+        };
+      }
+
+    componentDidMount(){
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
+                this.props.setUser(response.data.user);
+            }).catch(error => {
+                Toast.show({
+                    text: 'Error reaching the server.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+            })
+        }).then(() => {
+            this.setState({
+                refreshing: false
+            });
+        });
+    }
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Profile info">
                 <View style={styles.all}>
                         <View style={styles.container}>
                             <View style={styles.trainer}>
-                                <H3>Abdelrahman Labib</H3>
+                                <H3 style={styles.trainerH3}>{this.state.name}</H3>
                                 <H3 style={styles.trainerH3}>UI Trainer</H3>
                             </View>
                             <View style={styles.content}>
 
                                 <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Universty</H3>
-                                    <Text style={styles.titleName}>Stanford Universty</Text>
+                                    <H3 style={styles.title}>Joined</H3>
+                                    <Text style={styles.titleName}>{new Date(this.state.created_at).toString()}</Text>
+                                </View>
+
+                                <View style={styles.contentUniversty}>
+                                    <H3 style={styles.title}>Education</H3>
+                                    <Text style={styles.titleNameMajor}>{this.state.education}</Text>
                                 </View>
 
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Major</H3>
-                                    <Text style={styles.titleNameMajor}>Ui/Ux Design</Text>
+                                    <Text style={styles.titleNameMajor}>{this.state.jobs}</Text>
                                 </View>
 
                                 <View style={styles.contentUniversty}>
@@ -167,3 +207,15 @@ const styles = StyleSheet.create({
       paddingTop: 5
     },
 });
+
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ProfileInfo);

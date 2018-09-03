@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
-import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label, DatePicker, Toast} from 'native-base';
+import { StyleSheet, View, ActivityIndicator, AsyncStorage, FlatList} from 'react-native';
+import {Container, Textarea, Button, Icon, Text, Input, Item, Form, Label, DatePicker, Toast,} from 'native-base';
 import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
 import AppTemplate from "../../appTemplate";
+import Color from "../../../../constants/colors";
 
 export default class Education extends Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class Education extends Component {
         this.state = {
             chosenDate: new Date(),
             isLoading: false,
+            cloneEducation: [],
             name: "",
             institution: "",
             description: "",
@@ -24,150 +26,176 @@ export default class Education extends Component {
     //     this.setState({ chosenDate: newDate });
     // }
 
-    onEducationPressed(){
-
-        if(this.state.name == "" || this.state.institution == "" || this.state.description == "" || this.state.start_date == ""|| this.state.end_date == "")
-        {
-            Toast.show({
-                text: 'Please fill out fields.',
-                type: "danger",
-                buttonText: 'Okay'
-            });
-
-        }else {
-
-            this.setState({
-                isLoading: true
-            });
-            return AsyncStorage.getItem('token').then(userToken => {
-                return axios.post(Server.url + 'api/addEducation?token='+userToken, {
-                    name: this.state.name,
-                    institution: this.state.institution,
-                    description: this.state.description,
-                    start_date: new Date(this.state.start_date).toLocaleDateString('en-GB'),
-                    end_date: new Date(this.state.end_date).toLocaleDateString('en-GB'),
-                }).then(response => {
-                    Toast.show({
-                        text: 'Successfully',
-                        type: "success",
-                        buttonText: 'Okay'
-                    });
-                    this.setState({
-                        isLoading: false
-                    });
-                }).catch(error => {
-                    Toast.show({
-                        text: 'Error.',
-                        type: "danger",
-                        buttonText: 'Okay'
-                    });
-                    this.setState({
-                        isLoading: false
-                    });
+    _onLoad(){
+        this.setState({
+            isLoading: true
+        });
+        return AsyncStorage.getItem('token').then(userToken=>{
+            return axios.get(Server.url + 'api/user/education?token=' + userToken)
+            .then(response=>{
+                this.setState({
+                    isLoading:false,
+                    cloneEducation: response.data,
+                })
+            }).catch(error => {
+                Toast.show({
+                    text: 'Error reaching the server.',
+                    type: "danger",
+                    buttonText: 'Okay'
                 });
-            });
-        }
-
+            })
+        })
+    }
+    async componentDidMount(){
+        await this._onLoad();
     }
 
     render() {
         return (
-            <Container style={styles.all}>
-                <Form style={styles.container}>
-                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='pencil' />
-                        <Label>Title</Label>
-                        <Input onChangeText={(name) => this.setState({name})}
-                            placeholder="Name of your education...."
-                            placeholderTextColor="#ccc5c5"
-                        />
-                    </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='institution' />
-                        <Label>institution</Label>
-                        <Input onChangeText={(institution) => this.setState({institution})}
-                            keyboardType='numeric' placeholder="institution of your education...."
-                            placeholderTextColor="#ccc5c5"
-                        />
-                    </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='hourglass-start' />
-                        <Label>Start_date</Label>
-                        <DatePicker
-                            defaultDate={new Date().getTime()}
-                            minimumDate={new Date(1990, 1, 1).getTime()}
-                            maximumDate={new Date(2018, 12, 31).getTime()}
-                            locale={"en"}
-                            timeZoneOffsetInMinutes={undefined}
-                            modalTransparent={false}
-                            animationType={"fade"}
-                            androidMode={"default"}
-                            placeHolderText="Select date"
-                            textStyle={{ color: "green" }}
-                            placeHolderTextStyle={{ color: "#cacaca" }}
-                            onDateChange={(val) => this.setState({start_date: val})}
-                    />
-                    </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='hourglass-end' />
-                        <Label>End_date</Label>
-                        <DatePicker
-                            defaultDate={new Date().getTime()}
-                            minimumDate={new Date(1990, 1, 1).getTime()}
-                            maximumDate={new Date(2018, 12, 31).getTime()}
-                            locale={"en"}
-                            timeZoneOffsetInMinutes={undefined}
-                            modalTransparent={false}
-                            animationType={"fade"}
-                            androidMode={"default"}
-                            placeHolderText="Select date"
-                            textStyle={{ color: "green" }}
-                            placeHolderTextStyle={{ color: "#cacaca" }}
-                            onDateChange={(val) => this.setState({end_date: val})}
-                    />
-                    </Item>
-                    <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
-                        <Icon type="FontAwesome" name='info' />
-                        <Text>Description</Text>
-                    </Item>
-                    <Item style={{marginBottom: 20}}>
-                        <Textarea
-                            style={{height: 200, paddingTop: 0, marginTop: 0}}
-                            style={{flex: 1}}
-                            rowSpan={5}
-                            bordered
-                            onChangeText={(description) => this.setState({description})}
-                            placeholder="Write more about your education"
-                            placeholderTextColor="#ccc5c5"
-                            value={this.state.description}
-                        />
-                    </Item>
-                    <Button
-                        onPress={this.onEducationPressed.bind(this)}
-                        style={{flexDirection: "row", backgroundColor: '#6483f7'}}
-                        block light>
-                        <Text>Save</Text>
-                        {this.state.isLoading && (
-                            <ActivityIndicator style={{}} size="small" color="#000000" />
-                        )}
-                    </Button>
-                </Form>
-            </Container>
+            <AppTemplate back navigation={this.props.navigation} title="Education">
+                <Button
+                    dark
+                    onPress={() => this.props.navigation.navigate("AddEducation", {...this.props.item})}
+                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Education </Text>
+                    {this.state.isLoading && (
+                        <ActivityIndicator size="small" color="#000000" />
+                    )}
+                    <Icon name="ios-add-circle" style={{color: "#FFFFFF", fontSize: 25}}/>
+                </Button>
+                <View style={styles.container}>
+                {
+                    (this.state.isLoading)? (
+                        <View>
+                            <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                        </View>
+                    ): (
+                        <View>
+                            <FlatList
+                                ListEmptyComponent={
+                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No Education were found</Text>
+                                }
+                                data={this.state.cloneEducation}
+                                renderItem={({item}) => (
+                                    <Item style={{height: 110, flexDirection: 'row', padding: 5}}
+                                            onPress={() => this.props.navigation.navigate("AddEducation", {...item, isEducation: true, education_id: item.id})}
+                                    >
+                                    <Icon type="FontAwesome" name='institution' />
+                                        <View style={{paddingLeft: 20}}>
+                                            <Label>{item.name}</Label>
+                                            <Text>{item.institution}</Text>
+                                        </View>
+                                        <View>
+                                        <Text note>{item.start_date}</Text>
+                                        <Text note>{item.end_date}</Text>
+                                        </View>
+                                    </Item>
+
+                                )}
+                                keyExtractor = { (item, index) => index.toString() }
+                            />
+                        </View>
+                    )
+                    }
+
+                </View>
+            </AppTemplate>            
+            // <Container style={styles.all}>
+            //     <Form style={styles.container}>
+            //         <Item style={{height: 70}}>
+            //             <Icon type="FontAwesome" name='pencil' />
+            //             <Label>Title</Label>
+            //             <Input onChangeText={(name) => this.setState({name})}
+            //                 placeholder="Name of your education...."
+            //                 placeholderTextColor="#ccc5c5"
+            //             />
+            //         </Item>
+            //         <Item style={{height: 70}}>
+            //             <Icon type="FontAwesome" name='institution' />
+            //             <Label>institution</Label>
+            //             <Input onChangeText={(institution) => this.setState({institution})}
+            //                 keyboardType='numeric' placeholder="institution of your education...."
+            //                 placeholderTextColor="#ccc5c5"
+            //             />
+            //         </Item>
+            //         <Item style={{height: 70}}>
+            //             <Icon type="FontAwesome" name='hourglass-start' />
+            //             <Label>Start_date</Label>
+            //             <DatePicker
+            //                 defaultDate={new Date().getTime()}
+            //                 minimumDate={new Date(1990, 1, 1).getTime()}
+            //                 maximumDate={new Date(2018, 12, 31).getTime()}
+            //                 locale={"en"}
+            //                 timeZoneOffsetInMinutes={undefined}
+            //                 modalTransparent={false}
+            //                 animationType={"fade"}
+            //                 androidMode={"default"}
+            //                 placeHolderText="Select date"
+            //                 textStyle={{ color: "green" }}
+            //                 placeHolderTextStyle={{ color: "#cacaca" }}
+            //                 onDateChange={(val) => this.setState({start_date: val})}
+            //         />
+            //         </Item>
+            //         <Item style={{height: 70}}>
+            //             <Icon type="FontAwesome" name='hourglass-end' />
+            //             <Label>End_date</Label>
+            //             <DatePicker
+            //                 defaultDate={new Date().getTime()}
+            //                 minimumDate={new Date(1990, 1, 1).getTime()}
+            //                 maximumDate={new Date(2018, 12, 31).getTime()}
+            //                 locale={"en"}
+            //                 timeZoneOffsetInMinutes={undefined}
+            //                 modalTransparent={false}
+            //                 animationType={"fade"}
+            //                 androidMode={"default"}
+            //                 placeHolderText="Select date"
+            //                 textStyle={{ color: "green" }}
+            //                 placeHolderTextStyle={{ color: "#cacaca" }}
+            //                 onDateChange={(val) => this.setState({end_date: val})}
+            //         />
+            //         </Item>
+            //         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+            //             <Icon type="FontAwesome" name='info' />
+            //             <Text>Description</Text>
+            //         </Item>
+            //         <Item style={{marginBottom: 20}}>
+            //             <Textarea
+            //                 style={{height: 200, paddingTop: 0, marginTop: 0}}
+            //                 style={{flex: 1}}
+            //                 rowSpan={5}
+            //                 bordered
+            //                 onChangeText={(description) => this.setState({description})}
+            //                 placeholder="Write more about your education"
+            //                 placeholderTextColor="#ccc5c5"
+            //                 value={this.state.description}
+            //             />
+            //         </Item>
+            //         <Button
+            //             onPress={this.onEducationPressed.bind(this)}
+            //             style={{flexDirection: "row", backgroundColor: '#6483f7'}}
+            //             block light>
+            //             <Text>Save</Text>
+            //             {this.state.isLoading && (
+            //                 <ActivityIndicator style={{}} size="small" color="#000000" />
+            //             )}
+            //         </Button>
+            //     </Form>
+            // </Container>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    all:{
-        padding:20,
+    all: {
         backgroundColor: '#f1f1f1',
+        padding: 20,
+        height: '100%',
+        flex: 1,
+        flexDirection: "row"
     },
-    container:{
+    container: {
+        alignSelf: 'center',
+        width: '100%',
         backgroundColor: '#fff',
-        borderRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
-        padding: 20
     },
     content:{
         flexDirection: 'row',

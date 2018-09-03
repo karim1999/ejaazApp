@@ -82,8 +82,6 @@ class Profile extends Component {
             <AppTemplate navigation={this.props.navigation} title="Profile">
 
                 <View style={styles.container}>
-                    <Icon active style={styles.setting} type="MaterialCommunityIcons" name="settings"
-                          onPress={()=> this.props.navigation.navigate('Settings')}/>
                     <H2 style={styles.containerH2}>{this.props.user.name}</H2>
                     <Icon active style={styles.edit} type="FontAwesome" name="edit" 
                     onPress={()=> this.props.navigation.navigate('UserInfo')}/>
@@ -116,21 +114,21 @@ class Profile extends Component {
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("ShowEducation")}
+                    onPress={() => this.props.navigation.navigate("Education")}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Education</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("ShowJobs")}
+                    onPress={() => this.props.navigation.navigate("Jobs")}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Jobs</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("ShowCertificates")}
+                    onPress={() => this.props.navigation.navigate("Certificates")}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Certificates</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
