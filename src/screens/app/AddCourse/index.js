@@ -13,7 +13,7 @@ import {
     Picker,
     Toast,
     ListItem,
-    Right, Radio, Left
+    Right, Radio, Left,DatePicker
 } from 'native-base';
 import AppTemplate from "../appTemplate";
 import ImagePicker from "react-native-image-picker";
@@ -105,6 +105,11 @@ class AddCourse extends Component {
                     uri: this.state.video,
                     type: 'image/png'
                 });
+            }
+            if (this.state.type == 1) {
+                data.append('center', this.state.center);
+                data.append('address', this.state.address);
+                data.append('date_start', new Date(this.state.date_start).toLocaleDateString('en-GB'));
             }
             return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                 this.setState({
@@ -231,6 +236,51 @@ class AddCourse extends Component {
                                 />
                             </Right>
                         </ListItem>
+                        {
+                            (this.state.type == 1)?
+                            (
+                                <Form>
+                                    <Item style={{height: 70}}>
+                                    <Icon type="FontAwesome" name='pencil' />
+                                    <Label>Center name</Label>
+                                    <Input onChangeText={(center) => this.setState({center})}
+                                        placeholder="Center name..."
+                                        placeholderTextColor="#ccc5c5"
+                                    />
+                                    
+                                    </Item>
+                                    <Item style={{height: 70}}>
+                                    <Icon type="FontAwesome" name='pencil' />
+                                    <Label>Address</Label>
+                                    <Input onChangeText={(address) => this.setState({address})}
+                                        placeholder="Address..."
+                                        placeholderTextColor="#ccc5c5"
+                                    />
+                                    </Item>
+                                    <Item style={{height: 70}}>
+                                        <Icon type="FontAwesome" name='hourglass-end' />
+                                        <Label>Date start</Label>
+                                        <DatePicker
+                                            defaultDate={new Date()}
+                                            minimumDate={new Date(1990, 1, 1).getTime()}
+                                            maximumDate={new Date(2018, 12, 31).getTime()}
+                                            locale={"en"}
+                                            timeZoneOffsetInMinutes={undefined}
+                                            modalTransparent={false}
+                                            animationType={"fade"}
+                                            androidMode={"default"}
+                                            placeHolderText='Select date'
+                                            textStyle={{ color: "green" }}
+                                            placeHolderTextStyle={{ color: "#cacaca" }}
+                                            onDateChange={(val) => this.setState({date_start: val})}
+                                        />
+                                    </Item>
+                                </Form>
+                            )
+                            :(
+                               <Text></Text> 
+                            )
+                        }
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="FontAwesome" name='info' />
                             <Text>Description</Text>

@@ -55,7 +55,7 @@ export default class Jobs extends Component {
             <AppTemplate back navigation={this.props.navigation} title="Jobs">
                 <Button
                     dark
-                    onPress={() => this.props.navigation.navigate("AddJobs", {...this.props.item})}
+                    onPress={() => this.props.navigation.navigate("AddJobs", {isJobs: false})}
                     style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Jobs </Text>
                     {this.state.isLoading && (
                         <ActivityIndicator size="small" color="#000000" />
@@ -76,15 +76,15 @@ export default class Jobs extends Component {
                                 }
                                 data={this.state.cloneJobs}
                                 renderItem={({item}) => (
-                                    <Item style={{height: 110, flexDirection: 'row', padding: 5}}
+                                    <Item style={{height: 90, flexDirection: 'row', padding: 5}}
                                             onPress={() => this.props.navigation.navigate("AddJobs", {...item, isJobs: true, jobs_id: item.id})}
                                     >
-                                    <Icon type="Foundation" name='Jobs' />
+                                    <Icon type="Foundation" name='shopping-bag' style={{padding: 5}}/>
                                         <View style={{paddingLeft: 20}}>
                                             <Label>{item.name}</Label>
                                             <Text>{item.institution}</Text>
                                         </View>
-                                        <View>
+                                        <View style={{position: 'absolute', right: 10}}>
                                         <Text note>{item.start_date}</Text>
                                         <Text note>{item.end_date}</Text>
                                         </View>

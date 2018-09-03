@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator, AsyncStorage, FlatList} from 'react-native';
-import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast} from 'native-base';
+import { Container, Content, Button, Item, Icon, Text, DatePicker, Input, Toast, Form, Label, Textarea} from 'native-base';
 import Server from "../../../../constants/config"
 import {connect} from "react-redux";
 import axios from "axios"
@@ -23,8 +23,8 @@ export default class AddJobs extends Component {
             data= {
                 name: "",
                 institution: "",
-                start_date: "",
-                end_date: "",
+                start_date: "09/30/2018",
+                end_date: "09/30/2018",
                 description: "",
             }
         }
@@ -45,8 +45,8 @@ export default class AddJobs extends Component {
             let data = new FormData();
             data.append('name', this.state.name);
             data.append('institution', this.state.institution);
-            data.append('start_date', this.state.start_date);
-            data.append('end_date', this.state.end_date);
+            data.append('start_date', new Date(this.state.start_date).toLocaleDateString('en-GB'));
+            data.append('end_date', new Date(this.state.end_date).toLocaleDateString('en-GB'));
             data.append('description', this.state.description);
             if(this.state.data.isJobs){
                 data.append('id', this.state.data.id);
@@ -66,12 +66,12 @@ export default class AddJobs extends Component {
 
             } else {
                 return axios.post(Server.url + 'api/addJobs?token='+userToken, data).then(response => {
+                    this.props.navigation.navigate("Jobs");
                     Toast.show({
                         text: "Jobs was added successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                    this.props.navigation.navigate("Jobs");
                 }).catch(error => {
                     alert("karim")
                 })
@@ -123,7 +123,7 @@ export default class AddJobs extends Component {
     }
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Add Course">
+            <AppTemplate back navigation={this.props.navigation} title="Add Jobs">
                 {
                     (this.state.data.isJobs)&& (
                         <Button
@@ -204,7 +204,7 @@ export default class AddJobs extends Component {
                             rowSpan={5}
                             bordered
                             onChangeText={(description) => this.setState({description})}
-                            placeholder="Write more about the course"
+                            placeholder="Write more about your job"
                             placeholderTextColor="#ccc5c5"
                             value={this.state.description}
                         />

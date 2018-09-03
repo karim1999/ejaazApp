@@ -51,7 +51,7 @@ export default class Certificates extends Component {
             <AppTemplate back navigation={this.props.navigation} title="Certificates">
                 <Button
                     dark
-                    onPress={() => this.props.navigation.navigate("AddCertificates", {...this.props.item})}
+                    onPress={() => this.props.navigation.navigate("AddCertificates", {isCertificates: false})}
                     style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Certificates </Text>
                     {this.state.isLoading && (
                         <ActivityIndicator size="small" color="#000000" />
@@ -75,12 +75,12 @@ export default class Certificates extends Component {
                                     <Item style={{height: 110, flexDirection: 'row', padding: 5}}
                                             onPress={() => this.props.navigation.navigate("AddCertificates", {...item, isCertificates: true, certificates_id: item.id})}
                                     >
-                                    <Icon type="FontAwesome" name='institution' />
+                                    <Icon type="FontAwesome" name='certificate' style={{padding: 5}}/>
                                         <View style={{paddingLeft: 20}}>
                                             <Label>{item.name}</Label>
-                                            <Text>{item.from}</Text>
+                                            <Text>{item.from} years</Text>
                                         </View>
-                                        <Text note>{item.received_date}</Text>
+                                        <Text note style={{position: 'absolute', right: 10}}>{item.received_date}</Text>
                                     </Item>
 
                                 )}

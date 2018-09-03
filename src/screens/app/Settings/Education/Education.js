@@ -76,17 +76,17 @@ export default class Education extends Component {
                                 }
                                 data={this.state.cloneEducation}
                                 renderItem={({item}) => (
-                                    <Item style={{height: 110, flexDirection: 'row', padding: 5}}
+                                    <Item style={{height: 90, flexDirection: 'row', padding: 5}}
                                             onPress={() => this.props.navigation.navigate("AddEducation", {...item, isEducation: true, education_id: item.id})}
                                     >
-                                    <Icon type="FontAwesome" name='institution' />
+                                    <Icon type="FontAwesome" name='institution' style={{padding: 5}}/>
                                         <View style={{paddingLeft: 20}}>
                                             <Label>{item.name}</Label>
                                             <Text>{item.institution}</Text>
                                         </View>
-                                        <View>
-                                        <Text note>{item.start_date}</Text>
-                                        <Text note>{item.end_date}</Text>
+                                        <View style={{position: 'absolute', right: 10}}>
+                                            <Text note>{item.start_date}</Text>
+                                            <Text note>{item.end_date}</Text>
                                         </View>
                                     </Item>
 

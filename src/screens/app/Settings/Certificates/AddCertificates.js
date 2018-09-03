@@ -21,7 +21,7 @@ export default class AddCertificates extends Component {
             data= {
                 name: "",
                 from: "",
-                received_date: "",
+                received_date: "09/30/2018",
                 description: "",
             }
         }
@@ -40,42 +40,46 @@ export default class AddCertificates extends Component {
         });
         return AsyncStorage.getItem('token').then(userToken => {
             let data = new FormData();
-            if(this.state.data.isCertificates){
-                data.append('id', this.state.data.id);
-            }
             data.append('name', this.state.name);
             data.append('institution', this.state.institution);
-            data.append('start_date', this.state.start_date);
-            data.append('end_date', this.state.end_date);
+            data.append('received_date', new Date(this.state.received_date).toLocaleDateString('en-GB'));
             data.append('description', this.state.description);
-            return axios.post(Server.url + 'api/addCertificates?token='+userToken, data).then(response => {
-                this.setState({
-                    isLoading: false,
-                });
-                if(this.state.data.isCertificates){
+            if(this.state.data.isCertificates){
+                data.append('id', this.state.data.id);
+                return axios.post(Server.url + 'api/editCertificates/'+this.state.data.certificates_id+'?token='+userToken, data).then(response => {
+                    this.setState({
+                        isLoading: false,
+                    });
+                    this.props.navigation.navigate("Certificates");
                     Toast.show({
                         text: "Certificates was edited successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                }{
+                }).catch(error => {
+                    alert(error)
+                })
+
+            } else {
+                return axios.post(Server.url + 'api/addCertificates?token='+userToken, data).then(response => {
+                    this.props.navigation.navigate("Certificates");
                     Toast.show({
                         text: "Certificates was added successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                }
+                }).catch(error => {
+                    alert("karim")
+                })
+            }
 
-                this.props.navigation.navigate("Certificates", {...this.state.data});
-            }).catch(error => {
-                alert(error.data)
-            })
         }).then(() => {
             this.setState({
                 isLoading: false
             });
         });
     }
+
     deleteCertificates(){
         Alert.alert(
             "Are you sure?",
@@ -115,7 +119,7 @@ export default class AddCertificates extends Component {
     }
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Add Course">
+            <AppTemplate back navigation={this.props.navigation} title="Add Certificates">
                 {
                     (this.state.data.isCertificates)&& (
                         <Button
@@ -160,7 +164,7 @@ export default class AddCertificates extends Component {
                             modalTransparent={false}
                             animationType={"fade"}
                             androidMode={"default"}
-                            placeHolderText="Select date"
+                            placeHolderText={new Date(this.state.received_date).toLocaleDateString('en-GB')}
                             textStyle={{ color: "green" }}
                             placeHolderTextStyle={{ color: "#cacaca" }}
                             onDateChange={(val) => this.setState({received_date: val})}
@@ -177,7 +181,7 @@ export default class AddCertificates extends Component {
                             rowSpan={5}
                             bordered
                             onChangeText={(description) => this.setState({description})}
-                            placeholder="Write more about the course"
+                            placeholder="Write more about your certificate"
                             placeholderTextColor="#ccc5c5"
                             value={this.state.description}
                         />

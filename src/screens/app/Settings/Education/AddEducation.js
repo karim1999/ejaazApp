@@ -121,11 +121,6 @@ export default class AddEducation extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Add/Edit Education">
-                <Text>
-                    {
-                        this.state.name+" , "+this.state.institution+" , "+this.state.description+" , "+new Date(this.state.start_date).toLocaleDateString('en-GB')+" , "+new Date(this.state.end_date).toLocaleDateString('en-GB')
-                    }
-                </Text>
                 {
                     (this.state.data.isEducation)&& (
                         <Button
@@ -205,7 +200,7 @@ export default class AddEducation extends Component {
                             rowSpan={5}
                             bordered
                             onChangeText={(description) => this.setState({description})}
-                            placeholder="Write more about the course"
+                            placeholder="Write more about your education"
                             placeholderTextColor="#ccc5c5"
                             value={this.state.description}
                         />
