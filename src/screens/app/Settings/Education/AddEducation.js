@@ -23,8 +23,8 @@ export default class AddEducation extends Component {
             data= {
                 name: "",
                 institution: "",
-                start_date: "",
-                end_date: "",
+                start_date: "09/30/2018",
+                end_date: "09/30/2018",
                 description: "",
             }
         }
@@ -45,15 +45,12 @@ export default class AddEducation extends Component {
             let data = new FormData();
             data.append('name', this.state.name);
             data.append('institution', this.state.institution);
-            data.append('start_date', this.state.start_date);
-            data.append('end_date', this.state.end_date);
+            data.append('start_date', new Date(this.state.start_date).toLocaleDateString('en-GB'));
+            data.append('end_date', new Date(this.state.end_date).toLocaleDateString('en-GB'));
             data.append('description', this.state.description);
             if(this.state.data.isEducation){
                 data.append('id', this.state.data.id);
                 return axios.post(Server.url + 'api/editEducation/'+this.state.data.education_id+'?token='+userToken, data).then(response => {
-                    this.setState({
-                        isLoading: false,
-                    });
                     this.props.navigation.navigate("Education");
                     Toast.show({
                         text: "Education was edited successfully",
@@ -66,14 +63,14 @@ export default class AddEducation extends Component {
 
             } else {
                 return axios.post(Server.url + 'api/addEducation?token='+userToken, data).then(response => {
+                    this.props.navigation.navigate("Education");
                     Toast.show({
-                        text: "Education was added successfully",
+                        text: "Education was edited successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                    this.props.navigation.navigate("Education");
                 }).catch(error => {
-                    alert("karim")
+                    alert(error)
                 })
             }
 
@@ -124,6 +121,11 @@ export default class AddEducation extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Add/Edit Education">
+                <Text>
+                    {
+                        this.state.name+" , "+this.state.institution+" , "+this.state.description+" , "+new Date(this.state.start_date).toLocaleDateString('en-GB')+" , "+new Date(this.state.end_date).toLocaleDateString('en-GB')
+                    }
+                </Text>
                 {
                     (this.state.data.isEducation)&& (
                         <Button
