@@ -43,42 +43,47 @@ export default class AddJobs extends Component {
         });
         return AsyncStorage.getItem('token').then(userToken => {
             let data = new FormData();
-            if(this.state.data.isJobs){
-                data.append('id', this.state.data.id);
-            }
             data.append('name', this.state.name);
             data.append('institution', this.state.institution);
             data.append('start_date', this.state.start_date);
             data.append('end_date', this.state.end_date);
             data.append('description', this.state.description);
-            return axios.post(Server.url + 'api/addJobs?token='+userToken, data).then(response => {
-                this.setState({
-                    isLoading: false,
-                });
-                if(this.state.data.isJobs){
+            if(this.state.data.isJobs){
+                data.append('id', this.state.data.id);
+                return axios.post(Server.url + 'api/editJobs/'+this.state.data.jobs_id+'?token='+userToken, data).then(response => {
+                    this.setState({
+                        isLoading: false,
+                    });
+                    this.props.navigation.navigate("Jobs");
                     Toast.show({
                         text: "Jobs was edited successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                }{
+                }).catch(error => {
+                    alert(error)
+                })
+
+            } else {
+                return axios.post(Server.url + 'api/addJobs?token='+userToken, data).then(response => {
                     Toast.show({
                         text: "Jobs was added successfully",
                         buttonText: "Ok",
                         type: "success"
                     });
-                }
+                    this.props.navigation.navigate("Jobs");
+                }).catch(error => {
+                    alert("karim")
+                })
+            }
 
-                this.props.navigation.navigate("Jobs", {...this.state.data});
-            }).catch(error => {
-                alert(error.data)
-            })
         }).then(() => {
             this.setState({
                 isLoading: false
             });
         });
     }
+
     deleteJobs(){
         Alert.alert(
             "Are you sure?",
@@ -91,7 +96,7 @@ export default class AddJobs extends Component {
                         });
                         AsyncStorage.getItem('token').then(userToken => {
                             return axios.delete(Server.url+'api/jobs/'+this.state.data.jobs_id+'?token='+userToken).then(response => {
-                                this.props.navigation.navigate("Jobs", {...this.state.data});
+                                this.props.navigation.navigate("Jobs");
                                 this.setState({
                                     isDeleting: false,
                                 });

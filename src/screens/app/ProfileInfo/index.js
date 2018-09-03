@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, AsyncStorage} from 'react-native';
-import { Container, Content, Text, Button, Icon, H3, } from 'native-base';
+import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
+import { Container, Content, Text, Button, Icon, H3, Toast } from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";
 import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
 import axios from "axios";
+import Color from "../../../constants/colors";
 
 class ProfileInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {  
-            isLoading: false,
-            name:this.props.user.name,
-            created_at:this.props.user.created_at,
-            education:this.props.user.education.name,
-            jobs:this.props.user.jobs.name,
-            certificates:this.props.user.certificates.name,
-            phone:this.props.user.phone,
+            isLoading: true,
+            profile:this.props.navigation.state.params,
+            profielData: [],
         };
       }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
-                this.props.setUser(response.data.user);
+            return axios.post(Server.url+'api/auth/profile/'+this.state.profile.user_id+'?token='+userToken).then(response => {
+                profielData: response.data
+                this.setState({
+                    isLoading: false
+                });
             }).catch(error => {
                 Toast.show({
                     text: 'Error reaching the server.',
@@ -35,30 +35,45 @@ class ProfileInfo extends Component {
             })
         }).then(() => {
             this.setState({
-                refreshing: false
+                isLoading: false
             });
         });
     }
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Profile info">
+            {
+                (this.state.isLoading)? (
+                    <View>
+                        <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                    </View>
+                ): (
+                    
                 <View style={styles.all}>
                         <View style={styles.container}>
                             <View style={styles.trainer}>
-                                <H3 style={styles.trainerH3}>{this.state.name}</H3>
+                                <H3 style={styles.trainerH3}>{this.state.profielData.user.name}</H3>
                                 <H3 style={styles.trainerH3}>UI Trainer</H3>
                             </View>
                             <View style={styles.content}>
 
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Joined</H3>
-                                    <Text style={styles.titleName}>{new Date(this.state.created_at).toString()}</Text>
+                                    <Text style={styles.titleName}>{this.state.profielData.user.created_at}</Text>
                                 </View>
+
+                                <FlatList
+                                data={this.props.profielData.education}
+                                renderItem={({item}) => (
 
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Education</H3>
-                                    <Text style={styles.titleNameMajor}>{this.state.education}</Text>
+                                    <Text style={styles.titleNameMajor}>{item.name}</Text>
                                 </View>
+                                
+                                    )}
+                                    keyExtractor = { (item, index) => index.toString() }
+                                />
 
                                 <View style={styles.contentUniversty}>
                                     <H3 style={styles.title}>Major</H3>
@@ -96,7 +111,11 @@ class ProfileInfo extends Component {
                         </View>
                             <Image source={require("../../../images/6onq25y0sh311.jpg")} style={styles.image}/>
 
-              </View>
+                </View>
+                    
+                )
+            }
+                
             </AppTemplate>
         );
     }

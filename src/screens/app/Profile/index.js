@@ -77,6 +77,24 @@ class Profile extends Component {
         });
     }
 
+    componentDidMount(){
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
+                this.props.setUser(response.data.user);
+            }).catch(error => {
+                Toast.show({
+                    text: 'Error reaching the server.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+            })
+        }).then(() => {
+            this.setState({
+                refreshing: false
+            });
+        });
+    }
+
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="Profile">
@@ -107,7 +125,7 @@ class Profile extends Component {
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={()=> this.props.navigation.navigate('ProfileInfo')}
+                    onPress={()=> this.props.navigation.navigate('ProfileInfo', {user_id: this.props.user.id})}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Profile info</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
