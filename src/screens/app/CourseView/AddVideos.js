@@ -182,7 +182,7 @@ export default class AddVideos extends Component {
                         </Item>
                         <Button
                             onPress={() => this.addOrEdit()}
-                            style={{flexDirection: "row"}}
+                            style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                             block light
                         >
                             <Text>Save</Text>

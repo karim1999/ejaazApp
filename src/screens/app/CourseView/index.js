@@ -349,7 +349,7 @@ class CourseView extends Component {
                                                 </Item>
                                                 <Button
                                                     onPress={() => this.addReview()}
-                                                    style={{flexDirection: "row"}}
+                                                    style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                                                     block light
                                                 >
                                                     <Text>add</Text>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {StyleSheet, Image, View, FlatList, AsyncStorage, ActivityIndicator, TouchableOpacity} from 'react-native';
-import { Container, Content, Card, CardItem, Button, Icon, Text, H2 } from 'native-base';
+import {FlatList, TouchableOpacity} from 'react-native';
+import {Text} from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";

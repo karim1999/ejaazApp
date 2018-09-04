@@ -35,13 +35,23 @@ export default class AddCertificates extends Component {
     }
     
     addOrEdit(){
+        if(this.state.name == "" || this.state.from == "" || this.state.received_date == "" || this.state.description == "" ){
+           
+           Toast.show({
+               text: 'please fill out fields.',
+               type: "danger",
+               buttonText: 'Okay'
+           });
+
+       }else{
+
         this.setState({
             isLoading: true
         });
         return AsyncStorage.getItem('token').then(userToken => {
             let data = new FormData();
             data.append('name', this.state.name);
-            data.append('institution', this.state.institution);
+            data.append('from', this.state.from);
             data.append('received_date', new Date(this.state.received_date).toLocaleDateString('en-GB'));
             data.append('description', this.state.description);
             if(this.state.data.isCertificates){
@@ -78,6 +88,9 @@ export default class AddCertificates extends Component {
                 isLoading: false
             });
         });
+           
+       }
+        
     }
 
     deleteCertificates(){
@@ -145,10 +158,10 @@ export default class AddCertificates extends Component {
                         />
                     </Item>
                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='institution' />
-                        <Label>institution</Label>
-                        <Input onChangeText={(institution) => this.setState({institution})}
-                            keyboardType='numeric' placeholder="institution of your certificates...."
+                        <Icon type="Entypo" name='time-slot' />
+                        <Label>from</Label>
+                        <Input onChangeText={(from) => this.setState({from})}
+                            keyboardType='numeric' placeholder="ex: 5 years...."
                             placeholderTextColor="#ccc5c5"
                         />
                     </Item>

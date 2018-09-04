@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
-import { Container, Content, Text, Button, Icon, H3, Toast, Thumbnail, ListItem, Left, Body, } from 'native-base';
+import { Container, Text, Button, Icon, H3, Toast, Thumbnail, ListItem, Left, Body, } from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";
@@ -66,7 +66,14 @@ class ProfileInfo extends Component {
                         <View style={styles.container}>
                             <View style={styles.trainer}>
                                 <H3 style={styles.trainerH3}>{this.state.profileData.user.name}</H3>
-                                <H3 style={styles.trainerH3}>UI Trainer</H3>
+                                {
+                                    (this.state.profileData.user.type == 1)?(
+                                        <H3 style={styles.trainerH3}>Trainee</H3>
+                                    ):(
+                                        <H3 style={styles.trainerH3}>Trainer</H3>
+                                    )
+                                }
+                                
                             </View>
                             <View style={styles.content}>
 
@@ -147,7 +154,7 @@ class ProfileInfo extends Component {
                                 </View>
                             </View>
                         </View>
-                            <Image source={require("../../../images/6onq25y0sh311.jpg")} style={styles.image}/>
+                            <Image source={{uri: Server.storage+this.state.profileData.user.img}} style={styles.image}/>
 
                 </View>
                     
@@ -169,7 +176,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignSelf: 'center',
         width: '100%',
-        height: 1000,
+        height: 900,
     },
     image:{
       height: 200, 

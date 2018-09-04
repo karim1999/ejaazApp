@@ -110,17 +110,18 @@ class Profile extends Component {
                     >
                         <Image style={styles.image} source={{uri: this.state.source}} />
                     </TouchableOpacity>
-                    <Text style={styles.viewImageText}>UI Trainer</Text>
+                    {
+                        (this.props.user.type == 1)?(
+                            <Text style={styles.viewImageText}>Trainee</Text>
+                        ):(
+                            <Text style={styles.viewImageText}>Trainer</Text>
+                        )
+                    }
                 </View>
                 <TouchableOpacity style={styles.courseFollow}>
                     <View style={styles.course}>
                         <Text style={styles.text}>Courses</Text>
-                        <Text style={styles.text}>30</Text>
-                    </View>
-                    <Text style={styles.separate}></Text>
-                    <View style={styles.follow}>
-                        <Text style={styles.text}>Followers</Text>
-                        <Text style={styles.text}>1000</Text>
+                        <Text style={styles.text}>5</Text>
                     </View>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     courseFollow:{
-        height: 90,
+        height: 70,
         paddingTop: 15,
         flexDirection: 'row',
         alignSelf: 'center',

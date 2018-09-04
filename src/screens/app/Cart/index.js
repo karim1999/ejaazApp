@@ -99,7 +99,7 @@ class Cart extends Component {
                             !_.isEmpty(this.props.user.cart) && (
                                 <Button
                                     onPress={() => this.buy()}
-                                    style={{flexDirection: "row"}}
+                                    style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                                     block success
                                 >
                                     <Text>Buy</Text>

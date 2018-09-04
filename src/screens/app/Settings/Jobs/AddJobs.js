@@ -38,6 +38,17 @@ export default class AddJobs extends Component {
     }
     
     addOrEdit(){
+        if(this.state.name == "" || this.state.institution == "" || this.state.start_date == "" || this.state.end_date == ""
+        || this.state.description == "" ){
+           
+           Toast.show({
+               text: 'please fill out fields.',
+               type: "danger",
+               buttonText: 'Okay'
+           });
+
+       }else{
+
         this.setState({
             isLoading: true
         });
@@ -82,6 +93,9 @@ export default class AddJobs extends Component {
                 isLoading: false
             });
         });
+
+       }
+        
     }
 
     deleteJobs(){
