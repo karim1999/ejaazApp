@@ -71,8 +71,6 @@ class Cart extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Cart">
-                <View style={styles.all}>
-                    <View style={styles.container}>
                         <Text style={styles.containTxt}>Courses in cart</Text>
                         {
                             (this.state.isLoading)? (
@@ -109,8 +107,6 @@ class Cart extends Component {
                                 </Button>
                             )
                         }
-                    </View>
-                </View>
             </AppTemplate>
         );
     }

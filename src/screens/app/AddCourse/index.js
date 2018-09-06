@@ -84,68 +84,119 @@ class AddCourse extends Component {
         })
     }
     addOrEdit(){
-        if(this.state.title == "" || this.state.price == "" || this.state.description == "" || this.state.hours == ""
-         || this.state.img == "" || this.state.video == "" || this.state.center == "" || this.state.address == "" || this.state.date_start == ""){
-            
-            Toast.show({
-                text: 'please fill out fields.',
-                type: "danger",
-                buttonText: 'Okay'
-            });
-
-        }else{
-
-            this.setState({
-                isLoading: true
-            });
-            return AsyncStorage.getItem('token').then(userToken => {
-                let data = new FormData();
-                data.append('title', this.state.title);
-                data.append('type', this.state.type);
-                data.append('price', this.state.price);
-                data.append('category', this.state.category);
-                data.append('description', this.state.description);
-                data.append('hours', this.state.hours);
-                if (this.state.img) {
-                    data.append('img', {
-                        name: "img",
-                        uri: this.state.img,
-                        type: 'image/png'
-                    });
-                }
-                if (this.state.video) {
-                    data.append('video', {
-                        name: "video",
-                        uri: this.state.video,
-                        type: 'image/png'
-                    });
-                }
-                if (this.state.type == 1) {
+        if(this.state.type == 1){
+            if(this.state.title == "" || this.state.price == "" || this.state.description == "" || this.state.hours == ""
+            || this.state.img == "" || this.state.video == "" || this.state.center == "" || this.state.address == "" || this.state.date_start == ""){
+                Toast.show({
+                    text: 'please fill out fields.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+            }else{
+                this.setState({
+                    isLoading: true
+                });
+                return AsyncStorage.getItem('token').then(userToken => {
+                    let data = new FormData();
+                    data.append('title', this.state.title);
+                    data.append('type', this.state.type);
+                    data.append('price', this.state.price);
+                    data.append('category', this.state.category);
+                    data.append('description', this.state.description);
+                    data.append('hours', this.state.hours);
                     data.append('center', this.state.center);
                     data.append('address', this.state.address);
                     data.append('date_start', new Date(this.state.date_start).toLocaleDateString('en-GB'));
-                }
-                return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
+                    if (this.state.img) {
+                        data.append('img', {
+                            name: "img",
+                            uri: this.state.img,
+                            type: 'image/png'
+                        });
+                    }
+                    if (this.state.video) {
+                        data.append('video', {
+                            name: "video",
+                            uri: this.state.video,
+                            type: 'image/png'
+                        });
+                    }
+                    return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        Toast.show({
+                            text: "A Course was added successfully",
+                            buttonText: "Ok",
+                            type: "success"
+                        });
+                        this.props.navigation.navigate("UserCourses");
+                    }).catch(error => {
+                        alert(error.data)
+                    })
+                }).then(() => {
                     this.setState({
-                        isLoading: false,
+                        isLoading: false
                     });
-                    Toast.show({
-                        text: "A Course was added successfully",
-                        buttonText: "Ok",
-                        type: "success"
-                    });
-                    this.props.navigation.navigate("UserCourses");
-                }).catch(error => {
-                    alert(error.data)
-                })
-            }).then(() => {
-                this.setState({
-                    isLoading: false
                 });
-            });
+            }
+        }else if(this.state.type == 2){
+            if(this.state.title == "" || this.state.price == "" || this.state.description == "" || this.state.hours == ""
+            || this.state.img == "" || this.state.video == "")
+            {
+                Toast.show({
+                    text: 'please fill out fields.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+            }else{
 
-        }
-        
+                this.setState({
+                    isLoading: true
+                });
+                return AsyncStorage.getItem('token').then(userToken => {
+                    let data = new FormData();
+                    data.append('title', this.state.title);
+                    data.append('type', this.state.type);
+                    data.append('price', this.state.price);
+                    data.append('category', this.state.category);
+                    data.append('description', this.state.description);
+                    data.append('hours', this.state.hours);
+                    if (this.state.img) {
+                        data.append('img', {
+                            name: "img",
+                            uri: this.state.img,
+                            type: 'image/png'
+                        });
+                    }
+                    if (this.state.video) {
+                        data.append('video', {
+                            name: "video",
+                            uri: this.state.video,
+                            type: 'image/png'
+                        });
+                    }
+                    return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        Toast.show({
+                            text: "A Course was added successfully",
+                            buttonText: "Ok",
+                            type: "success"
+                        });
+                        this.props.navigation.navigate("UserCourses");
+                    }).catch(error => {
+                        alert(error.data)
+                    })
+                }).then(() => {
+                    this.setState({
+                        isLoading: false
+                    });
+                });
+
+            }
+        }   
     }
     render() {
         return (
@@ -167,7 +218,7 @@ class AddCourse extends Component {
                             <Input onChangeText={(hours) => this.setState({hours})}
                                    value={this.state.hours}
                                    keyboardType='numeric'
-                                   placeholder="ex:33..."
+                                   placeholder="ex:33h..."
                                    placeholderTextColor="#ccc5c5"
                             />
                         </Item>
@@ -177,7 +228,7 @@ class AddCourse extends Component {
                             <Input onChangeText={(price) => this.setState({price})}
                                    value={this.state.price}
                                    keyboardType='numeric'
-                                   placeholder="ex:33h..."
+                                   placeholder="ex:20$..."
                                    placeholderTextColor="#ccc5c5"
                             />
                         </Item>

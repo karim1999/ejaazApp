@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage, Alert, Slider} from 'react-native';
+import {StyleSheet, Image, View, FlatList, ActivityIndicator, AsyncStorage, Alert, Slider, TouchableOpacity} from 'react-native';
 import {
     Container,
     Content,
@@ -259,19 +259,8 @@ class CourseView extends Component {
                 <View style={styles.all}>
                     <Content>
                         <View style={styles.container}>
-                            {/*<Form>*/}
-                            {/*<Picker*/}
-                            {/*note*/}
-                            {/*style={{ width: undefined}}*/}
-                            {/*selectedValue={this.state.selected}*/}
-                            {/*onValueChange={this.onValueChange.bind(this)}*/}
-                            {/*>*/}
-                            {/*<Picker.Item label="select" value="key0" />*/}
-                            {/*<Picker.Item label="Edit" value="key1" />*/}
-                            {/*<Picker.Item label="Delete" value="key2" />*/}
-                            {/*</Picker>*/}
-                            {/*</Form>*/}
                             <View style={styles.paddingContent}>
+                            <TouchableOpacity onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: this.state.course.user_id})}>
                                 <CardItem style={{ paddingBottom: 30, paddingLeft: 0 }}>
                                     <Left>
                                         <Thumbnail source={{uri: Server.storage+this.state.course.img}} />
@@ -280,11 +269,21 @@ class CourseView extends Component {
                                         <Text note>{this.state.course.created_at}</Text>
                                         </Body>
                                     </Left>
-                                </CardItem>
+                                    </CardItem>
+                                </TouchableOpacity>
                                 <H2 style={styles.viewH2}>{this.state.course.title}</H2>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}
                                 </Text>
+
+                                {
+                                    (this.state.course.type == 1) ? (
+
+                                        <H3>In door course</H3>
+                                    ) : (
+                                        <H3>Online course</H3> 
+                                    )
+                                }
 
                                 {/*<H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>*/}
                                 {/*<Text style={styles.viewText}>*/}
@@ -293,25 +292,34 @@ class CourseView extends Component {
                             </View>
                             <Image source={{uri: Server.storage+this.state.course.img}} style={styles.image}/>
 
-                            <View style={styles.paddingContent}>
-                                <H2 >Orientation Video</H2>
-                                <VideoPlayer source={{uri: "https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"}}   // Can be a URL or a local file.
-                                             ref={(ref) => {
-                                                 this.player = ref
-                                             }}
-                                             style={styles.backgroundVideo}
-                                             onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                                             onEnd={this.onEnd}                      // Callback when playback finishes
-                                             onError={this.videoError}
-                                             playInBackground={false}
-                                             paused={true}
-                                             selectedTextTrack={{
-                                                 type: "title",
-                                                 value: "Dubbing"
-                                             }}
-                                />
+                            {
+                                    (this.state.course.type == 1) ? (
 
-                            </View>
+                                        <Text>In door course</Text>
+                                    ) : (
+                                        
+                                        <View style={styles.paddingContent}>
+                                            <H2 >Orientation Video</H2>
+                                            <VideoPlayer source={{uri: "https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"}}   // Can be a URL or a local file.
+                                                         ref={(ref) => {
+                                                             this.player = ref
+                                                         }}
+                                                         style={styles.backgroundVideo}
+                                                         onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                                                         onEnd={this.onEnd}                      // Callback when playback finishes
+                                                         onError={this.videoError}
+                                                         playInBackground={false}
+                                                         paused={true}
+                                                         selectedTextTrack={{
+                                                             type: "title",
+                                                             value: "Dubbing"
+                                                         }}
+                                            />
+            
+                                        </View>
+                                    )
+                                }
+
                             <View style={styles.paddingContent}>
                                 <H2 >Price</H2>
                                 <Button transparent>

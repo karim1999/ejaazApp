@@ -1,5 +1,5 @@
-const SERVER_URL = 'http://192.168.1.3:8000/'; // dev
-const STORAGE_URL = 'http://192.168.1.3:8000/uploads/'; // dev
+const SERVER_URL = 'https://ejaaztech.com/'; // dev
+const STORAGE_URL = 'https://ejaaztech.com/storage/'; // dev
 
 export default {
     url:SERVER_URL,

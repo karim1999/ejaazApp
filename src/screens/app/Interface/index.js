@@ -82,7 +82,7 @@ export default class Interface extends Component {
                                                         data={item.courses}
                                                         renderItem={({item}) => (
                                                             <TouchableOpacity
-                                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
                                                                 <CourseBox {...item} user_name={item.user.name} />
                                                             </TouchableOpacity>
                                                         )}

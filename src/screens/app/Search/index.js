@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, TextInput, } from 'react-native';
 import { Container, Content, Header, Text, Button, Icon, H3, } from 'native-base';
 import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
+import AppTemplate from "../appTemplate";
 
 export default class Search extends Component {
     constructor(props){
@@ -23,8 +24,8 @@ export default class Search extends Component {
 
     render() {
         return (
-            <Container style={styles.all}>
-                <Content>
+            <AppTemplate back navigation={this.props.navigation} title="Search">
+            <View style={styles.all}>
                     <SearchBar
                     lightTheme
                     round
@@ -71,8 +72,8 @@ export default class Search extends Component {
                         </View>
 
                     </View>
-                </Content>
-            </Container>
+            </View>
+            </AppTemplate>
         );
     }
 }
