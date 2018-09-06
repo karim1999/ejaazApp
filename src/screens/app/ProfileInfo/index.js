@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
-import { Container, Text, Button, Icon, H3, Toast, Thumbnail, ListItem, Left, Body, } from 'native-base';
+import { Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body, H3 } from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";
@@ -13,12 +13,12 @@ import _ from "lodash";
 class ProfileInfo extends Component {
     constructor(props) {
         super(props);
-        this.state = {  
+        this.state = {
             isLoading: true,
             profile:this.props.navigation.state.params,
             profileData: [],
         };
-      }
+    }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(userToken => {
@@ -51,154 +51,143 @@ class ProfileInfo extends Component {
         }
         return stars;
     }
-    
+
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Profile info">
-            {
-                (this.state.isLoading)? (
-                    <View>
-                        <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
-                    </View>
-                ): (
-                    
-                <View style={styles.all}>
-                        <View style={styles.container}>
-                            <View style={styles.trainer}>
-                                <H3 style={styles.trainerH3}>{this.state.profileData.user.name}</H3>
-                                {
-                                    (this.state.profileData.user.type == 1)?(
-                                        <H3 style={styles.trainerH3}>Trainee</H3>
-                                    ):(
-                                        <H3 style={styles.trainerH3}>Trainer</H3>
-                                    )
-                                }
-                                
-                            </View>
-                            <View style={styles.content}>
+                {
+                    (this.state.isLoading)? (
+                        <View>
+                            <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                        </View>
+                    ): (
+                        <View style={{ backgroundColor: "#f5f5f5", padding: 15, paddingLeft: 10, paddingRight: 10, paddingTop: 120}}>
+                            <Image source={{uri: Server.storage+this.state.profileData.user.img}} style={styles.image}/>
+                            <View style={{flex: 1, backgroundColor: "white", paddingTop: 120}}>
+                                <View style={styles.trainer}>
+                                    <Text style={styles.trainerH3}>{this.state.profileData.user.name}</Text>
+                                    {
+                                        (this.state.profileData.user.type == 1)?(
+                                            <Text note style={styles.trainerH4}>Trainee</Text>
+                                        ):(
+                                            <Text note style={styles.trainerH4}>Trainer</Text>
+                                        )
+                                    }
 
-                                <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Joined</H3>
-                                    <Text style={styles.titleName}>{this.state.profileData.user.created_at}</Text>
                                 </View>
+                                <View style={styles.content}>
 
-                                <FlatList
-                                data={this.state.profileData.user.education}
-                                renderItem={({item}) => (
-                                <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Education</H3>
-                                    <Text style={styles.titleNameMajor}>{item.name}</Text>
-                                </View>
-                                
-                                    )}
-                                    keyExtractor = { (item, index) => index.toString() }
-                                />
+                                    <View style={styles.contentUniversty}>
+                                        <H3 style={styles.title}>Joined</H3>
+                                        <Text style={styles.titleName}>{this.state.profileData.user.created_at}</Text>
+                                    </View>
 
-                                <FlatList
-                                data={this.state.profileData.user.jobs}
-                                renderItem={({item}) => (
-                                <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Major</H3>
-                                    <Text style={styles.titleNameMajor}>{item.name}</Text>
-                                </View>
-                                
-                                    )}
-                                    keyExtractor = { (item, index) => index.toString() }
-                                />
+                                    <FlatList
+                                        data={this.state.profileData.user.education}
+                                        renderItem={({item}) => (
+                                            <View style={styles.contentUniversty}>
+                                                <H3 style={styles.title}>Education</H3>
+                                                <Text style={styles.titleNameMajor}>{item.name}</Text>
+                                            </View>
 
-                                <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Courses</H3>
-                                    <Text style={styles.titleName}>5</Text>
-                                    <H3 style={styles.titleCertify}>Certified</H3>
-                                    <Image source={require("../../../images/checkmark-blue.png")} style={styles.imageCertify}/>
-                                </View>
+                                        )}
+                                        keyExtractor = { (item, index) => index.toString() }
+                                    />
 
-                                <FlatList
-                                data={this.state.profileData.user.certificates}
-                                renderItem={({item}) => (
-                                <View style={styles.contentUniversty}>
-                                    <H3 style={styles.title}>Experience</H3>
-                                    <Text style={styles.titleNameMajor}>{item.from} Years in {item.name}</Text>
-                                </View>
-                                
-                                    )}
-                                    keyExtractor = { (item, index) => index.toString() }
-                                />
-                                
-                                <View style={styles.contentReview}>
-                                    <H3 style={styles.title}>Reviws</H3>
-                                    
-                                <FlatList
-                                ListEmptyComponent={
-                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No reviews were found</Text>
-                                }
-                                data={_.reverse(this.state.profileData.user.reviews)}
-                                renderItem={({item}) => (
-                                    <ListItem avatar>
-                                        <Left>
-                                            <Thumbnail source={{uri: Server.storage+item.user.img}} />
-                                        </Left>
-                                        <Body>
-                                        <Text>{item.user.name}</Text>
-                                        <View style={styles.viewContentStar}>
-                                            {
-                                                this.createRating(item.rate)
+                                    <FlatList
+                                        data={this.state.profileData.user.jobs}
+                                        renderItem={({item}) => (
+                                            <View style={styles.contentUniversty}>
+                                                <H3 style={styles.title}>Major</H3>
+                                                <Text style={styles.titleNameMajor}>{item.name}</Text>
+                                            </View>
+
+                                        )}
+                                        keyExtractor = { (item, index) => index.toString() }
+                                    />
+
+                                    <View style={styles.contentUniversty}>
+                                        <H3 style={styles.title}>Courses</H3>
+                                        <Text style={styles.titleName}>5</Text>
+                                        <H3 style={styles.titleCertify}>Certified</H3>
+                                        <Image source={require("../../../images/checkmark-blue.png")} style={styles.imageCertify}/>
+                                    </View>
+
+                                    <FlatList
+                                        data={this.state.profileData.user.certificates}
+                                        renderItem={({item}) => (
+                                            <View style={styles.contentUniversty}>
+                                                <H3 style={styles.title}>Experience</H3>
+                                                <Text style={styles.titleNameMajor}>{item.from} Years in {item.name}</Text>
+                                            </View>
+
+                                        )}
+                                        keyExtractor = { (item, index) => index.toString() }
+                                    />
+
+                                    <View style={styles.contentReview}>
+                                        <H3 style={styles.title}>Reviws</H3>
+
+                                        <FlatList
+                                            ListEmptyComponent={
+                                                <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No reviews were found</Text>
                                             }
-                                        </View>
-                                        <Text note>{item.review}</Text>
-                                        </Body>
-                                    </ListItem>
-                                )}
-                                keyExtractor = { (item, index) => index.toString() }
-                            />
+                                            data={_.reverse(this.state.profileData.user.reviews)}
+                                            renderItem={({item}) => (
+                                                <ListItem avatar>
+                                                    <Left>
+                                                        <Thumbnail source={{uri: Server.storage+item.user.img}} />
+                                                    </Left>
+                                                    <Body>
+                                                    <Text>{item.user.name}</Text>
+                                                    <View style={styles.viewContentStar}>
+                                                        {
+                                                            this.createRating(item.rate)
+                                                        }
+                                                    </View>
+                                                    <Text note>{item.review}</Text>
+                                                    </Body>
+                                                </ListItem>
+                                            )}
+                                            keyExtractor = { (item, index) => index.toString() }
+                                        />
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                            <Image source={{uri: Server.storage+this.state.profileData.user.img}} style={styles.image}/>
+                    )
+                }
 
-                </View>
-                    
-                )
-            }
-                
             </AppTemplate>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    all:{
-        backgroundColor: '#f5f5f5',
-        padding:15,
-        paddingTop: 150
-    },
-    container:{
-        backgroundColor: '#fff',
-        alignSelf: 'center',
-        width: '100%',
-        height: 900,
-    },
-    image:{
-      height: 200, 
-      width: 200, 
-      flex: 1,
-      borderRadius: 100,
-      position: 'absolute',
-      top: 25,
-      alignSelf: 'center'
-    },
     trainer:{
-        position: 'absolute',
-        top: 85,
         alignSelf: 'center'
     },
     trainerH3:{
+        alignSelf: 'center',
+        fontSize: 20
+    },
+    trainerH4:{
+        alignSelf: 'center',
+        fontSize: 17
+    },
+    image:{
+        height: 200,
+        width: 200,
+        borderRadius: 100,
+        position: 'absolute',
+        top: 20,
+        zIndex: 1,
         alignSelf: 'center'
     },
     content:{
-        position: 'absolute',
-        top: 140,
+        paddingTop: 10
     },
+
     contentUniversty:{
         flexDirection: 'row',
         padding: 10
@@ -243,21 +232,21 @@ const styles = StyleSheet.create({
         padding: 10
     },
     reviewComment:{
-      flexDirection: 'row',
-      paddingTop: 10,
+        flexDirection: 'row',
+        paddingTop: 10,
     },
     imageComment:{
-      width: 30,
-      height: 30,
-      borderRadius: 100,
-      borderWidth: 2,
-      borderColor: '#e5e5e5',
+        width: 30,
+        height: 30,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#e5e5e5',
     },
     viewContentStarComment:{
-      flexDirection: 'row',
-      position: 'absolute',
-      right: 25,
-      bottom: 5
+        flexDirection: 'row',
+        position: 'absolute',
+        right: 25,
+        bottom: 5
     },
     viewContentStar:{
         flexDirection: 'row',
@@ -271,12 +260,13 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     commentName:{
-      paddingLeft: 10,
-      paddingTop: 5
+        paddingLeft: 10,
+        paddingTop: 5
     },
     commentText:{
-      paddingTop: 5
+        paddingTop: 5
     },
+
 });
 
 const mapStateToProps = ({ user }) => ({
