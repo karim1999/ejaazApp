@@ -86,7 +86,7 @@ class AddCourse extends Component {
     addOrEdit(){
         if(this.state.type == 1){
             if(this.state.title == "" || this.state.price == "" || this.state.description == "" || this.state.hours == ""
-            || this.state.img == "" || this.state.video == "" || this.state.center == "" || this.state.address == "" || this.state.date_start == ""){
+            || this.state.img == "" || this.state.center == "" || this.state.address == "" || this.state.date_start == ""){
                 Toast.show({
                     text: 'please fill out fields.',
                     type: "danger",
@@ -142,7 +142,7 @@ class AddCourse extends Component {
             }
         }else if(this.state.type == 2){
             if(this.state.title == "" || this.state.price == "" || this.state.description == "" || this.state.hours == ""
-            || this.state.img == "" || this.state.video == "")
+            || this.state.img == "")
             {
                 Toast.show({
                     text: 'please fill out fields.',

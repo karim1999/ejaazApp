@@ -80,7 +80,9 @@ class SignIn extends Component {
     }
     render() {
         return (
-            <AuthTemplate>
+            <Container>
+            <ImageBackground source={require('../../../images/Background.png')} style={{height: '100%', width: '100%', }}>
+                <Content contentContainerStyle={{ justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
 
                 <Form>
                     <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
@@ -108,7 +110,9 @@ class SignIn extends Component {
                 <TouchableOpacity style={{alignItems: 'center',}} onPress={()=> this.props.navigation.navigate('ResetPassword')}>
                         <Text style={styles.signupButton}> Forgot Your Password? </Text>
                     </TouchableOpacity>
-            </AuthTemplate>
+                    </Content>
+                </ImageBackground>
+            </Container>
         );
     }
 }

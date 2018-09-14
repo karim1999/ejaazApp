@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator, 
+    Modal, TouchableHighlight, CheckBox } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
@@ -9,8 +10,16 @@ export default class SignUp extends Component {
     constructor(props){
         super(props);
         this.state = {
+            check:false,
+            modalVisible: false,
             isSignUp: false,
             name: "",
+            secondname: "",
+            lastname: "",
+            age: "",
+            country: "",
+            address: "",
+            phone: "",
             email: "",
             password: "",
             type: 1,
@@ -20,8 +29,16 @@ export default class SignUp extends Component {
             }]
         }
     }
+
+    checkBoxTest(){
+        this.setState({
+            check: !this.state.check
+        })
+    }
+
     onRegisterPressed(){
-        if(this.state.name == "" || this.state.email == "" || this.state.password == ""){
+        if(this.state.name == "" || this.state.secondname == "" || this.state.lastname == "" || this.state.age == "" || 
+        this.state.country == "" || this.state.address == "" || this.state.phone == "" || this.state.email == "" || this.state.password == ""){
 
             Toast.show({
                 text: 'Fields cannot be empty.',
@@ -29,6 +46,12 @@ export default class SignUp extends Component {
                 buttonText: 'Okay'
             });
 
+        }else if(this.state.check == false){
+            Toast.show({
+                text: 'You must agree to terms and conditions.',
+                type: "danger",
+                buttonText: 'Okay'
+            });            
         }else{
             this.setState({
                 isSignUp:true
@@ -37,6 +60,12 @@ export default class SignUp extends Component {
             return axios.post(Server.url+'api/auth/register',{
 
                 name: this.state.name,
+                secondname: this.state.secondname,
+                lastname: this.state.lastname,
+                age: this.state.age,
+                country: this.state.country,
+                address: this.state.address,
+                phone: this.state.phone,
                 email: this.state.email,
                 password: this.state.password,
                 type: this.state.type
@@ -70,6 +99,10 @@ export default class SignUp extends Component {
             });
         }
     }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+      }
     componentDidMount(){
         // Imprtant Read it --------------------------------->
         /*
@@ -89,8 +122,32 @@ export default class SignUp extends Component {
                 <Form>
                     <Image source={require("../../../images/Logosampletwo.png")} style={{height: 200, width: 200,alignSelf: 'center', }}/>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Name" placeholderTextColor="#fff"
+                        <Input style={styles.inputText} placeholder="First name" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({name: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Second name" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({secondname: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Last name" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({lastname: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Age" placeholderTextColor="#fff"
+                        keyboardType='numeric' onChangeText={(val) => this.setState({age: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Country" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({country: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Address" placeholderTextColor="#fff"
+                               onChangeText={(val) => this.setState({address: val})}/>
+                    </Item>
+                    <Item rounded style={styles.input}>
+                        <Input style={styles.inputText} placeholder="Mobile phone" placeholderTextColor="#fff"
+                        keyboardType='numeric' onChangeText={(val) => this.setState({phone: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
                         <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
@@ -101,7 +158,7 @@ export default class SignUp extends Component {
                                onChangeText={(val) => this.setState({password: val})}/>
                     </Item>
                     <ListItem
-                        style={{height: 70, width: 300, justifyContent: "center", alignItems: "center", alignSelf: "center", borderBottomColor: "transparent"}}
+                        style={{height: 50, width: 300, justifyContent: "center", alignItems: "center", alignSelf: "center", borderBottomColor: "transparent"}}
                     >
                         <View
                             style={{width: "50%", height: 70, flex: 1, flexDirection: "row", padding: 10}}
@@ -131,6 +188,41 @@ export default class SignUp extends Component {
                                 />
                             </Right>
                         </View>
+                    </ListItem>
+                    <ListItem 
+                    style={{ alignSelf: "center", borderBottomColor: "transparent"}}>
+                        <CheckBox
+                        title='Click Here'
+                        value={this.state.check}
+                        onChange={()=> this.checkBoxTest()}
+                        />
+                        <Modal
+                        animationType="slide"
+                        transparent={false}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            alert('Modal has been closed.');
+                        }}>
+                        <View style={{marginTop: 22}}>
+                            <View>
+                            <Text>Hello World!</Text>
+
+                            <TouchableHighlight
+                                onPress={() => {
+                                this.setModalVisible(!this.state.modalVisible);
+                                }}>
+                                <Text>Hide Modal</Text>
+                            </TouchableHighlight>
+                            </View>
+                        </View>
+                        </Modal>
+
+                        <TouchableHighlight
+                        onPress={() => {
+                            this.setModalVisible(true);
+                        }}>
+                        <Text style={styles.TermButton}>I agree to terms and conditions</Text>
+                        </TouchableHighlight>
                     </ListItem>
                     <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}>
                         <Text style={styles.buttonText}> Signup </Text>
@@ -186,6 +278,11 @@ const styles = StyleSheet.create({
     },
     signupButton:{
         color:'#367fa9',
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    TermButton:{
+        color:'#506de0',
         fontSize: 16,
         fontWeight: '500',
     }

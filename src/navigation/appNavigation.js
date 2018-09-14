@@ -15,8 +15,10 @@ import Jobs from "../screens/app/Settings/Jobs/Jobs";
 import AddJobs from "../screens/app/Settings/Jobs/AddJobs";
 import Security from "../screens/app/Settings/Security";
 import CourseView from "../screens/app/CourseView";
+import Applying from "../screens/app/CourseView/Applying";
 import ProfileInfo from "../screens/app/ProfileInfo";
 import Search from "../screens/app/Search";
+import ResultSearch from "../screens/app/Search/ResultSearch";
 import CourseName from "../screens/app/CourseName";
 import UserCourses from '../screens/app/UserCourses';
 import UserInfo from '../screens/app/UserInfo';
@@ -27,17 +29,20 @@ import EditCourse from '../screens/app/CourseView/editCourse';
 import AddVideos from '../screens/app/CourseView/AddVideos';
 import Videos from '../screens/app/CourseView/Videos';
 import Color from "../constants/colors";
+import CallUs from '../screens/app/CallUs';
 
 const HomeStack = createStackNavigator({
     Interface,
     CourseName,
     Search,
+    ResultSearch,
     CourseView,
     AddCourse,
     ShowCategories,
     EditCourse,
     AddVideos,
-    Videos
+    Videos,
+    Applying
 },{
     headerMode: 'none',
 });
@@ -53,7 +58,8 @@ const ProfileStack = createStackNavigator({
     AddJobs,
     Certificates,
     AddCertificates,
-    UserInfo
+    UserInfo,
+    CallUs
 
 },{
     headerMode: 'none',

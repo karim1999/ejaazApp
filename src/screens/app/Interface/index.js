@@ -13,7 +13,8 @@ export default class Interface extends Component {
         super(props);
         this.state={
             isLoading: false,
-            cloneInterface:[]
+            cloneInterface:[],
+            cloneTrainer:[],
         }
     }
     _onLoad(){
@@ -36,8 +37,29 @@ export default class Interface extends Component {
         });
     }
     async componentDidMount(){
+
         await this._onLoad();
+        
     }
+
+    // this.setState({
+    //     isLoading: true
+    // });
+    // return AsyncStorage.getItem('token').then(userToken => {
+    //     return axios.get(Server.url + 'api/course?token='+userToken).then(response => {
+    //         this.setState({
+    //             isLoading: false,
+    //             cloneTrainer: response.data
+    //         });
+    //     }).catch(error => {
+    //         alert(error);
+    //     })
+    // }).then(() => {
+    //     this.setState({
+    //         isLoading: false
+    //     });
+    // });
+
     render() {
         return (
             <AppTemplate fab interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
@@ -47,55 +69,91 @@ export default class Interface extends Component {
                             <View>
                                 <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
                             </View>
-                        ): (
-                            <View>
-                                <FlatList
-                                    horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
-                                    contentContainerStyle ={styles.searchTitle}
-                                    data={this.state.cloneInterface}
-                                    renderItem={({item}) => (
-                                        <TouchableOpacity
-                                            onPress={() => this.props.navigation.navigate("ShowCategories", {...item})} style={{alignSelf: 'flex-start'}}>
-                                            <Text style={styles.searchName}>{item.name}</Text>
-                                        </TouchableOpacity>
-                                    )}
-                                    keyExtractor = { (item, index) => index.toString() }
-                                />
-
-                                <FlatList
-                                    ListEmptyComponent={
-                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                        ):this.state.cloneInterface.map((result, i) =>(result.type == 2)) ?
+                        (
+                            <FlatList
+                            ListEmptyComponent={
+                                <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                            }
+                            data={this.state.cloneTrainer}
+                            renderItem={({item}) => (
+                                <View style={{padding: 0}}>
+                                    <View style={styles.container}>
+                                        <H2 style={styles.containerH1}>{item.name}</H2>
+                                    </View>
+                                    {
+                                        (item.courses && (
+                                            <FlatList
+                                                ListEmptyComponent={
+                                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses</Text>
+                                                }
+                                                data={item.courses}
+                                                renderItem={({item}) => (
+                                                    <TouchableOpacity
+                                                        onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
+                                                        <CourseBox {...item} user_name={item.user.name} />
+                                                    </TouchableOpacity>
+                                                )}
+                                                keyExtractor = { (item, index) => index.toString() }
+                                            />
+                                        ))
                                     }
-                                    data={this.state.cloneInterface}
-                                    renderItem={({item}) => (
-                                        <View style={{padding: 0}}>
-                                            <View style={styles.container}>
-                                                <H2 style={styles.containerH1}>{item.name}</H2>
-                                            </View>
-                                            {
-                                                (item.courses && (
-                                                    <FlatList
-                                                        ListEmptyComponent={
-                                                            <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses to your cart first</Text>
-                                                        }
-                                                        data={item.courses}
-                                                        renderItem={({item}) => (
-                                                            <TouchableOpacity
-                                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
-                                                                <CourseBox {...item} user_name={item.user.name} />
-                                                            </TouchableOpacity>
-                                                        )}
-                                                        keyExtractor = { (item, index) => index.toString() }
-                                                    />
-                                                ))
-                                            }
+                                </View>
+                            )}
+                            keyExtractor = { (item, index) => index.toString() }
+                        />
+                        ):
+                        (
+                            <View>
+                            <FlatList
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle ={styles.searchTitle}
+                                data={this.state.cloneInterface}
+                                renderItem={({item}) => (
+                                    <TouchableOpacity
+                                        onPress={() => this.props.navigation.navigate("ShowCategories", {...item})} style={{alignSelf: 'flex-start'}}>
+                                        <Text style={styles.searchName}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                keyExtractor = { (item, index) => index.toString() }
+                            />
+
+                            <FlatList
+                                ListEmptyComponent={
+                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                                }
+                                data={this.state.cloneInterface}
+                                renderItem={({item}) => (
+                                    <View style={{padding: 0}}>
+                                        <View style={styles.container}>
+                                            <H2 style={styles.containerH1}>{item.name}</H2>
                                         </View>
-                                    )}
-                                    keyExtractor = { (item, index) => index.toString() }
-                                />
-                            </View>
+                                        {
+                                            (item.courses && (
+                                                <FlatList
+                                                    ListEmptyComponent={
+                                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses</Text>
+                                                    }
+                                                    data={item.courses}
+                                                    renderItem={({item}) => (
+                                                        <TouchableOpacity
+                                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
+                                                            <CourseBox {...item} user_name={item.user.name} />
+                                                        </TouchableOpacity>
+                                                    )}
+                                                    keyExtractor = { (item, index) => index.toString() }
+                                                />
+                                            ))
+                                        }
+                                    </View>
+                                )}
+                                keyExtractor = { (item, index) => index.toString() }
+                            />
+                        </View>
+
                         )
+                            
                     }
                 </View>
             </AppTemplate>

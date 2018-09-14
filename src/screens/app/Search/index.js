@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TextInput, } from 'react-native';
-import { Container, Content, Header, Text, Button, Icon, H3, } from 'native-base';
+import { StyleSheet, View, Image, TextInput, AsyncStorage } from 'react-native';
+import { Container, Content, Header, Text, Button, Icon, H3, Toast} from 'native-base';
 import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
+import axios from "axios/index";
+import Server from "../../../constants/config";
 
 export default class Search extends Component {
     constructor(props){
         super(props);
         this.state={
             isSearch:false,
-            search:""
+            search:"",
+            cloneSearch: [],
         }
     }
 
     onSearchPressed(){
-        return axios.post(Server.url + 'api/search',{
+        return AsyncStorage.getItem('token').then(userToken => {
+        return axios.post(Server.url + 'api/search?token='+userToken,{
             search: this.state.search
         }).then(response => {
-
+            this.setState({
+                cloneSearch: response.data
+            })
+            this.props.navigation.navigate('ResultSearch', {...this.state.cloneSearch})
+        }).catch(error => {
+            alert(error.data)
         })
+    })
     }
 
     render() {
@@ -32,7 +42,9 @@ export default class Search extends Component {
                     searchIcon={{ size: 24 }}
                     cancelIcon={{ type: 'font-awesome', name: 'chevron-left' }}
                     cancelButtonTitle="Cancel"
-                    placeholder='Search...' />
+                    placeholder='Search...' 
+                    onChangeText={(search) => this.setState({search})}
+                    />
 
                     <View style={styles.container}>
                         <View style={styles.searchTitle}>
@@ -68,7 +80,7 @@ export default class Search extends Component {
                                 </Button>
                             </View> 
                             
-                            <Button style={styles.submit}><Text>Search</Text></Button>
+                            <Button style={styles.submit} onPress={()=> this.onSearchPressed()}><Text>Search</Text></Button>
                         </View>
 
                     </View>
