@@ -94,9 +94,10 @@ class CourseView extends Component {
 
     componentDidMount(){
         this.setState({
-            isGettingReviews: true
+            isGettingReviews: true,
+            isGettingComments: true
         });
-        return axios.get(Server.url+'api/course/'+this.state.course.id+'/reviews').then(response => {
+        axios.get(Server.url+'api/course/'+this.state.course.id+'/reviews').then(response => {
             this.setState({
                 reviews: response.data
             });
@@ -112,10 +113,7 @@ class CourseView extends Component {
             });
         })
 
-        this.setState({
-            isGettingComments: true
-        });
-        return axios.get(Server.url+'api/course/'+this.state.course.id+'/comments').then(response => {
+        axios.get(Server.url+'api/course/'+this.state.course.id+'/comments').then(response => {
             this.setState({
                 comments: response.data
             });

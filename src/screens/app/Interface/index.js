@@ -22,7 +22,7 @@ export default class Interface extends Component {
             isLoading: true
         });
         return AsyncStorage.getItem('token').then(userToken => {
-            return axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
+            axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
                 this.setState({
                     isLoading: false,
                     cloneInterface: response.data
@@ -30,6 +30,14 @@ export default class Interface extends Component {
             }).catch(error => {
                 // alert("karim")
             })
+            // axios.get(Server.url + 'api/course?token='+userToken).then(response => {
+            //     this.setState({
+            //         isLoading: false,
+            //         cloneTrainer: response.data
+            //     });
+            // }).catch(error => {
+            //     alert(error);
+            // })
         }).then(() => {
             this.setState({
                 isLoading: false
@@ -42,23 +50,6 @@ export default class Interface extends Component {
         
     }
 
-    // this.setState({
-    //     isLoading: true
-    // });
-    // return AsyncStorage.getItem('token').then(userToken => {
-    //     return axios.get(Server.url + 'api/course?token='+userToken).then(response => {
-    //         this.setState({
-    //             isLoading: false,
-    //             cloneTrainer: response.data
-    //         });
-    //     }).catch(error => {
-    //         alert(error);
-    //     })
-    // }).then(() => {
-    //     this.setState({
-    //         isLoading: false
-    //     });
-    // });
 
     render() {
         return (
