@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TextInput, AsyncStorage, ActivityIndicator, CheckBox } from 'react-native';
+import { StyleSheet, View, Image, TextInput, AsyncStorage, ActivityIndicator } from 'react-native';
 import { Container, Content, Header, Text, Button, Icon, H3, Toast} from 'native-base';
-import { SearchBar } from 'react-native-elements';
+import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
 import axios from "axios/index";
