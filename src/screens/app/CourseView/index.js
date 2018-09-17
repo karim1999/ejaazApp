@@ -294,7 +294,7 @@ class CourseView extends Component {
 
                     
                     !_.find(this.props.user.courses, course => course.id == this.state.course.id) ? (
-                        _.find(this.props.jointcourses, course => course.id == this.state.course.id) ? (
+                        _.find(this.props.jointcourses, course => course.id == this.state.course.id && course.type == 2) ? (
                                 <Button
                                     primary
                                     onPress={() => this.props.navigation.navigate("CourseName", {course_id: this.state.course.id})}
