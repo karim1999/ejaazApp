@@ -6,9 +6,11 @@ import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
 import Color from "../../../constants/colors";
 import CourseBox from "../../../components/courseBox"
+import {setUser} from "../../../reducers";
+import {connect} from "react-redux";
 
 
-export default class Interface extends Component {
+class Interface extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -22,22 +24,14 @@ export default class Interface extends Component {
             isLoading: true
         });
         return AsyncStorage.getItem('token').then(userToken => {
-            axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
+            return axios.get(Server.url + 'api/courses?token='+userToken).then(response => {
                 this.setState({
                     isLoading: false,
                     cloneInterface: response.data
-                });
+                });               
             }).catch(error => {
-                // alert("karim")
+                
             })
-            // axios.get(Server.url + 'api/course?token='+userToken).then(response => {
-            //     this.setState({
-            //         isLoading: false,
-            //         cloneTrainer: response.data
-            //     });
-            // }).catch(error => {
-            //     alert(error);
-            // })
         }).then(() => {
             this.setState({
                 isLoading: false
@@ -60,35 +54,20 @@ export default class Interface extends Component {
                             <View>
                                 <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
                             </View>
-                        ):this.state.cloneInterface.map((result, i) =>(result.type == 2)) ?
+                        ):(this.props.user.type == 2) ?
                         (
                             <FlatList
                             ListEmptyComponent={
-                                <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No categories were found</Text>
+                                <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Add courses</Text>
                             }
-                            data={this.state.cloneTrainer}
+                            data={this.props.user.courses}
                             renderItem={({item}) => (
                                 <View style={{padding: 0}}>
-                                    <View style={styles.container}>
-                                        <H2 style={styles.containerH1}>{item.name}</H2>
-                                    </View>
-                                    {
-                                        (item.courses && (
-                                            <FlatList
-                                                ListEmptyComponent={
-                                                    <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses</Text>
-                                                }
-                                                data={item.courses}
-                                                renderItem={({item}) => (
-                                                    <TouchableOpacity
-                                                        onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
-                                                        <CourseBox {...item} user_name={item.user.name} />
-                                                    </TouchableOpacity>
-                                                )}
-                                                keyExtractor = { (item, index) => index.toString() }
-                                            />
-                                        ))
-                                    }
+                                            <TouchableOpacity
+                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
+                                                <CourseBox {...item} user_name={item.user.name} />
+                                            </TouchableOpacity>
+                                    
                                 </View>
                             )}
                             keyExtractor = { (item, index) => index.toString() }
@@ -188,3 +167,15 @@ const styles = StyleSheet.create({
     },
 
 });
+
+const mapStateToProps = ({ user }) => ({
+    user,
+});
+
+const mapDispatchToProps = {
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Interface);

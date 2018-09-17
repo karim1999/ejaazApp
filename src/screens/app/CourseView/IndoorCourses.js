@@ -5,42 +5,57 @@ import React, {
 } from 'react';
 
 import {
+    AppRegistry,
     StyleSheet,
     Text,
+    ActivityIndicator,
+    TouchableOpacity,
     View,
+    FlatList,
+    AsyncStorage
 } from 'react-native';
-import { Container, Item, Label, Icon, Button} from 'native-base';
+import { Container, Item, Label, Icon, Toast, Thumbnail, CardItem, Left, Body, Right, Button} from 'native-base';
+import axios from "axios/index";
+import Server from "../../../constants/config";
+import Color from "../../../constants/colors";
 import AppTemplate from "../appTemplate";
 
-export default class CallUs extends Component {
+export default class IndoorCourses extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            course: this.props.navigation.state.params,
+        }
+    }
+
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Call us">
+            <AppTemplate back navigation={this.props.navigation} title="indoor course">
                 <View style={styles.all}>
                     <View style={styles.container}>
                     <Item style={{height: 70}}>
-                        <Icon type="Entypo" name='facebook' />
-                        <Label>Facebook link</Label>
-                        <Text></Text>
+                        <Icon type="FontAwesome" name='pencil' />
+                        <Text>Course name: </Text>
+                        <Label> {this.state.course.title} </Label>
                     </Item>
                    <Item style={{height: 70}}>
-                        <Icon type="Entypo" name='twitter' />
-                        <Label>Twitter link</Label>
-                        <Text></Text>
-                    </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="Entypo" name='instagram' />
-                        <Label>Instagram link</Label>
-                        <Text></Text>
-                    </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="FontAwesome" name='mobile-phone' />
-                        <Label>Phone number</Label>
-                        <Text></Text>
+                        <Icon type="MaterialCommunityIcons" name='houzz' />
+                        <Text>Center name: </Text>
+                        <Label> {this.state.course.center} </Label>
                     </Item>
                     <Item style={{height: 70}}>
                         <Icon type="Entypo" name='address' />
-                        <Label>Address</Label>
+                        <Text>Address: </Text>
+                        <Label> {this.state.course.address} </Label>
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='dollar' />
+                        <Text>Price: </Text>
+                        <Label> {this.state.course.price} </Label>
+                    </Item>
+                    <Item style={{height: 70}}>
+                        <Icon type="MaterialIcons" name='place' />
+                        <Label>Location: </Label>
                         <Text></Text>
                     </Item>
                     </View>

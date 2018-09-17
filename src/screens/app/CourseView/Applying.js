@@ -26,6 +26,8 @@ export default class Applying extends Component {
         this.state={
             cloneApplying:[],
             isLoading:false,
+            isApproving:false,
+            isDisapproving:false,
             course: this.props.navigation.state.params,
             status: 1,
             statuss: 2,
@@ -60,7 +62,7 @@ export default class Applying extends Component {
 
     approve(id){
         this.setState({
-            isLoading: true,
+            isApproving: true,
         });
             AsyncStorage.getItem('token').then(userToken => {
                 return axios.post(Server.url+'api/apply/'+id+'/approve?token='+userToken,
@@ -76,12 +78,12 @@ export default class Applying extends Component {
                         buttonText: 'Okay'
                     });
                     this.setState({
-                        isLoading: false,
+                        isApproving: false,
                     });
                     this.props.navigation.navigate("Applying", {...this.state.course})
                 }).catch(error => {
                     this.setState({
-                        isLoading: false,
+                        isApproving: false,
                     });
                     Toast.show({
                         text: "Error reaching the server.",
@@ -94,7 +96,7 @@ export default class Applying extends Component {
 
     disapprove(id){
         this.setState({
-            isLoading: true,
+            isDisapproving: true,
         });
             AsyncStorage.getItem('token').then(userToken => {
                 return axios.post(Server.url+'api/apply/'+id+'/approve?token='+userToken,
@@ -110,12 +112,12 @@ export default class Applying extends Component {
                         buttonText: 'Okay'
                     });
                     this.setState({
-                        isLoading: false,
+                        isDisapproving: false,
                     });
                     this.props.navigation.navigate("Applying", {...this.state.course})
                 }).catch(error => {
                     this.setState({
-                        isLoading: false,
+                        isDisapproving: false,
                     });
                     Toast.show({
                         text: "Error reaching the server.",
@@ -160,6 +162,9 @@ export default class Applying extends Component {
                                                 block light
                                                 >
                                                 <Text>Approve</Text>
+                                                {this.state.isApproving && (
+                                                    <ActivityIndicator size="small" color="#000000" />
+                                                )}
                                             </Button>
                                             <Button
                                                 onPress={() => this.disapprove(item.id)}
@@ -167,6 +172,9 @@ export default class Applying extends Component {
                                                 block light
                                                 >
                                                 <Text>Disapprove</Text>
+                                                {this.state.isDisapproving && (
+                                                    <ActivityIndicator size="small" color="#000000" />
+                                                )}
                                             </Button>
                                         </Right>
                                         </CardItem>

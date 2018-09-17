@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TextInput, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Image, TextInput, AsyncStorage, ActivityIndicator } from 'react-native';
 import { Container, Content, Header, Text, Button, Icon, H3, Toast} from 'native-base';
 import { CheckBox ,SearchBar } from 'react-native-elements';
 import Color from '../../../constants/colors';
@@ -18,16 +18,23 @@ export default class Search extends Component {
     }
 
     onSearchPressed(){
+        this.setState({
+            isSearch: true,
+        });
         return AsyncStorage.getItem('token').then(userToken => {
         return axios.post(Server.url + 'api/search?token='+userToken,{
             search: this.state.search
         }).then(response => {
             this.setState({
+                isSearch:false,
                 cloneSearch: response.data
             })
             this.props.navigation.navigate('ResultSearch', {...this.state.cloneSearch})
         }).catch(error => {
             alert(error.data)
+            this.setState({
+                isSearch:false,
+            })
         })
     })
     }
@@ -80,7 +87,12 @@ export default class Search extends Component {
                                 </Button>
                             </View> 
                             
-                            <Button style={styles.submit} onPress={()=> this.onSearchPressed()}><Text>Search</Text></Button>
+                            <Button style={styles.submit} onPress={()=> this.onSearchPressed()}>
+                            <Text>Search</Text>
+                            {this.state.isSearch && (
+                                        <ActivityIndicator size="small" color="#000000" />
+                                    )}                            
+                            </Button>
                         </View>
 
                     </View>

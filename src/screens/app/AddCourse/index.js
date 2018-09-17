@@ -114,13 +114,13 @@ class AddCourse extends Component {
                             type: 'image/png'
                         });
                     }
-                    if (this.state.video) {
+                    
                         data.append('video', {
                             name: "video",
                             uri: this.state.video,
                             type: 'image/png'
                         });
-                    }
+                    
                     return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                         this.setState({
                             isLoading: false,
@@ -130,7 +130,7 @@ class AddCourse extends Component {
                             buttonText: "Ok",
                             type: "success"
                         });
-                        this.props.navigation.navigate("UserCourses");
+                        this.props.navigation.navigate("Interface");
                     }).catch(error => {
                         alert(error.data)
                     })
@@ -169,13 +169,12 @@ class AddCourse extends Component {
                             type: 'image/png'
                         });
                     }
-                    if (this.state.video) {
                         data.append('video', {
                             name: "video",
                             uri: this.state.video,
                             type: 'image/png'
                         });
-                    }
+                    
                     return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                         this.setState({
                             isLoading: false,
@@ -185,7 +184,7 @@ class AddCourse extends Component {
                             buttonText: "Ok",
                             type: "success"
                         });
-                        this.props.navigation.navigate("UserCourses");
+                        this.props.navigation.navigate("Interface");
                     }).catch(error => {
                         alert(error.data)
                     })
@@ -265,21 +264,29 @@ class AddCourse extends Component {
                                      Select</Text>
                             </Button>
                         </Item>
-                        <Item style={{height: 70}}>
-                            <Icon name='ios-videocam' />
-                            <Label>Orientation Video</Label>
-                            <Button
-                                style={{alignSelf: "center"}}
-                                onPress={() => this.selectVideo()} light>
-                                <Text>
-                                    {
-                                        (this.state.video) && (
-                                            <Icon name="md-checkmark-circle" style={{color: "green", fontSize: 17, marginRight: 10}} />
-                                        )
-                                    }
-                                     Select</Text>
-                            </Button>
-                        </Item>
+                        {
+                            (this.state.type == 2)?
+                            (
+                                
+                                <Item style={{height: 70}}>
+                                    <Icon name='ios-videocam' />
+                                    <Label>Orientation Video</Label>
+                                    <Button
+                                        style={{alignSelf: "center"}}
+                                        onPress={() => this.selectVideo()} light>
+                                        <Text>
+                                            {
+                                                (this.state.video) && (
+                                                    <Icon name="md-checkmark-circle" style={{color: "green", fontSize: 17, marginRight: 10}} />
+                                                )
+                                            }
+                                            Select</Text>
+                                    </Button>
+                                </Item>
+                            ):(
+                                <Text></Text>
+                            )
+                        }
                         <ListItem
                             onPress={(type) => {this.setState({type: 1})}}
                         >

@@ -28,6 +28,7 @@ import ShowCategories from '../screens/app/Categories/ShowCategories';
 import EditCourse from '../screens/app/CourseView/editCourse';
 import AddVideos from '../screens/app/CourseView/AddVideos';
 import Videos from '../screens/app/CourseView/Videos';
+import IndoorCourses from '../screens/app/CourseView/IndoorCourses';
 import Color from "../constants/colors";
 import CallUs from '../screens/app/CallUs';
 
@@ -42,7 +43,8 @@ const HomeStack = createStackNavigator({
     EditCourse,
     AddVideos,
     Videos,
-    Applying
+    Applying,
+    IndoorCourses
 },{
     headerMode: 'none',
 });

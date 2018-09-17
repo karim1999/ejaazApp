@@ -35,6 +35,7 @@ class CourseView extends Component {
             isGettingReviews: false,
             isCommented:false,
             isGettingComments:false,
+            isApplying:false,
             reviews: [],
             rate: 1,
             review: "",
@@ -42,7 +43,6 @@ class CourseView extends Component {
             comments:[],
             isSetting: false,
             isDeleting: false,
-            text: 'Apply',
             status: 0
         }
     }
@@ -61,8 +61,7 @@ class CourseView extends Component {
                 {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
                 {text: "Ok", onPress: () => {
                     this.setState({
-                        text: 'Waiting approve',
-                        isLoading: true,
+                        isApplying: true,
                     })
                     AsyncStorage.getItem('token').then(userToken => {
                         return axios.post(Server.url+'api/apply/'+this.state.course.id+'?token='+userToken,{
@@ -74,9 +73,12 @@ class CourseView extends Component {
                                 type: "success",
                                 buttonText: 'Okay'
                             });
+                            this.setState({
+                                isApplying: false,
+                            })
                         }).catch(error => {
                             this.setState({
-                                isLoading: false,
+                                isApplying: false,
                             });
                             Toast.show({
                                 text: "Error reaching the server.",
@@ -289,6 +291,8 @@ class CourseView extends Component {
         return (
             <AppTemplate favorite course_id={this.state.course.id} back navigation={this.props.navigation} title={this.state.course.title}>
                 {
+
+                    
                     !_.find(this.props.user.courses, course => course.id == this.state.course.id) ? (
                         _.find(this.props.jointcourses, course => course.id == this.state.course.id) ? (
                                 <Button
@@ -298,6 +302,7 @@ class CourseView extends Component {
                                     <Icon name="folder-video" type="Entypo" style={{color: "white", fontSize: 25}}/>
                                 </Button>
                             ) :
+                            (this.state.course.type == 2)?(
                             !_.find(this.props.user.cart, course => course.id == this.state.course.id) ? (
                                 <Button
                                     success
@@ -316,11 +321,32 @@ class CourseView extends Component {
                                     <Icon name="ios-cart" style={{color: "#FFFFFF", fontSize: 25}}/>
                                 </Button>
                             )
+                        ):
+                            _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
+                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                    course.pivot.status == 1) ? (
+                                        <Button
+                                            primary
+                                            onPress={() => this.props.navigation.navigate("IndoorCourses", {...this.state.course, course_id: this.state.course.id})}
+                                            style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Open Course </Text>
+                                            <Icon name="folder-video" type="Entypo" style={{color: "white", fontSize: 25}}/>
+                                        </Button>
+                                    
+                                ):(
+                                    <Text></Text>
+                                )
+        
+                            ):(<Text></Text>)
+
                     ) : (
                         <Button onPress={() => this.setState({isSetting: !this.state.isSetting})} style={{width: "100%", alignItems: "center"}} dark><Text style={{flex: 1}}> Settings </Text>
                             <Icon name={this.state.isSetting? "ios-arrow-dropup-circle": "ios-arrow-dropdown-circle"} style={{color: "#FFFFFF", fontSize: 25}}/>
                         </Button>
                     )
+                    
+
+                                                         
+                        
                 }
                 {
                     (this.state.isSetting) && (
@@ -419,31 +445,57 @@ class CourseView extends Component {
                                     <Text style={styles.footerText}>{this.state.course.price}</Text>
                                     <Text style={styles.footerIcon}>$</Text>
                                 </Button>
-                                
+
+
                                 {
                                     (this.state.course.type == 1) ? (
                                         (this.props.user.type == 1) ? (
-                                            <Button
-                                            onPress={() => this.applyCourse()}
-                                            style={{alignSelf:'flex-end', backgroundColor: '#6483f7'}}
-                                            block light
-                                            >
-                                            <Text>Apply</Text>
-                                        </Button>                                            
-                                        ):(
-                                            <Text></Text>  
-                                        )
 
-                                    ) : (
-                                        <Text></Text>
-                                    )
-                                }
+                                            _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
+                                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                            course.pivot.status == 1 || course.pivot.status == 2) ? (
+                                            <Text></Text>
+                                        ) :
+
+                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                            course.pivot.status == 0) ? (
+                                                <Button
+                                                    style={{alignSelf:'flex-end', backgroundColor: '#6483f7'}}>
+                                                    <Text> Waiting to approve </Text>
+                                                    <Icon name="back-in-time" type="Entypo" style={{color: "#FFFFFF", fontSize: 25}}/>
+                                                </Button>
+                                                
+                                            
+                                            
+                                        ) : (
+                                            <Text></Text>
+                                        )
+                                ) : (
+                                    <Button
+                                    onPress={() => this.applyCourse()}
+                                    style={{alignSelf:'flex-end', backgroundColor: '#6483f7'}}>
+                                    <Text> Apply </Text>
+                                    {this.state.isApplying && (
+                                        <ActivityIndicator size="small" color="#000000" />
+                                    )}
+                                    <Icon name="ios-checkmark" style={{color: "#FFFFFF", fontSize: 25}}/>
+                                </Button>
+                                )
+                                ):(
+                                    <Text></Text>
+                                )
+                                ):(
+                                    <Text></Text>
+                                )
+                            }
+                                
 
                                 <H2>Reviews</H2>
 
                                 <List>
                                     {
-                                        ((!_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (!_.find(this.props.user.courses, course => course.id == this.state.course.id)) && (_.find(this.props.user.jointcourses, course => course.id == this.state.course.id))) && (
+                                        ((!_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (!_.find(this.props.user.courses, course => course.id == this.state.course.id)) && (_.find(this.props.user.jointcourses, course => course.id == this.state.course.id)))
+                                        && (_.find(this.props.user.jointcourses, course => course.id == this.state.course.id &&  course.pivot.status == 1)) && (
                                             <Form>
                                                 <Item style={{height: 70}}>
                                                     <Icon type="MaterialIcons" name='rate-review' />
@@ -500,7 +552,8 @@ class CourseView extends Component {
                                                     data={_.reverse(this.state.reviews)}
                                                     renderItem={({item}) => (
                                                         <View>
-                                                        <ListItem avatar>
+                                                        
+                                                        <ListItem avatar onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user.id})}>
                                                             <Left>
                                                                 <Thumbnail source={{uri: Server.storage+item.user.img}} />
                                                             </Left>
@@ -512,52 +565,59 @@ class CourseView extends Component {
                                                                 }
                                                             </View>
                                                             <Text note>{item.review}</Text>
-                                                            </Body>                                                            
+                                                            </Body>                                                           
                                                         </ListItem>
 
                                                         <FlatList
                                                     data={this.state.comments}
                                                     renderItem={({item}) => (
-                                                        <ListItem avatar>
+                                                        <ListItem avatar onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user_id})}>
                                                             <Left>
-                                                                <Thumbnail source={{uri: Server.storage+this.props.user.img}} />
+                                                                <Thumbnail source={{uri: Server.storage+item.user.img}} />
                                                             </Left>
                                                             <Body>
-                                                            <Text>{this.props.user.name}</Text>
+                                                            <Text>{item.user.name}</Text>
                                                             <Text note>{item.comment}</Text>
                                                             </Body>                                                            
                                                         </ListItem>
                                                         )}
                                                         keyExtractor = { (item, index) => index.toString() }
                                                         />
+                                                        {
+                                                            ((_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (_.find(this.props.user.courses, course => course.id == this.state.course.id))
+                                                            && (_.find(this.state.comments, comment => comment.user_id == this.props.user.id)))
+                                                            && (
+                                                                    <Form>
+                                                                        <Item style={{height: 30, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
+                                                                            <Icon type="FontAwesome" name='info' />
+                                                                            <Text>Comment</Text>
+                                                                        </Item>
+                                                                        <Item style={{marginBottom: 10}}>
+                                                                        <Textarea
+                                                                            style={{height: 80, paddingTop: 0, marginTop: 0, flex: 1}}
+                                                                            rowSpan={3}
+                                                                            bordered
+                                                                            onChangeText={(comment) => this.setState({comment})}
+                                                                            placeholder="Write your comment"
+                                                                            placeholderTextColor="#ccc5c5"
+                                                                            value={this.state.description}
+                                                                        />
+                                                                        </Item>
+                                                                        <Button
+                                                                            onPress={() => this.addComment(item.id)}
+                                                                            style={{flexDirection: "row", backgroundColor: '#6483f7'}}
+                                                                            block light
+                                                                        >
+                                                                            <Text>add</Text>
+                                                                            {this.state.isCommented && (
+                                                                                <ActivityIndicator size="small" color="#000000" />
+                                                                            )}
+                                                                        </Button>
+                                                                    </Form>
+                                                            )
+                                                        }
 
-                                                        <Form>
-                                                            <Item style={{height: 30, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
-                                                                <Icon type="FontAwesome" name='info' />
-                                                                <Text>Comment</Text>
-                                                            </Item>
-                                                            <Item style={{marginBottom: 10}}>
-                                                            <Textarea
-                                                                style={{height: 80, paddingTop: 0, marginTop: 0, flex: 1}}
-                                                                rowSpan={3}
-                                                                bordered
-                                                                onChangeText={(comment) => this.setState({comment})}
-                                                                placeholder="Write your comment"
-                                                                placeholderTextColor="#ccc5c5"
-                                                                value={this.state.description}
-                                                            />
-                                                            </Item>
-                                                            <Button
-                                                                onPress={() => this.addComment(item.id)}
-                                                                style={{flexDirection: "row", backgroundColor: '#6483f7'}}
-                                                                block light
-                                                            >
-                                                                <Text>add</Text>
-                                                                {this.state.isCommented && (
-                                                                    <ActivityIndicator size="small" color="#000000" />
-                                                                )}
-                                                            </Button>
-                                                        </Form>
+                                                        
                                                         </View>
                                                     )}
                                                     keyExtractor = { (item, index) => index.toString() }

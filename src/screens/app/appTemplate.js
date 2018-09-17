@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Container, Header, Left, Body, Right, Button, Icon, Title, Content, Toast, Fab} from 'native-base';
 import Color from '../../constants/colors';
 import {connect} from "react-redux";
-import {RefreshControl, StyleSheet, AsyncStorage, TouchableOpacity, ActivityIndicator} from "react-native";
+import {RefreshControl, StyleSheet, AsyncStorage, TouchableOpacity, ActivityIndicator,Text} from "react-native";
 import {setCategories, setUser, setFavorites} from "../../reducers";
 import axios from "axios/index";
 import Server from "../../constants/config";
@@ -151,16 +151,24 @@ class AppTemplate extends Component {
                     }>
                     { this.props.children }
                 </Content>
-                {this.props.fab && (
-                    <Fab
-                        active={true}
-                        style={{ backgroundColor: Color.mainColor }}
-                        position="bottomRight"
-                        onPress={() => this.props.navigation.navigate('AddCourse')}>
+                {
+                    (this.props.user.type == 2)?(
+                        this.props.fab && (
+                            <Fab
+                                active={true}
+                                style={{ backgroundColor: Color.mainColor }}
+                                position="bottomRight"
+                                onPress={() => this.props.navigation.navigate('AddCourse')}>
+        
+                                <Icon size={25} type="Ionicons" name="ios-add-outline" style={{color:'#FFFFFF'}}  />
+                            </Fab>
+                        )
 
-                        <Icon size={25} type="Ionicons" name="ios-add-outline" style={{color:'#FFFFFF'}}  />
-                    </Fab>
-                )}
+                    ):(
+                        <Text></Text>
+                    )
+
+                }
             </Container>
         );
     }

@@ -79,6 +79,7 @@ export default class SignUp extends Component {
                 this.setState({
                     isSignUp: false
                 });
+                this.props.navigation.navigate("Login");
             }).catch(error => {
                 let text= "No Internet Connection.";
                 if(error.response.status == 400 && error.response.data && error.response.data.type == "validation" && error.response.data.error){

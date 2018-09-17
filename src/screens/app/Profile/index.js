@@ -133,21 +133,21 @@ class Profile extends Component {
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Education")}
+                    onPress={() => this.props.navigation.navigate("Education", {...this.props.user, user_id: this.props.user.id})}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Education</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Jobs")}
+                    onPress={() => this.props.navigation.navigate("Jobs", {...this.props.user, user_id: this.props.user.id})}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Jobs</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Certificates")}
+                    onPress={() => this.props.navigation.navigate("Certificates", {...this.props.user, user_id: this.props.user.id})}
                     style={styles.Profile}>
                     <Text style={styles.textProfil}>Certificates</Text>
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
