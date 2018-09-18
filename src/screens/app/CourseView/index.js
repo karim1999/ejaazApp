@@ -20,7 +20,7 @@ import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
 import _ from "lodash";
-import {setCart, setUser} from "../../../reducers";
+import {setCart, setUser, setJointCourses} from "../../../reducers";
 import {connect} from "react-redux";
 import Color from "../../../constants/colors";
 import VideoPlayer from "react-native-video-controls";
@@ -62,12 +62,13 @@ class CourseView extends Component {
                 {text: "Ok", onPress: () => {
                     this.setState({
                         isApplying: true,
-                    })
+                    });
                     AsyncStorage.getItem('token').then(userToken => {
                         return axios.post(Server.url+'api/apply/'+this.state.course.id+'?token='+userToken,{
                             status: this.state.status
                         })
                         .then(response => {
+                            this.props.setJointCourses(response.data);
                             Toast.show({
                                 text: 'Successfully applying',
                                 type: "success",
@@ -113,7 +114,7 @@ class CourseView extends Component {
             this.setState({
                 isGettingReviews: false,
             });
-        })
+        });
 
         axios.get(Server.url+'api/course/'+this.state.course.id+'/comments').then(response => {
             this.setState({
@@ -785,7 +786,8 @@ const mapStateToProps = ({ categories, user }) => ({
 
 const mapDispatchToProps = {
     setCart,
-    setUser
+    setUser,
+    setJointCourses
 };
 export default connect(
     mapStateToProps,

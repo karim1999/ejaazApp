@@ -114,12 +114,13 @@ class AddCourse extends Component {
                             type: 'image/png'
                         });
                     }
-                    
+                    if (this.state.video) {
                         data.append('video', {
                             name: "video",
                             uri: this.state.video,
                             type: 'image/png'
                         });
+                    }
                     
                     return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                         this.setState({

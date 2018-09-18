@@ -47,7 +47,7 @@ class Interface extends Component {
 
     render() {
         return (
-            <AppTemplate fab interface onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
+            <AppTemplate fab={this.props.user.type == 2} interface={this.props.user.type == 1} onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
                 <View style={styles.all}>
                     {
                         (this.state.isLoading)? (

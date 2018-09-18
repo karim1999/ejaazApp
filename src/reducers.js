@@ -16,6 +16,9 @@ export const currentUser= (state = initialState, action) => {
         case "SET_FAVORITES":
             return { ...state, user: {...state.user, favorites: action.favorites} };
             break;
+        case "JOINT_COURSES":
+            return { ...state, user: {...state.user, jointcourses: action.jointcourses} };
+            break;
         case "SET_CART":
             return { ...state, user: {...state.user, cart: action.cart} };
             break;
@@ -42,6 +45,10 @@ export const setFavorites = (favorites) => ({
 export const setCart = (cart) => ({
     type: 'SET_CART',
     cart
+});
+export const setJointCourses = (jointcourses) => ({
+    type: 'JOINT_COURSES',
+    jointcourses
 });
 export const removeUser = () => ({
     type: 'REMOVE_USER'
