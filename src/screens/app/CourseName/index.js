@@ -55,7 +55,6 @@ export default class CourseName extends Component {
     render() {
         return (
             <Container style={styles.all}>
-            <Icon type="Entypo" name='chevron-left' />
             {this.state.cloneVideos.map((result, i) =>
             <VideoPlayer source={{uri: this.state.cloneVideos[0].video}}   // Can be a URL or a local file.
                        ref={(ref) => {
@@ -73,8 +72,6 @@ export default class CourseName extends Component {
                        navigator={'CourseView'}
                 />
             )}
-                
-                <Icon type="Entypo" name='chevron-right' />
 
                 <FlatList
                     ListEmptyComponent={

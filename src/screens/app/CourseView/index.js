@@ -350,6 +350,56 @@ class CourseView extends Component {
                         
                 }
                 {
+                        (this.state.course.type == 1) ? (
+                            (this.props.user.type == 1) ? (
+                                (new Date(this.state.course.date_start).toDateString() == new Date(new Date().getTime()).toDateString())?
+                                (
+                                    <Text></Text>
+                                ):(
+                                    _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
+                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                    course.pivot.status == 1 || course.pivot.status == 2 ) ? (
+                                    <Text></Text>
+                                ) :
+    
+                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                    course.pivot.status == 0) ? (
+                                        <Button
+                                            primary
+                                            style={{width: "100%", alignItems: "center"}}>
+                                            <Text style={{flex: 1}}> Waiting to approve </Text>
+                                            <Icon name="back-in-time" type="Entypo" style={{color: "#FFFFFF", fontSize: 25}}/>
+                                        </Button>
+                                        
+                                    
+                                    
+                                ) : (
+                                    <Text></Text>
+                                )
+                        ) : (
+                            <Button
+                            success
+                            onPress={() => this.applyCourse()}
+                            style={{width: "100%", alignItems: "center"}}>
+                            <Text style={{flex: 1}}> Apply </Text>
+                            {this.state.isApplying && (
+                                <ActivityIndicator size="small" color="#000000" />
+                            )}
+                            <Icon name="ios-checkmark" style={{color: "#FFFFFF", fontSize: 25}}/>
+                        </Button>
+                        )
+
+                                )
+
+                                
+                    ):(
+                        <Text></Text>
+                    )
+                    ):(
+                        <Text></Text>
+                    )
+                }
+                {
                     (this.state.isSetting) && (
                         <List style={{backgroundColor: "#FFFFFF", right: 0}}>
                             <ListItem
@@ -441,54 +491,13 @@ class CourseView extends Component {
                                 }
 
                             <View style={styles.paddingContent}>
-                                <H2 >Price</H2>
-                                <Button transparent>
+                                <Button transparent style={{alignSelf:'flex-end'}}>
                                     <Text style={styles.footerText}>{this.state.course.price}</Text>
                                     <Text style={styles.footerIcon}>$</Text>
                                 </Button>
 
 
-                                {
-                                    (this.state.course.type == 1) ? (
-                                        (this.props.user.type == 1) ? (
-
-                                            _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
-                                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
-                                            course.pivot.status == 1 || course.pivot.status == 2) ? (
-                                            <Text></Text>
-                                        ) :
-
-                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
-                                            course.pivot.status == 0) ? (
-                                                <Button
-                                                    style={{alignSelf:'flex-end', backgroundColor: '#6483f7'}}>
-                                                    <Text> Waiting to approve </Text>
-                                                    <Icon name="back-in-time" type="Entypo" style={{color: "#FFFFFF", fontSize: 25}}/>
-                                                </Button>
-                                                
-                                            
-                                            
-                                        ) : (
-                                            <Text></Text>
-                                        )
-                                ) : (
-                                    <Button
-                                    onPress={() => this.applyCourse()}
-                                    style={{alignSelf:'flex-end', backgroundColor: '#6483f7'}}>
-                                    <Text> Apply </Text>
-                                    {this.state.isApplying && (
-                                        <ActivityIndicator size="small" color="#000000" />
-                                    )}
-                                    <Icon name="ios-checkmark" style={{color: "#FFFFFF", fontSize: 25}}/>
-                                </Button>
-                                )
-                                ):(
-                                    <Text></Text>
-                                )
-                                ):(
-                                    <Text></Text>
-                                )
-                            }
+                                
                                 
 
                                 <H2>Reviews</H2>
@@ -568,25 +577,30 @@ class CourseView extends Component {
                                                             <Text note>{item.review}</Text>
                                                             </Body>                                                           
                                                         </ListItem>
+                                                        {
+                                                            (item.comments &&(
+                                                                <FlatList
+                                                                    data={item.comments}
+                                                                    renderItem={({item}) => (
+                                                                        <ListItem avatar onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user_id})}>
+                                                                            <Left>
+                                                                                <Thumbnail source={{uri: Server.storage+item.user.img}} />
+                                                                            </Left>
+                                                                            <Body>
+                                                                            <Text>{item.user.name}</Text>
+                                                                            <Text note>{item.comment}</Text>
+                                                                            </Body>                                                            
+                                                                        </ListItem>
+                                                                        )}
+                                                                        keyExtractor = { (item, index) => index.toString() }
+                                                                />
+                                                                
+                                                            ))
+                                                        }
 
-                                                        <FlatList
-                                                    data={this.state.comments}
-                                                    renderItem={({item}) => (
-                                                        <ListItem avatar onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user_id})}>
-                                                            <Left>
-                                                                <Thumbnail source={{uri: Server.storage+item.user.img}} />
-                                                            </Left>
-                                                            <Body>
-                                                            <Text>{item.user.name}</Text>
-                                                            <Text note>{item.comment}</Text>
-                                                            </Body>                                                            
-                                                        </ListItem>
-                                                        )}
-                                                        keyExtractor = { (item, index) => index.toString() }
-                                                        />
                                                         {
                                                             ((_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (_.find(this.props.user.courses, course => course.id == this.state.course.id))
-                                                            && (_.find(this.state.comments, comment => comment.user_id == this.props.user.id)))
+                                                            && (_.find(this.state.reviews.comments, comment => comment.user_id == this.props.user.id)))
                                                             && (
                                                                     <Form>
                                                                         <Item style={{height: 30, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>

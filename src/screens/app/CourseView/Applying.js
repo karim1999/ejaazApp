@@ -80,7 +80,7 @@ export default class Applying extends Component {
                     this.setState({
                         isApproving: false,
                     });
-                    this.props.navigation.navigate("Applying", {...this.state.course})
+                    this.componentDidMount();
                 }).catch(error => {
                     this.setState({
                         isApproving: false,
@@ -114,7 +114,7 @@ export default class Applying extends Component {
                     this.setState({
                         isDisapproving: false,
                     });
-                    this.props.navigation.navigate("Applying", {...this.state.course})
+                    this.componentDidMount();
                 }).catch(error => {
                     this.setState({
                         isDisapproving: false,

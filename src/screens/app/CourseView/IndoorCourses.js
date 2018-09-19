@@ -49,6 +49,11 @@ export default class IndoorCourses extends Component {
                         <Label> {this.state.course.address} </Label>
                     </Item>
                     <Item style={{height: 70}}>
+                        <Icon type="FontAwesome" name='hourglass-start' />
+                        <Text>start: </Text>
+                        <Label> {new Date(this.state.course.date_start).toDateString()} </Label>
+                    </Item>
+                    <Item style={{height: 70}}>
                         <Icon type="FontAwesome" name='dollar' />
                         <Text>Price: </Text>
                         <Label> {this.state.course.price} </Label>

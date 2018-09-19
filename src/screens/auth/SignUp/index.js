@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator, 
-    Modal, TouchableHighlight, CheckBox } from 'react-native';
+    Modal, TouchableHighlight, CheckBox, FlatList } from 'react-native';
 import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
@@ -26,7 +26,9 @@ export default class SignUp extends Component {
             categories:[{
                 id:1,
                 name:'first category'
-            }]
+            }],
+            termsAndCond:[],
+            isTerms:false,
         }
     }
 
@@ -102,7 +104,23 @@ export default class SignUp extends Component {
     }
 
     setModalVisible(visible) {
-        this.setState({modalVisible: visible});
+        this.setState({modalVisible: visible, isTerms:true});
+        return axios.get(Server.url+'api/terms')
+        .then(response => {
+            this.setState({
+                isTerms: false,
+                termsAndCond: response.data
+            });
+        }).catch(error => {
+            this.setState({
+                isTerms: false,
+            });
+            Toast.show({
+                text: "Error reaching the server.",
+                buttonText: "Ok",
+                type: "danger"
+            })
+        })
       }
     componentDidMount(){
         // Imprtant Read it --------------------------------->
@@ -206,7 +224,13 @@ export default class SignUp extends Component {
                         }}>
                         <View style={{marginTop: 22}}>
                             <View>
-                            <Text>Hello World!</Text>
+                            <FlatList
+                            data={this.state.termsAndCond}
+                            renderItem={({item}) => (
+                            <Text>{item.terms}</Text>
+                                )}
+                                keyExtractor = { (item, index) => index.toString() }
+                            />
 
                             <TouchableHighlight
                                 onPress={() => {

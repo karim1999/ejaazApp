@@ -79,7 +79,7 @@ class Profile extends Component {
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
+            axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
                 this.props.setUser(response.data.user);
             }).catch(error => {
                 Toast.show({
@@ -121,7 +121,9 @@ class Profile extends Component {
                 <TouchableOpacity style={styles.courseFollow}>
                     <View style={styles.course}>
                         <Text style={styles.text}>Courses</Text>
-                        <Text style={styles.text}>5</Text>
+                        {this.props.user.courses.map((result, i) => 
+                            <Text style={styles.text}>{result.length}</Text>
+                        )}
                     </View>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
