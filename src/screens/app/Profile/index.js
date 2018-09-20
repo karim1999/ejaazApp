@@ -100,6 +100,8 @@ class Profile extends Component {
             <AppTemplate navigation={this.props.navigation} title="Profile">
 
                 <View style={styles.container}>
+                <Icon active style={styles.setting} type="MaterialCommunityIcons" name="settings" 
+                            onPress={()=> this.props.navigation.navigate('Security')}/>
                     <H2 style={styles.containerH2}>{this.props.user.name}</H2>
                     <Icon active style={styles.edit} type="FontAwesome" name="edit" 
                     onPress={()=> this.props.navigation.navigate('UserInfo')}/>
