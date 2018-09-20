@@ -7,7 +7,8 @@ import Server from "../../../constants/config";
 import Course from "../../../components/course";
 import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
-import CourseBox from "../../../components/courseBox"
+import CourseBox from "../../../components/courseBox";
+import _ from "lodash";
 
 class UserCourses extends Component {
     constructor(props){
@@ -29,10 +30,16 @@ class UserCourses extends Component {
                 }
                     data={this.props.user.jointcourses}
                     renderItem={({item}) => (
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                            <CourseBox {...item} user_name={item.user.name} />
-                        </TouchableOpacity>
+                        (_.find(this.props.user.jointcourses, course => course.id == item.id &&  course.pivot.status == 1))?
+                        (
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                <CourseBox {...item} user_name={item.user.name} />
+                            </TouchableOpacity>
+                        ):
+                        (
+                            <Text></Text>
+                        )
                     )}
 
                     keyExtractor = { (item, index) => index.toString() }

@@ -97,14 +97,19 @@ class Interface extends Component {
                                 renderItem={({item}) => (
                                     <View style={{padding: 0}}>
                                         <View style={styles.container}>
-                                            <H2 style={styles.containerH1}>{item.name}</H2>
+                                        {
+                                            (item.courses.length == 0)?
+                                            (
+                                                <Text></Text>
+                                            ):
+                                            (
+                                                <H2 style={styles.containerH1}>{item.name}</H2>
+                                            )
+                                        }
                                         </View>
                                         {
                                             (item.courses && (
                                                 <FlatList
-                                                    ListEmptyComponent={
-                                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", marginTop: 10}}>Add courses</Text>
-                                                    }
                                                     data={item.courses}
                                                     renderItem={({item}) => (
                                                         <TouchableOpacity

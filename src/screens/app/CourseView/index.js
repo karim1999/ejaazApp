@@ -449,9 +449,9 @@ class CourseView extends Component {
                                 {
                                     (this.state.course.type == 1) ? (
 
-                                        <H3>In door course</H3>
+                                        <H2 style={styles.courses}>In door course</H2>
                                     ) : (
-                                        <H3>Online course</H3> 
+                                        <H2 style={styles.courses}>Online course</H2> 
                                     )
                                 }
 
@@ -791,6 +791,14 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 16
     },
+    courses:{
+        alignSelf: 'center',
+        backgroundColor: Color.mainColor,
+        color: '#fff',
+        padding: 10,
+        borderRadius: 8,
+        marginTop: 10,
+    }
 
 });
 const mapStateToProps = ({ categories, user }) => ({
