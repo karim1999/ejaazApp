@@ -61,7 +61,7 @@ export default class Security extends Component {
 
     render() {
         return (
-            <AppTemplate navigation={this.props.navigation} title="Password">
+            <AppTemplate back navigation={this.props.navigation} title="Password">
             <View style={styles.all}>
                 <Form style={styles.container}>
                     <Item style={{height: 70}}>

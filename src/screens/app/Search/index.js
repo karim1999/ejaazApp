@@ -140,9 +140,6 @@ export default class Search extends Component {
 }
 
 const styles = StyleSheet.create({
-    all:{
-        backgroundColor: '#f1f1f1'        
-    },
     container:{
         padding: 20,
     },

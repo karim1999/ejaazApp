@@ -100,7 +100,7 @@ class CourseView extends Component {
             isGettingReviews: true,
             isGettingComments: true
         });
-        axios.get(Server.url+'api/course/'+this.state.course.id+'/reviews').then(response => {
+        return axios.get(Server.url+'api/course/'+this.state.course.id+'/reviews').then(response => {
             this.setState({
                 reviews: response.data
             });
@@ -115,22 +115,6 @@ class CourseView extends Component {
                 isGettingReviews: false,
             });
         });
-
-        axios.get(Server.url+'api/course/'+this.state.course.id+'/comments').then(response => {
-            this.setState({
-                comments: response.data
-            });
-        }).catch(error => {
-            Toast.show({
-                text: "Unknown error hs occurred",
-                buttonText: "Ok",
-                type: "danger"
-            })
-        }).then(() => {
-            this.setState({
-                isGettingComments: false,
-            });
-        })
     }
     deleteCourse(){
         Alert.alert(
@@ -334,7 +318,15 @@ class CourseView extends Component {
                                         </Button>
                                     
                                 ):(
-                                    <Text></Text>
+                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                            course.pivot.status == 2) ? (
+                                                <Button
+                                                    danger
+                                                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Sorry not accepted </Text>
+                                                    <Icon name="exclamation-circle" type="FontAwesome" style={{color: "white", fontSize: 25}}/>
+                                                </Button>
+                                                
+                                            ):(<Text></Text>)
                                 )
         
                             ):(<Text></Text>)
@@ -407,11 +399,18 @@ class CourseView extends Component {
                             >
                                 <Text>Applying</Text>
                             </ListItem>
-                            <ListItem
-                                onPress={() => this.props.navigation.navigate("Videos", {...this.state.course})}
-                            >
-                                <Text>Videos</Text>
-                            </ListItem>
+                            {
+                                (this.state.course.type == 1) ? (
+
+                                    <Text></Text>
+                                ) : (
+                                <ListItem
+                                    onPress={() => this.props.navigation.navigate("Videos", {...this.state.course})}
+                                >
+                                    <Text>Videos</Text>
+                                </ListItem> 
+                                )
+                            }
                             <ListItem
                                 onPress={() => this.props.navigation.navigate("EditCourse", {...this.state.course})}
                             >
@@ -441,19 +440,21 @@ class CourseView extends Component {
                                     </Left>
                                     </CardItem>
                                 </TouchableOpacity>
-                                <H2 style={styles.viewH2}>{this.state.course.title}</H2>
+                                    <H3 style={styles.viewH2}>{this.state.course.title}</H3>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}
                                 </Text>
-
                                 {
                                     (this.state.course.type == 1) ? (
 
-                                        <H2 style={styles.courses}>In door course</H2>
+                                        <Text style={styles.courses}>In door course</Text>
                                     ) : (
-                                        <H2 style={styles.courses}>Online course</H2> 
+                                        <Text style={styles.courses}>Online course</Text> 
                                     )
                                 }
+                                
+
+                                
 
                                 {/*<H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>*/}
                                 {/*<Text style={styles.viewText}>*/}
@@ -599,8 +600,8 @@ class CourseView extends Component {
                                                         }
 
                                                         {
-                                                            ((_.find(this.state.reviews, review => review.user_id == this.props.user.id)) && (_.find(this.props.user.courses, course => course.id == this.state.course.id))
-                                                            && (_.find(this.state.reviews.comments, comment => comment.user_id == this.props.user.id)))
+                                                            ((_.find(this.props.user.courses, course => course.id == this.state.course.id))
+                                                            && (!_.find(this.state.reviews.comments, comment => comment.user_id == this.state.course.user_id)))
                                                             && (
                                                                     <Form>
                                                                         <Item style={{height: 30, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
@@ -708,9 +709,6 @@ const styles = StyleSheet.create({
     paddingContent:{
         padding: 20
     },
-    viewH2Padd:{
-        paddingTop: 15,
-    },
     viewText:{
         color: '#464646',
         fontSize: 15,
@@ -792,13 +790,14 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     courses:{
-        alignSelf: 'center',
-        backgroundColor: Color.mainColor,
+        backgroundColor: '#449d44',
         color: '#fff',
-        padding: 10,
-        borderRadius: 8,
         marginTop: 10,
-    }
+        padding: 6,
+        textAlign:'center',
+        fontSize: 16,
+        borderRadius: 6
+    },
 
 });
 const mapStateToProps = ({ categories, user }) => ({

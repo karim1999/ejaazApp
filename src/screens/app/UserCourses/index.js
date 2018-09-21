@@ -30,16 +30,16 @@ class UserCourses extends Component {
                 }
                     data={this.props.user.jointcourses}
                     renderItem={({item}) => (
-                        (_.find(this.props.user.jointcourses, course => course.id == item.id &&  course.pivot.status == 1))?
-                        (
-                            <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
-                                <CourseBox {...item} user_name={item.user.name} />
-                            </TouchableOpacity>
-                        ):
-                        (
-                            <Text></Text>
-                        )
+                        // (_.find(this.props.user.jointcourses, course => course.id == item.id &&  course.pivot.status == 1))?
+                        // (
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                            <CourseBox {...item} user_name={item.user.name} />
+                        </TouchableOpacity>
+                        // ):
+                        // (
+                        //     <Text></Text>
+                        // )
                     )}
 
                     keyExtractor = { (item, index) => index.toString() }

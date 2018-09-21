@@ -14,7 +14,7 @@ import {
     FlatList,
     AsyncStorage
 } from 'react-native';
-import { Container, Item, Label, Icon, Toast, Thumbnail, CardItem, Left, Body, Right, Button} from 'native-base';
+import { Container, Item, Label, Icon, Toast, Thumbnail, Segment, CardItem, Left, Body, Right, Button} from 'native-base';
 import axios from "axios/index";
 import Server from "../../../constants/config";
 import Color from "../../../constants/colors";
@@ -131,8 +131,22 @@ export default class Applying extends Component {
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Applying">
+            
+                <Segment>
+                    <Button style={{ padding:6, backgroundColor: this.state.tab === 2 ? Color.mainColor : undefined, borderColor: '#000',}}
+                    active={this.state.tab === 2}first onPress={() => this.setState({tab:2})}>
+                    <Text style={{color: this.state.tab === 2 ? "#fff": '#000'}}>Applied</Text>
+                    </Button>
+
+                    <Button style={{ padding:6, backgroundColor: this.state.tab === 1 ? Color.mainColor : undefined, borderColor: '#000',}}
+                    active={this.state.tab === 1}last onPress={() => this.setState({tab:1})}>
+                    <Text style={{color: this.state.tab === 1 ? "#fff": '#000'}}>Applying</Text>
+                    </Button>
+
+                </Segment>
                 {
-                    (this.state.isLoading)? (
+                    (this.state.tab === 1) ? (
+                        (this.state.isLoading)? (
                         <View>
                             <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
                         </View>
@@ -187,6 +201,60 @@ export default class Applying extends Component {
                         />
 
                     )
+
+                    ):(
+                        (this.state.tab === 2) ? (
+                            (this.state.isLoading)? (
+                            <View>
+                                <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                            </View>
+                        ):(
+                            <FlatList
+                            ListEmptyComponent={
+                                        <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No one applied for this course</Text>
+                                    }
+                            data={this.state.cloneApplying}
+                            renderItem={({item}) => (
+                                    <TouchableOpacity onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user_id})}>
+                                    <CardItem style={{ padding: 5 }}>
+                                        <Left>
+                                            <Thumbnail source={{uri: Server.storage+item.user_img}} />
+                                            <Body>
+                                            <Text>{item.user_name}</Text>
+                                            </Body>
+                                        </Left>
+                                        <Right>
+                                            {
+                                                (item.status == 1)? (
+                                                    <Button
+                                                        success
+                                                        style={{ padding:5}}
+                                                        >
+                                                        <Text>Approve</Text>
+                                                    </Button>
+    
+                                                ):(item.status == 2)&&(
+                                                    <Button
+                                                        danger
+                                                        style={{padding:5,}}
+                                                        >
+                                                        <Text>Disapprove</Text>
+                                                    </Button>                                                
+                                                )
+                                            }
+                                        </Right>
+                                        </CardItem>
+                                    </TouchableOpacity>
+    
+                                
+                            )}
+                            keyExtractor = { (item, index) => index.toString() }
+                        />
+
+                        )
+                    ):(<Text></Text>)
+                )
+                    
                 }
             </AppTemplate>
             

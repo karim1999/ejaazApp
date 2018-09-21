@@ -58,11 +58,6 @@ export default class IndoorCourses extends Component {
                         <Text>Price: </Text>
                         <Label> {this.state.course.price} </Label>
                     </Item>
-                    <Item style={{height: 70}}>
-                        <Icon type="MaterialIcons" name='place' />
-                        <Label>Location: </Label>
-                        <Text></Text>
-                    </Item>
                     </View>
                 </View>
             </AppTemplate>

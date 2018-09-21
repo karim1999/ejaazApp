@@ -116,18 +116,16 @@ class Profile extends Component {
                         (this.props.user.type == 1)?(
                             <Text style={styles.viewImageText}>Trainee</Text>
                         ):(
-                            <Text style={styles.viewImageText}>Trainer</Text>
+                            <View>
+                                <Text style={styles.viewImageText}>Trainer</Text>
+                                <View style={styles.course}>
+                                    <Text style={styles.text}>Courses</Text>
+                                    <Text style={styles.text}>{this.props.user.courses.length}</Text>
+                                </View>
+                            </View>
                         )
                     }
                 </View>
-                <TouchableOpacity style={styles.courseFollow}>
-                    <View style={styles.course}>
-                        <Text style={styles.text}>Courses</Text>
-                        {this.props.user.courses.map((result, i) => 
-                            <Text style={styles.text}>{result.length}</Text>
-                        )}
-                    </View>
-                </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
                 <TouchableOpacity
                     onPress={()=> this.props.navigation.navigate('ProfileInfo', {user_id: this.props.user.id})}
@@ -136,27 +134,35 @@ class Profile extends Component {
                     <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
                 </TouchableOpacity>
                 <Hr lineColor="#e5e3e3" width={1} />
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Education", {...this.props.user, user_id: this.props.user.id})}
-                    style={styles.Profile}>
-                    <Text style={styles.textProfil}>Education</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
-                </TouchableOpacity>
-                <Hr lineColor="#e5e3e3" width={1} />
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Jobs", {...this.props.user, user_id: this.props.user.id})}
-                    style={styles.Profile}>
-                    <Text style={styles.textProfil}>Jobs</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
-                </TouchableOpacity>
-                <Hr lineColor="#e5e3e3" width={1} />
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Certificates", {...this.props.user, user_id: this.props.user.id})}
-                    style={styles.Profile}>
-                    <Text style={styles.textProfil}>Certificates</Text>
-                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
-                </TouchableOpacity>
-                <Hr lineColor="#e5e3e3" width={1} />
+                    {
+                        (this.props.user.type == 1)?(
+                            <Text></Text>
+                        ):(
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate("Education", {...this.props.user, user_id: this.props.user.id})}
+                                    style={styles.Profile}>
+                                    <Text style={styles.textProfil}>Education</Text>
+                                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                                </TouchableOpacity>
+                                <Hr lineColor="#e5e3e3" width={1} />
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate("Jobs", {...this.props.user, user_id: this.props.user.id})}
+                                    style={styles.Profile}>
+                                    <Text style={styles.textProfil}>Jobs</Text>
+                                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                                </TouchableOpacity>
+                                <Hr lineColor="#e5e3e3" width={1} />
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate("Certificates", {...this.props.user, user_id: this.props.user.id})}
+                                    style={styles.Profile}>
+                                    <Text style={styles.textProfil}>Certificates</Text>
+                                    <Icon style={styles.icon} type="MaterialCommunityIcons" name="chevron-right"/>
+                                </TouchableOpacity>
+                                <Hr lineColor="#e5e3e3" width={1} />
+                            </View>
+                        )
+                    }
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate("CallUs")}
                     style={styles.Profile}>
@@ -209,7 +215,8 @@ const styles = StyleSheet.create({
     viewImageText:{
         alignSelf: 'center',
         paddingTop: 10,
-        fontSize: 20
+        fontSize: 20,
+        marginBottom: 10,
     },
     courseFollow:{
         height: 70,
@@ -220,7 +227,7 @@ const styles = StyleSheet.create({
     text:{
         fontSize: 20,
         color: '#515151',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     separate:{
         marginLeft: 75,

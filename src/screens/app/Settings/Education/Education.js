@@ -54,22 +54,17 @@ export default class Education extends Component {
     render() {
         return (
             <AppTemplate interface onLoad={()=> this._onLoad()} back navigation={this.props.navigation} title="Education">
-                {
-                    (this.state.user.type == 2)?(
-                        <Button
-                            dark
-                            onPress={() => this.props.navigation.navigate("AddEducation", {isEducation: false})}
-                            style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Education </Text>
-                            {this.state.isLoading && (
-                                <ActivityIndicator size="small" color="#000000" />
-                            )}
-                            <Icon name="ios-add-circle" style={{color: "#FFFFFF", fontSize: 25}}/>
-                        </Button>
+                
+                <Button
+                    dark
+                    onPress={() => this.props.navigation.navigate("AddEducation", {isEducation: false})}
+                    style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Add Education </Text>
+                    {this.state.isLoading && (
+                        <ActivityIndicator size="small" color="#000000" />
+                    )}
+                    <Icon name="ios-add-circle" style={{color: "#FFFFFF", fontSize: 25}}/>
+                </Button>
 
-                    ):(
-                        <Text></Text>
-                    )
-                }
                 <View style={styles.container}>
                 {
                     (this.state.isLoading)? (
