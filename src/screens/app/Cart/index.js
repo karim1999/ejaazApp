@@ -17,7 +17,8 @@ class Cart extends Component {
         super(props);
         this.state={
             isLoading: false,
-            isBuying: false
+            isBuying: false,
+            isConnected:null,
         }
     }
     removeFromCart(id){
@@ -43,45 +44,55 @@ class Cart extends Component {
         });
     }
 
-    // buy(){
-
-    //     AsyncStorage.getItem('token').then(userToken => {
-    //     return axios.post(Linking.openURL(Server.url+'api/paypal?token='+userToken)).then(response => {
-    //                 }).catch(error => {
-    //                     Toast.show({
-    //                         text: "Error reaching the server.",
-    //                         buttonText: "Ok",
-    //                         type: "danger"
-    //                     })
-    //                 })
-    //             })
-    // }
-
-    buy(){
+    componentDidMount(){
         this.setState({
-            isBuying: true
+            isLoading: true,
         });
         AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url+'api/buy?token='+userToken).then(response => {
-                this.props.setUser(response.data.user);
-                Toast.show({
-                    text: "You can now access your courses.",
-                    buttonText: "Ok",
-                    type: "success"
-                })
+            axios.get(Server.url+'api/buy?token='+userToken).then(response => {
+                this.setState({
+                    isLoading: false,
+                });
+                this.props.setCart(response.data);
             }).catch(error => {
+                this.setState({
+                    isLoading: false,
+                });
                 Toast.show({
                     text: "Error reaching the server.",
                     buttonText: "Ok",
                     type: "danger"
                 })
-            }).then(() => {
-                this.setState({
-                    isBuying: false,
-                });
             })
-        });
+        })
     }
+        
+
+    // buy(){
+    //     this.setState({
+    //         isBuying: true
+    //     });
+    //     AsyncStorage.getItem('token').then(userToken => {
+    //         return axios.post(Server.url+'api/buy?token='+userToken).then(response => {
+    //             this.props.setUser(response.data.user);
+    //             Toast.show({
+    //                 text: "You can now access your courses.",
+    //                 buttonText: "Ok",
+    //                 type: "success"
+    //             })
+    //         }).catch(error => {
+    //             Toast.show({
+    //                 text: "Error reaching the server.",
+    //                 buttonText: "Ok",
+    //                 type: "danger"
+    //             })
+    //         }).then(() => {
+    //             this.setState({
+    //                 isBuying: false,
+    //             });
+    //         })
+    //     });
+    // }
 
     render() {
         return (
@@ -111,7 +122,7 @@ class Cart extends Component {
                         {
                             !_.isEmpty(this.props.user.cart) && (
                                 <Button
-                                    onPress={() => this.buy()}
+                                    onPress={() => this.props.navigation.navigate('WeebVieew')}
                                     style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                                     block success
                                 >

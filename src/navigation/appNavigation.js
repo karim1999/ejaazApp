@@ -23,6 +23,7 @@ import CourseName from "../screens/app/CourseName";
 import UserCourses from '../screens/app/UserCourses';
 import UserInfo from '../screens/app/UserInfo';
 import Cart from '../screens/app/Cart';
+import WeebVieew from '../screens/app/Cart/WebView';
 import AddCourse from '../screens/app/AddCourse';
 import ShowCategories from '../screens/app/Categories/ShowCategories';
 import EditCourse from '../screens/app/CourseView/editCourse';
@@ -69,7 +70,8 @@ const ProfileStack = createStackNavigator({
 
 const CategoriesStack = createStackNavigator({
     UserCourses,
-    Cart
+    Cart,
+    WeebVieew
 },{
     headerMode: 'none',
 });
