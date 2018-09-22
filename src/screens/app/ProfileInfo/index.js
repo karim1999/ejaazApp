@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
-import { Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body, H3 } from 'native-base';
+import {Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body, H3} from 'native-base';
 import Hr from "react-native-hr-component";
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";

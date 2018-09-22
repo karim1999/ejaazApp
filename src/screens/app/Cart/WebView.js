@@ -30,7 +30,10 @@ export default class WeebVieew extends Component {
             })
         })
     }
-   
+    _onNavigationStateChange(data){
+        alert(data.url);
+        // alert(data.url);
+    }
 
     render() {
         return (
@@ -43,6 +46,7 @@ export default class WeebVieew extends Component {
                 ): (
                     <WebView
                        source={{uri: this.state.url + this.state.Token}}
+                       onNavigationStateChange={data => this._onNavigationStateChange(data)}
                        style={{marginTop: 20}}
                      />
                 )
