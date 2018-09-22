@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator,} from 'react-native';
+import {StyleSheet, View, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator,Linking} from 'react-native';
 import {Button, Container, Content, Header, Text, Toast} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Color from "../../../constants/colors";
@@ -43,6 +43,20 @@ class Cart extends Component {
         });
     }
 
+    // buy(){
+
+    //     AsyncStorage.getItem('token').then(userToken => {
+    //     return axios.post(Linking.openURL(Server.url+'api/paypal?token='+userToken)).then(response => {
+    //                 }).catch(error => {
+    //                     Toast.show({
+    //                         text: "Error reaching the server.",
+    //                         buttonText: "Ok",
+    //                         type: "danger"
+    //                     })
+    //                 })
+    //             })
+    // }
+
     buy(){
         this.setState({
             isBuying: true
@@ -68,6 +82,7 @@ class Cart extends Component {
             })
         });
     }
+
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Cart">
