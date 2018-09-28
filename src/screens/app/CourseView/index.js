@@ -432,7 +432,7 @@ class CourseView extends Component {
                             <TouchableOpacity onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: this.state.course.user_id})}>
                                 <CardItem style={{ paddingBottom: 30, paddingLeft: 0 }}>
                                     <Left>
-                                        <Thumbnail source={{uri: Server.storage+this.state.course.img}} />
+                                        <Thumbnail source={{uri: Server.storage+this.state.course.user_img}} />
                                         <Body>
                                         <Text>{this.state.course.user_name}</Text>
                                         <Text note>{this.state.course.created_at}</Text>
@@ -440,7 +440,7 @@ class CourseView extends Component {
                                     </Left>
                                     </CardItem>
                                 </TouchableOpacity>
-                                    <H3 style={styles.viewH2}>{this.state.course.title}</H3>
+                                    <H3 style={{marginBottom: 10}}>{this.state.course.title}</H3>
                                 <Text style={styles.viewText}>
                                     {this.state.course.description}
                                 </Text>

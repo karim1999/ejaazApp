@@ -20,6 +20,7 @@ import ProfileInfo from "../screens/app/ProfileInfo";
 import Search from "../screens/app/Search";
 import ResultSearch from "../screens/app/Search/ResultSearch";
 import CourseName from "../screens/app/CourseName";
+import OpenVideo from "../screens/app/CourseName/OpenVideo";
 import UserCourses from '../screens/app/UserCourses';
 import UserInfo from '../screens/app/UserInfo';
 import Cart from '../screens/app/Cart';
@@ -36,6 +37,7 @@ import CallUs from '../screens/app/CallUs';
 const HomeStack = createStackNavigator({
     Interface,
     CourseName,
+    OpenVideo,
     Search,
     ResultSearch,
     CourseView,
@@ -121,7 +123,8 @@ const AppStack = createMaterialTopTabNavigator (
             activeTintColor: Color.mainColor,
             inactiveTintColor: 'black',
             tabStyle: {
-                width: 100,
+                flex:1,
+                width: '100%',
             },
             style: {
                 backgroundColor: 'white',

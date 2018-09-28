@@ -65,7 +65,7 @@ class AppTemplate extends Component {
         this.setState({
             refreshing: true
         });
-        if(this.props.interface){
+        if(this.props.refreshing){
             this.props.onLoad().then(() => {
                 this.setState({
                     refreshing: false
@@ -109,12 +109,12 @@ class AppTemplate extends Component {
                     <Title>{this.props.title}</Title>
                     </Body>
                     <Right>
-                        <Button transparent>
-                            <Icon onPress={()=> this.props.navigation.navigate('Search')} name='md-search' />
-                        </Button>
-                        <Button transparent>
-                            <Icon onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
-                        </Button>
+                        <TouchableOpacity>
+                            <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Search')} name='md-search' />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
+                        </TouchableOpacity>
                         {
                             this.state.isLoading ? (
                                 <Button transparent>
@@ -178,6 +178,11 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
     },
+    butt:{
+        padding: 7,
+        color: '#fff',
+        fontSize: 23
+    }
 
 });
 const mapStateToProps = ({ categories, user }) => ({

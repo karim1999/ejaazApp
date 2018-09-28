@@ -21,6 +21,9 @@ class UserInfo extends Component {
       }
 
       onupdateUserPressed(){
+          this.setState({
+              isLoading: true,
+          })
         return AsyncStorage.getItem('token').then(userToken => {
             return axios.post(Server.url + 'api/auth/updateUser/?token='+userToken, {
                 name: this.state.name,
@@ -118,7 +121,7 @@ class UserInfo extends Component {
                             />
                         </Item>
                         <Button
-                            onPress={this.onupdateUserPressed.bind(this)}
+                            onPress={()=>this.onupdateUserPressed()}
                             style={{flexDirection: "row", backgroundColor: '#6483f7'}}
                             block light>
                             <Text>Save</Text>

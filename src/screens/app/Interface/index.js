@@ -64,7 +64,7 @@ class Interface extends Component {
                             renderItem={({item}) => (
                                 <View style={{padding: 0}}>
                                             <TouchableOpacity
-                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
+                                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id,user_img: item.user.img})}>
                                                 <CourseBox {...item} user_name={item.user.name} />
                                             </TouchableOpacity>
                                     
@@ -113,7 +113,7 @@ class Interface extends Component {
                                                     data={item.courses}
                                                     renderItem={({item}) => (
                                                         <TouchableOpacity
-                                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
+                                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id,user_img: item.user.img})}>
                                                             <CourseBox {...item} user_name={item.user.name} />
                                                         </TouchableOpacity>
                                                     )}

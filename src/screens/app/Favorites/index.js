@@ -32,8 +32,6 @@ class Favorites extends Component {
     render() {
         return (
             <AppTemplate navigation={this.props.navigation} title="Favorites">
-                <Container>
-                    <Content>
                         <FlatList
                             ListEmptyComponent={
                                 <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Please add courses to favorites first</Text>
@@ -43,7 +41,7 @@ class Favorites extends Component {
 
                                 <View style={styles.container}>
                                 <TouchableOpacity
-                                     onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                     onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name,user_img: item.user.img})}>
                                     <ImageBackground source={{uri: Server.storage+item.img}} style={styles.image}>
                                         <View style={styles.viewContent}>
                                             <Text style={styles.viewContentTxt}>{_.truncate(item.title)}</Text>
@@ -67,8 +65,6 @@ class Favorites extends Component {
                             )}
                             keyExtractor = { (item, index) => index.toString() }
                         />
-                    </Content>
-                </Container>
             </AppTemplate>
         );
     }

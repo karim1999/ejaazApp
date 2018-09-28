@@ -71,7 +71,7 @@ export default class ShowCategories extends Component {
                                     data={this.state.cloneInterface}
                                     renderItem={({item}) => (
                                         <TouchableOpacity
-                                          onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                          onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name,user_img: item.user.img})}>
                                           <CourseBox {...item} user_name={item.user.name} />
                                          </TouchableOpacity>
                                     

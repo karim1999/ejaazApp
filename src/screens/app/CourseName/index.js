@@ -21,6 +21,7 @@ import _ from "lodash";
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 import Color from "../../../constants/colors";
+import AppTemplate from "../appTemplate";
 
 export default class CourseName extends Component {
     constructor(props){
@@ -57,22 +58,7 @@ export default class CourseName extends Component {
 
     render() {
         return (
-            <Container style={styles.all}>
-                        
-                    <VideoPlayer source={{uri: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4'}}   // Can be a URL or a local file.
-                            ref={(ref) => {
-                                this.player = ref
-                            }}
-                            style={styles.backgroundVideo}
-                            onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                            onEnd={this.onEnd}                      // Callback when playback finishes
-                            onError={this.videoError}
-                            playInBackground={false}
-                            paused={true}
-                            toggleResizeModeOnFullscreen={true}
-                            controlTimeout={5000}
-                            navigator={'CourseView'}
-                        />
+            <AppTemplate back navigation={this.props.navigation} title="Videos">
 
                     {
                         (this.state.isLoading)? (
@@ -87,7 +73,9 @@ export default class CourseName extends Component {
                             }
                             data={this.state.cloneVideos}
                             renderItem={({item}) => (
-                            <Item style={{height: 110, flexDirection: 'row', padding: 20}}>
+                            <Item style={{height: 110, flexDirection: 'row', padding: 20}}
+                            onPress={() => this.props.navigation.navigate("OpenVideo", {...item})}
+                            >
                                 <Text style={{marginRight:4}}>{this.state.i++} </Text>
                                 <Video source={{uri: item.video}}   // Can be a URL or a local file.
                                     ref={(ref) => {
@@ -106,17 +94,9 @@ export default class CourseName extends Component {
                         />
                     )
                 }
-            </Container>
+            </AppTemplate>
         );
     }
 }
 
 
-var styles = StyleSheet.create({
-    all:{
-    },
-    backgroundVideo: {
-        width: "100%",
-        height: 200
-    },
-});

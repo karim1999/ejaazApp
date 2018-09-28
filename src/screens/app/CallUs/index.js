@@ -86,7 +86,7 @@ export default class CallUs extends Component {
                                         <Item style={{height: 70}}>
                                             <Icon type="Entypo" name='address' />
                                             <Text>Address </Text>
-                                            <Label>} {item.address} </Label>
+                                            <Label> {item.address} </Label>
                                         </Item>
                                     </View>
                                 </View>

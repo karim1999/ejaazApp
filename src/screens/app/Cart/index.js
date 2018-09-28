@@ -43,29 +43,6 @@ class Cart extends Component {
             })
         });
     }
-
-    componentDidMount(){
-        this.setState({
-            isLoading: true,
-        });
-        AsyncStorage.getItem('token').then(userToken => {
-            axios.get(Server.url+'api/buy?token='+userToken).then(response => {
-                this.setState({
-                    isLoading: false,
-                });
-                this.props.setCart(response.data);
-            }).catch(error => {
-                this.setState({
-                    isLoading: false,
-                });
-                Toast.show({
-                    text: "Error reaching the server.",
-                    buttonText: "Ok",
-                    type: "danger"
-                })
-            })
-        })
-    }
         
 
     // buy(){
@@ -111,7 +88,7 @@ class Cart extends Component {
                                     data={this.props.user.cart}
                                     renderItem={({item}) => (
                                         <TouchableOpacity
-                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name,user_img: item.user.img})}>
                                             <CoursBox cart removeFromCart={() => this.removeFromCart(item.id)} {...item} user_name={item.user.name} />
                                         </TouchableOpacity>
                                     )}

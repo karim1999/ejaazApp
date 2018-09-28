@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator, 
     Modal, TouchableHighlight, CheckBox, FlatList } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio} from 'native-base';
+import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio, Icon} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
@@ -224,6 +224,12 @@ export default class SignUp extends Component {
                         }}>
                         <View style={{marginTop: 22}}>
                             <View>
+                            <TouchableHighlight
+                                onPress={() => {
+                                this.setModalVisible(!this.state.modalVisible);
+                                }}>
+                                <Icon style={{alignSelf:'flex-end',marginBottom:8,marginRight:15}} type="Ionicons" name='md-close' />
+                            </TouchableHighlight>
                             <FlatList
                             data={this.state.termsAndCond}
                             renderItem={({item}) => (
@@ -231,13 +237,6 @@ export default class SignUp extends Component {
                                 )}
                                 keyExtractor = { (item, index) => index.toString() }
                             />
-
-                            <TouchableHighlight
-                                onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                                }}>
-                                <Text>Hide Modal</Text>
-                            </TouchableHighlight>
                             </View>
                         </View>
                         </Modal>

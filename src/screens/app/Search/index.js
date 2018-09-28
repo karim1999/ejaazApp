@@ -63,6 +63,7 @@ export default class Search extends Component {
                     cancelButtonTitle="Cancel"
                     placeholder='Search...' 
                     onChangeText={(search) => this.setState({search})}
+                    onSubmitEditing={()=> this.onSearchPressed()}
                     />
 
                     <View style={styles.container}>
@@ -110,7 +111,7 @@ export default class Search extends Component {
                                 <Label>Budget range</Label>
                             </Item> */}
 
-                            <View style={styles.price}>
+                            {/* <View style={styles.price}>
                                 <Button transparent>
                                 <TextInput keyboardType='numeric' style={styles.priceInput} 
                                 onChangeText={(min_price) => this.setState({min_price})}/>
@@ -122,7 +123,7 @@ export default class Search extends Component {
                                 onChangeText={(max_price) => this.setState({max_price})}/>
                                 <Text style={styles.footerIcon}>$</Text>
                                 </Button>
-                            </View> 
+                            </View>  */}
                             
                             <Button style={styles.submit} onPress={()=> this.onSearchPressed()}>
                             <Text>Search</Text>

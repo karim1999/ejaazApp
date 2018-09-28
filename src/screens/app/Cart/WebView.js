@@ -12,48 +12,73 @@ import Server from "../../../constants/config";
 import _ from "lodash";
 
 
-export default class WeebVieew extends Component {
+class WeebVieew extends Component {
     constructor(props){
         super(props);
         this.state={
-            isLoading: true,
+            visible: true,
             Token: '',
             url:Server.url+'api/payment?token=',
         }
     }
 
+    showSpinner() {
+        this.setState({ visible: true });
+      }
+
+    hideSpinner() {
+        this.setState({ visible: false });
+      }
+
     componentDidMount(){
         AsyncStorage.getItem('token').then(userToken => {
             this.setState({
                 Token: userToken,
-                isLoading: false
+                isLoading: false, 
             })
         })
     }
     _onNavigationStateChange(data){
-        alert(data.url);
-        // alert(data.url);
+        var str = data.url
+        if(str.includes("status")){
+            Toast.show({
+                text: "Successfullly buy.",
+                buttonText: "Ok",
+                type: "success"
+            })
+            this.props.navigation.navigate('Cart', this.props.setCart());
+        }
     }
 
     render() {
         return (
-            <Container style={{flex:1}}>
-            {
-                (this.state.isLoading)? (
-                    <View>
-                        <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
-                    </View>
-                ): (
-                    <WebView
-                       source={{uri: this.state.url + this.state.Token}}
-                       onNavigationStateChange={data => this._onNavigationStateChange(data)}
-                       style={{marginTop: 20}}
-                     />
-                )
-            }
-
-
-            </Container>
+            <AppTemplate back navigation={this.props.navigation} title="Paypal">
+                    <Container style={{flex:1}}>
+                        
+                             {this.state.visible && (
+                                <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                                )}
+                            <WebView
+                               source={{uri: this.state.url + this.state.Token}}
+                               onLoadStart={() => (this.showSpinner())}
+                               onLoad={() => this.hideSpinner()}
+                               onNavigationStateChange={data => this._onNavigationStateChange(data)}
+                               style={{marginTop: 20}}
+                             />
+                    </Container>
+            </AppTemplate>
         );
     }
 }
+const mapStateToProps = ({ user }) => ({
+    user
+});
+
+const mapDispatchToProps = {
+    setCart,
+    setUser
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(WeebVieew);

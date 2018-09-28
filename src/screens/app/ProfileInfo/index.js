@@ -106,12 +106,20 @@ class ProfileInfo extends Component {
                                         keyExtractor = { (item, index) => index.toString() }
                                     />
 
-                                    <View style={styles.contentUniversty}>
-                                        <H3 style={styles.title}>Courses</H3>
-                                        <Text style={styles.titleName}>5</Text>
-                                        <H3 style={styles.titleCertify}>Certified</H3>
-                                        <Image source={require("../../../images/checkmark-blue.png")} style={styles.imageCertify}/>
-                                    </View>
+                                    
+                                        {
+                                            (this.state.profileData.user.type == 1)?(
+                                                <Text></Text>
+                                            ):(
+                                                <View style={styles.contentUniversty}>
+                                                    <H3 style={styles.title}>Courses</H3>
+                                                    <Text style={styles.titleName}>{this.props.user.courses.length}</Text>
+                                                </View>
+                                            )
+                                        }
+                                        {/* <H3 style={styles.titleCertify}>Certified</H3>
+                                        <Image source={require("../../../images/checkmark-blue.png")} style={styles.imageCertify}/> */}
+                                    
 
                                     <FlatList
                                         data={this.state.profileData.user.certificates}

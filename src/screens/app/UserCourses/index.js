@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 import {Text} from 'native-base';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {setUser} from "../../../reducers";
 import CourseBox from "../../../components/courseBox";
 import _ from "lodash";
+import Color from "../../../constants/colors";
 
 class UserCourses extends Component {
     constructor(props){
@@ -33,7 +34,7 @@ class UserCourses extends Component {
                         // (_.find(this.props.user.jointcourses, course => course.id == item.id &&  course.pivot.status == 1))?
                         // (
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name})}>
+                            onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name,user_img: item.user.img})}>
                             <CourseBox {...item} user_name={item.user.name} />
                         </TouchableOpacity>
                         // ):

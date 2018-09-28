@@ -19,31 +19,19 @@ export default class ResultSearch extends Component {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Result">
                 <Segment>
-                    <Button style={{ backgroundColor: this.state.tab === 2 ? Color.mainColor : undefined, borderColor: '#000',}}
-                    active={this.state.tab === 2}first onPress={() => this.setState({tab:2})}>
-                    <Text style={{color: this.state.tab === 2 ? "#fff": '#000'}}>Courses</Text>
+                    <Button style={{ backgroundColor: this.state.tab === 1 ? Color.mainColor : undefined, borderColor: '#000',}}
+                    active={this.state.tab === 1}first onPress={() => this.setState({tab:1})}>
+                    <Text style={{color: this.state.tab === 1 ? "#fff": '#000'}}>Courses</Text>
                     </Button>
 
-                    <Button style={{ backgroundColor: this.state.tab === 1 ? Color.mainColor : undefined, borderColor: '#000',}}
-                    active={this.state.tab === 1}last onPress={() => this.setState({tab:1})}>
-                    <Text style={{color: this.state.tab === 1 ? "#fff": '#000'}}>Users</Text>
+                    <Button style={{ backgroundColor: this.state.tab === 2 ? Color.mainColor : undefined, borderColor: '#000',}}
+                    active={this.state.tab === 2}last onPress={() => this.setState({tab:2})}>
+                    <Text style={{color: this.state.tab === 2 ? "#fff": '#000'}}>Users</Text>
                     </Button>
 
                 </Segment>
                 {
                     (this.state.tab === 2) ? (
-                        <FlatList
-                           data={this.state.search.courses}
-                           renderItem={({item}) => (
-                                <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id})}>
-                                <CourseBox {...item} user_name={item.user.name} />
-                                </TouchableOpacity>
-                           )}
-                           keyExtractor = { (item, index) => index.toString() }
-                       />
-
-                    ):(
                         <FlatList
                            data={this.state.search.users}
                            renderItem={({item}) => (
@@ -56,6 +44,18 @@ export default class ResultSearch extends Component {
                                         </Body>
                                     </Left>
                                     </CardItem>
+                                </TouchableOpacity>
+                           )}
+                           keyExtractor = { (item, index) => index.toString() }
+                       />
+
+                    ):(
+                        <FlatList
+                           data={this.state.search.courses}
+                           renderItem={({item}) => (
+                                <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id,user_img: item.user.img})}>
+                                <CourseBox {...item} user_name={item.user.name} />
                                 </TouchableOpacity>
                            )}
                            keyExtractor = { (item, index) => index.toString() }
