@@ -25,7 +25,7 @@ class UserInfo extends Component {
               isLoading: true,
           })
         return AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url + 'api/auth/updateUser/?token='+userToken, {
+            return axios.post(Server.url + 'api/auth/updateUser?token='+userToken, {
                 name: this.state.name,
                 country: this.state.country,
                 city: this.state.city,

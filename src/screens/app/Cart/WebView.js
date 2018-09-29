@@ -63,7 +63,6 @@ class WeebVieew extends Component {
                                onLoadStart={() => (this.showSpinner())}
                                onLoad={() => this.hideSpinner()}
                                onNavigationStateChange={data => this._onNavigationStateChange(data)}
-                               style={{marginTop: 20}}
                              />
                     </Container>
             </AppTemplate>
