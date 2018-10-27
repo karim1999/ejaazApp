@@ -55,7 +55,7 @@ class Favorites extends Component {
                                             </View>
                                             <Button transparent style={styles.footer}>
                                                 <Text style={styles.footerText}>{item.price}</Text>
-                                                <Text style={styles.footerIcon}>$</Text>
+                                                <Text style={styles.footerIcon}>SAR</Text>
                                             </Button>
                                         </View>
                                     </ImageBackground>

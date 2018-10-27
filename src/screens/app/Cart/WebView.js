@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator,WebView } from 'react-native';
+import {StyleSheet, View, Image, FlatList, TouchableOpacity, AsyncStorage, ActivityIndicator,WebView, Platform } from 'react-native';
 import {Button, Container, Content, Header, Text, Toast} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Color from "../../../constants/colors";
@@ -34,7 +34,7 @@ class WeebVieew extends Component {
         AsyncStorage.getItem('token').then(userToken => {
             this.setState({
                 Token: userToken,
-                isLoading: false, 
+                isLoading: false,
             })
         })
     }
@@ -52,20 +52,18 @@ class WeebVieew extends Component {
 
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title="Paypal">
-                    <Container style={{flex:1}}>
-                        
-                             {this.state.visible && (
-                                <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
-                                )}
-                            <WebView
-                               source={{uri: this.state.url + this.state.Token}}
-                               onLoadStart={() => (this.showSpinner())}
-                               onLoad={() => this.hideSpinner()}
-                               onNavigationStateChange={data => this._onNavigationStateChange(data)}
-                             />
-                    </Container>
-            </AppTemplate>
+                  <Container style={{flex:1}}>
+
+                           {this.state.visible && (
+                              <ActivityIndicator style={{paddingTop: 20}} size="large" color={Color.mainColor} />
+                              )}
+                          <WebView
+                             source={{uri: this.state.url + this.state.Token}}
+                             onLoadStart={() => (this.showSpinner())}
+                             onLoad={() => this.hideSpinner()}
+                             onNavigationStateChange={data => this._onNavigationStateChange(data)}
+                           />
+                  </Container>
         );
     }
 }

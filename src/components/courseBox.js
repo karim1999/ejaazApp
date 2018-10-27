@@ -26,7 +26,7 @@ export default class Course extends Component {
                     <Text style={styles.trainer}>{this.props.user_name}</Text>
                     <Button transparent style={styles.price}>
                         <Text style={styles.priceText}>{this.props.price}</Text>
-                        <Text style={styles.priceIcon}>$</Text>
+                        <Text style={styles.priceIcon}>SAR</Text>
                     </Button>
                 </View>
             </View>

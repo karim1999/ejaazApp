@@ -269,7 +269,7 @@ class CourseView extends Component {
                         type: "danger"
                     })
                 })
-            }) 
+            })
     }
 
     render() {
@@ -277,7 +277,7 @@ class CourseView extends Component {
             <AppTemplate favorite course_id={this.state.course.id} back navigation={this.props.navigation} title={this.state.course.title}>
                 {
 
-                    
+
                     !_.find(this.props.user.courses, course => course.id == this.state.course.id) ? (
                         _.find(this.props.jointcourses, course => course.id == this.state.course.id && course.type == 2) ? (
                                 <Button
@@ -308,7 +308,7 @@ class CourseView extends Component {
                             )
                         ):
                             _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
-                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id &&
                                     course.pivot.status == 1) ? (
                                         <Button
                                             primary
@@ -316,19 +316,19 @@ class CourseView extends Component {
                                             style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Open Course </Text>
                                             <Icon name="folder-video" type="Entypo" style={{color: "white", fontSize: 25}}/>
                                         </Button>
-                                    
+
                                 ):(
-                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id &&
                                             course.pivot.status == 2) ? (
                                                 <Button
                                                     danger
                                                     style={{width: "100%", alignItems: "center"}}><Text style={{flex: 1}}> Sorry not accepted </Text>
                                                     <Icon name="exclamation-circle" type="FontAwesome" style={{color: "white", fontSize: 25}}/>
                                                 </Button>
-                                                
+
                                             ):(<Text></Text>)
                                 )
-        
+
                             ):(<Text></Text>)
 
                     ) : (
@@ -336,10 +336,10 @@ class CourseView extends Component {
                             <Icon name={this.state.isSetting? "ios-arrow-dropup-circle": "ios-arrow-dropdown-circle"} style={{color: "#FFFFFF", fontSize: 25}}/>
                         </Button>
                     )
-                    
 
-                                                         
-                        
+
+
+
                 }
                 {
                         (this.state.course.type == 1) ? (
@@ -349,12 +349,12 @@ class CourseView extends Component {
                                     <Text></Text>
                                 ):(
                                     _.find(this.props.user.jointcourses, course => course.id == this.state.course.id) ? (
-                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+                                        _.find(this.props.user.jointcourses, course => course.id == this.state.course.id &&
                                     course.pivot.status == 1 || course.pivot.status == 2 ) ? (
                                     <Text></Text>
                                 ) :
-    
-                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id && 
+
+                                _.find(this.props.user.jointcourses, course => course.id == this.state.course.id &&
                                     course.pivot.status == 0) ? (
                                         <Button
                                             primary
@@ -362,9 +362,9 @@ class CourseView extends Component {
                                             <Text style={{flex: 1}}> Waiting to approve </Text>
                                             <Icon name="back-in-time" type="Entypo" style={{color: "#FFFFFF", fontSize: 25}}/>
                                         </Button>
-                                        
-                                    
-                                    
+
+
+
                                 ) : (
                                     <Text></Text>
                                 )
@@ -383,7 +383,7 @@ class CourseView extends Component {
 
                                 )
 
-                                
+
                     ):(
                         <Text></Text>
                     )
@@ -408,7 +408,7 @@ class CourseView extends Component {
                                     onPress={() => this.props.navigation.navigate("Videos", {...this.state.course})}
                                 >
                                     <Text>Videos</Text>
-                                </ListItem> 
+                                </ListItem>
                                 )
                             }
                             <ListItem
@@ -449,12 +449,12 @@ class CourseView extends Component {
 
                                         <Text style={styles.courses}>In door course</Text>
                                     ) : (
-                                        <Text style={styles.courses}>Online course</Text> 
+                                        <Text style={styles.courses}>Online course</Text>
                                     )
                                 }
-                                
 
-                                
+
+
 
                                 {/*<H2 style={styles.viewH2Padd}>{this.state.course.user_name}</H2>*/}
                                 {/*<Text style={styles.viewText}>*/}
@@ -468,7 +468,7 @@ class CourseView extends Component {
 
                                         <Text></Text>
                                     ) : (
-                                        
+
                                         <View style={styles.paddingContent}>
                                             <H2 >Orientation Video</H2>
                                             <VideoPlayer source={{uri: "https://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"}}   // Can be a URL or a local file.
@@ -486,7 +486,7 @@ class CourseView extends Component {
                                                              value: "Dubbing"
                                                          }}
                                             />
-            
+
                                         </View>
                                     )
                                 }
@@ -494,12 +494,12 @@ class CourseView extends Component {
                             <View style={styles.paddingContent}>
                                 <Button transparent style={{alignSelf:'flex-end'}}>
                                     <Text style={styles.footerText}>{this.state.course.price}</Text>
-                                    <Text style={styles.footerIcon}>$</Text>
+                                    <Text style={styles.footerIcon}>SAR</Text>
                                 </Button>
 
 
-                                
-                                
+
+
 
                                 <H2>Reviews</H2>
 
@@ -563,7 +563,7 @@ class CourseView extends Component {
                                                     data={_.reverse(this.state.reviews)}
                                                     renderItem={({item}) => (
                                                         <View>
-                                                        
+
                                                         <ListItem avatar onPress = {()=> this.props.navigation.navigate('ProfileInfo', {user_id: item.user.id})}>
                                                             <Left>
                                                                 <Thumbnail source={{uri: Server.storage+item.user.img}} />
@@ -576,7 +576,7 @@ class CourseView extends Component {
                                                                 }
                                                             </View>
                                                             <Text note>{item.review}</Text>
-                                                            </Body>                                                           
+                                                            </Body>
                                                         </ListItem>
                                                         {
                                                             (item.comments &&(
@@ -590,12 +590,12 @@ class CourseView extends Component {
                                                                             <Body>
                                                                             <Text>{item.user.name}</Text>
                                                                             <Text note>{item.comment}</Text>
-                                                                            </Body>                                                            
+                                                                            </Body>
                                                                         </ListItem>
                                                                         )}
                                                                         keyExtractor = { (item, index) => index.toString() }
                                                                 />
-                                                                
+
                                                             ))
                                                         }
 
@@ -633,7 +633,7 @@ class CourseView extends Component {
                                                             )
                                                         }
 
-                                                        
+
                                                         </View>
                                                     )}
                                                     keyExtractor = { (item, index) => index.toString() }

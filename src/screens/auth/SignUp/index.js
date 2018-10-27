@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator, 
-    Modal, TouchableHighlight, CheckBox, FlatList } from 'react-native';
-import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio, Icon} from 'native-base';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,ImageBackground, ActivityIndicator,
+    Modal, TouchableHighlight, FlatList } from 'react-native';
+import {Container, Header, Content, Form, Item, Input, Button, Toast, ListItem, Left, Right, Radio, CheckBox, Icon} from 'native-base';
 import AuthTemplate from "../../auth/authTemplate";
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
 import axios from "axios";
+
 export default class SignUp extends Component {
     constructor(props){
         super(props);
@@ -39,8 +40,7 @@ export default class SignUp extends Component {
     }
 
     onRegisterPressed(){
-        if(this.state.name == "" || this.state.secondname == "" || this.state.lastname == "" || this.state.age == "" || 
-        this.state.country == "" || this.state.address == "" || this.state.phone == "" || this.state.email == "" || this.state.password == ""){
+        if(this.state.name == "" || this.state.secondname == "" || this.state.lastname == "" || this.state.phone == "" || this.state.email == "" || this.state.password == ""){
 
             Toast.show({
                 text: 'Fields cannot be empty.',
@@ -53,7 +53,7 @@ export default class SignUp extends Component {
                 text: 'You must agree to terms and conditions.',
                 type: "danger",
                 buttonText: 'Okay'
-            });            
+            });
         }else{
             this.setState({
                 isSignUp:true
@@ -83,7 +83,7 @@ export default class SignUp extends Component {
                 });
                 this.props.navigation.navigate("Login");
             }).catch(error => {
-                let text= "No Internet Connection.";
+                let text= "The password must be 6 characters at least.";
                 if(error.response.status == 400 && error.response.data && error.response.data.type == "validation" && error.response.data.error){
                     if(error.response.data.error.name){
                         text= error.response.data.error.name[0];
@@ -153,15 +153,15 @@ export default class SignUp extends Component {
                                onChangeText={(val) => this.setState({lastname: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Age" placeholderTextColor="#fff"
+                        <Input style={styles.inputText} placeholder="Age... optional" placeholderTextColor="#fff"
                         keyboardType='numeric' onChangeText={(val) => this.setState({age: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Country" placeholderTextColor="#fff"
+                        <Input style={styles.inputText} placeholder="Country... optional" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({country: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Address" placeholderTextColor="#fff"
+                        <Input style={styles.inputText} placeholder="Address... optional" placeholderTextColor="#fff"
                                onChangeText={(val) => this.setState({address: val})}/>
                     </Item>
                     <Item rounded style={styles.input}>
@@ -179,7 +179,7 @@ export default class SignUp extends Component {
                     <ListItem
                         style={{height: 50, width: 300, justifyContent: "center", alignItems: "center", alignSelf: "center", borderBottomColor: "transparent"}}
                     >
-                        <View
+                        <TouchableOpacity
                             style={{width: "50%", height: 70, flex: 1, flexDirection: "row", padding: 10}}
                             onPress={(type) => {this.setState({type: 1})}}
                         >
@@ -192,8 +192,8 @@ export default class SignUp extends Component {
                                        onPress={(type) => {this.setState({type: 1})}}
                                 />
                             </Right>
-                        </View>
-                        <View
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             style={{width: "50%", height: 70, flex: 1, flexDirection: "row", padding: 10}}
                             onPress={(type) => {this.setState({type: 2})}}
                         >
@@ -206,15 +206,17 @@ export default class SignUp extends Component {
                                        onPress={(type) => {this.setState({type: 2})}}
                                 />
                             </Right>
-                        </View>
+                        </TouchableOpacity>
                     </ListItem>
-                    <ListItem 
+                    <ListItem
                     style={{ alignSelf: "center", borderBottomColor: "transparent"}}>
+
                         <CheckBox
-                        title='Click Here'
-                        value={this.state.check}
-                        onChange={()=> this.checkBoxTest()}
+                        checked={this.state.check}
+                        onPress={()=> this.checkBoxTest()}
+                        color="white"
                         />
+
                         <Modal
                         animationType="slide"
                         transparent={false}
@@ -222,7 +224,7 @@ export default class SignUp extends Component {
                         onRequestClose={() => {
                             alert('Modal has been closed.');
                         }}>
-                        <View style={{marginTop: 22}}>
+                        <View style={{marginTop: 22,padding:10}}>
                             <View>
                             <TouchableHighlight
                                 onPress={() => {
@@ -245,7 +247,7 @@ export default class SignUp extends Component {
                         onPress={() => {
                             this.setModalVisible(true);
                         }}>
-                        <Text style={styles.TermButton}>I agree to terms and conditions</Text>
+                        <Text style={styles.TermButton}> I agree to terms and conditions</Text>
                         </TouchableHighlight>
                     </ListItem>
                     <Button info style={styles.button} onPress={this.onRegisterPressed.bind(this)}>

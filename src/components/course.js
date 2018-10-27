@@ -33,7 +33,7 @@ export default class Course extends Component {
                     <View footer style={styles.footer}>
                         <Button transparent>
                             <Text style={styles.footerText}>{this.props.price}</Text>
-                            <Text style={styles.footerIcon}>$</Text>
+                            <Text style={styles.footerIcon}>SAR</Text>
                         </Button>
                     </View>
                 </Card>

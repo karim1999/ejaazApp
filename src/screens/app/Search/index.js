@@ -48,7 +48,7 @@ export default class Search extends Component {
                 })
             })
         })
-    
+
     }
 
     render() {
@@ -61,7 +61,7 @@ export default class Search extends Component {
                     searchIcon={{ size: 24 }}
                     cancelIcon={{ type: 'font-awesome', name: 'chevron-left' }}
                     cancelButtonTitle="Cancel"
-                    placeholder='Search...' 
+                    placeholder='Search...'
                     onChangeText={(search) => this.setState({search})}
                     onSubmitEditing={()=> this.onSearchPressed()}
                     />
@@ -113,23 +113,23 @@ export default class Search extends Component {
 
                             {/* <View style={styles.price}>
                                 <Button transparent>
-                                <TextInput keyboardType='numeric' style={styles.priceInput} 
+                                <TextInput keyboardType='numeric' style={styles.priceInput}
                                 onChangeText={(min_price) => this.setState({min_price})}/>
-                                <Text style={styles.footerIcon}>$</Text>
+                                <Text style={styles.footerIcon}>SAR</Text>
                                 </Button>
                                 <H3 style={styles.searchtH3To}>To</H3>
                                 <Button transparent>
-                                <TextInput keyboardType='numeric' style={styles.priceInput} 
+                                <TextInput keyboardType='numeric' style={styles.priceInput}
                                 onChangeText={(max_price) => this.setState({max_price})}/>
-                                <Text style={styles.footerIcon}>$</Text>
+                                <Text style={styles.footerIcon}>SAR</Text>
                                 </Button>
                             </View>  */}
-                            
+
                             <Button style={styles.submit} onPress={()=> this.onSearchPressed()}>
                             <Text>Search</Text>
                             {this.state.isSearch && (
                                         <ActivityIndicator size="small" color="#000000" />
-                                    )}                            
+                                    )}
                             </Button>
                         {/* </View> */}
 

@@ -4,6 +4,7 @@ import android.app.Application;
 import com.brentvatne.react.ReactVideoPackage;
 
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
             new SplashScreenReactPackage(),
             new ImagePickerPackage(),
             new ReactNativeDocumentPicker(),

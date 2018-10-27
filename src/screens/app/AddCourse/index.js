@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
+import {StyleSheet, View, ActivityIndicator, AsyncStorage, Platform} from 'react-native';
 import {
     Button,
     Item,
@@ -12,13 +12,13 @@ import {
     Picker,
     Toast,
     ListItem,
-    Right, Radio, Left,DatePicker
+    Right, Radio, Left,DatePicker,
 } from 'native-base';
 import AppTemplate from "../appTemplate";
 import ImagePicker from "react-native-image-picker";
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import {connect} from "react-redux";
-import {setCategories} from "../../../reducers";
+import {setUser,setCategories} from "../../../reducers";
 import axios from "axios/index";
 import Server from "../../../constants/config";
 import UserCourses from "../UserCourses";
@@ -39,6 +39,8 @@ class AddCourse extends Component {
             center: "",
             address: "",
             date_start: "",
+            product: 1,
+            Products:[],
 
         };
         this.setDate = this.setDate.bind(this);
@@ -121,7 +123,7 @@ class AddCourse extends Component {
                             type: 'image/png'
                         });
                     }
-                    
+
                     return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                         this.setState({
                             isLoading: false,
@@ -175,7 +177,7 @@ class AddCourse extends Component {
                             uri: this.state.video,
                             type: 'image/png'
                         });
-                    
+
                     return axios.post(Server.url + 'api/addcourses?token='+userToken, data).then(response => {
                         this.setState({
                             isLoading: false,
@@ -196,8 +198,18 @@ class AddCourse extends Component {
                 });
 
             }
-        }   
+        }
     }
+
+    // componentDidMount(){
+    //     return axios.get(Server.url+'api/products').then(response=>{
+    //         this.setState({
+    //             Products: response.data
+    //         });
+    //     }).catch(error=>{
+    //         alert(error);
+    //     })
+    // }
     render() {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Add Course">
@@ -222,14 +234,34 @@ class AddCourse extends Component {
                                    placeholderTextColor="#ccc5c5"
                             />
                         </Item>
+                            
+                                {/* // <Item style={{height: 70}}>
+                                //     <Icon type="FontAwesome" name='dollar' />
+                                //     <Label>Price</Label>
+                                //     <Picker
+                                //         mode="dropdown"
+                                //         iosIcon={<Icon name="ios-arrow-down-outline" />}
+                                //         style={{ width: undefined }}
+                                //         placeholder="Select your Category"
+                                //         placeholderStyle={{ color: "#bfc6ea" }}
+                                //         placeholderIconColor="#007aff"
+                                //         selectedValue={this.state.product}
+                                //         onValueChange={(itemValue, itemIndex) => this.setState({ product: itemValue})}
+                                //     >
+                                //         {this.state.Products.map((products) => (
+                                //             <Picker.Item key={products.product_id} label={products.price} value={products.product_id} />
+                                //         ))}
+                                //     </Picker>
+                                // </Item> */}
+
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name='dollar' />
                             <Label>Price</Label>
                             <Input onChangeText={(price) => this.setState({price})}
-                                   value={this.state.price}
-                                   keyboardType='numeric'
-                                   placeholder="ex:20$..."
-                                   placeholderTextColor="#ccc5c5"
+                                    value={this.state.price}
+                                    keyboardType='numeric'
+                                    placeholder="ex:20 SAR..."
+                                    placeholderTextColor="#ccc5c5"
                             />
                         </Item>
                         <Item style={{height: 70}}>
@@ -268,7 +300,7 @@ class AddCourse extends Component {
                         {
                             (this.state.type == 2)?
                             (
-                                
+
                                 <Item style={{height: 70}}>
                                     <Icon name='ios-videocam' />
                                     <Label>Orientation Video</Label>
@@ -300,18 +332,41 @@ class AddCourse extends Component {
                                 />
                             </Right>
                         </ListItem>
-                        <ListItem
-                            onPress={(type) => {this.setState({type: 2})}}
-                        >
-                            <Left>
-                                <Text>Online</Text>
-                            </Left>
-                            <Right>
-                                <Radio selected={this.state.type === 2}
-                                       onPress={(type) => {this.setState({type: 2})}}
-                                />
-                            </Right>
-                        </ListItem>
+                        {
+                            (Platform.OS === 'ios')?(
+                                
+                                (this.props.user.shows == 0)?(
+                                    <Text></Text>
+                                    ):(
+                                        <ListItem
+                                            onPress={(type) => {this.setState({type: 2})}}
+                                        >
+                                            <Left>
+                                                <Text>Online</Text>
+                                            </Left>
+                                            <Right>
+                                                <Radio selected={this.state.type === 2}
+                                                        onPress={(type) => {this.setState({type: 2})}}
+                                                />
+                                            </Right>
+                                        </ListItem>
+                                    )
+                                    
+                            ):(
+                                <ListItem
+                                    onPress={(type) => {this.setState({type: 2})}}
+                                >
+                                    <Left>
+                                        <Text>Online</Text>
+                                    </Left>
+                                    <Right>
+                                        <Radio selected={this.state.type === 2}
+                                               onPress={(type) => {this.setState({type: 2})}}
+                                        />
+                                    </Right>
+                                </ListItem>
+                                )
+                        }
                         {
                             (this.state.type == 1)?
                             (
@@ -323,7 +378,7 @@ class AddCourse extends Component {
                                         placeholder="Center name..."
                                         placeholderTextColor="#ccc5c5"
                                     />
-                                    
+
                                     </Item>
                                     <Item style={{height: 70}}>
                                     <Icon type="FontAwesome" name='pencil' />
@@ -354,7 +409,7 @@ class AddCourse extends Component {
                                 </Form>
                             )
                             :(
-                               <Text></Text> 
+                               <Text></Text>
                             )
                         }
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
@@ -438,11 +493,13 @@ const styles = StyleSheet.create({
         bottom: 10
     },
 });
-const mapStateToProps = ({ categories }) => ({
+const mapStateToProps = ({ categories, user }) => ({
+    user,
     categories
 });
 
 const mapDispatchToProps = {
+    setUser,
     setCategories
 };
 export default connect(

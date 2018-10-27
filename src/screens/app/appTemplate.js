@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Container, Header, Left, Body, Right, Button, Icon, Title, Content, Toast, Fab} from 'native-base';
 import Color from '../../constants/colors';
 import {connect} from "react-redux";
-import {RefreshControl, StyleSheet, AsyncStorage, TouchableOpacity, ActivityIndicator,Text} from "react-native";
+import {RefreshControl, StyleSheet, AsyncStorage, TouchableOpacity, ActivityIndicator,Text,Platform} from "react-native";
 import {setCategories, setUser, setFavorites} from "../../reducers";
 import axios from "axios/index";
 import Server from "../../constants/config";
@@ -112,9 +112,22 @@ class AppTemplate extends Component {
                         <TouchableOpacity>
                             <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Search')} name='md-search' />
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
-                        </TouchableOpacity>
+                        {
+                            (Platform.OS === 'ios')?(
+                                (this.props.user.shows == 0)?(
+                                    <Text></Text>
+                                ):(
+                                    <TouchableOpacity>
+                                    <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
+                                </TouchableOpacity>
+                                )
+                            ):(
+                                <TouchableOpacity>
+                                    <Icon style={styles.butt} onPress={()=> this.props.navigation.navigate('Cart')} name='md-cart' />
+                                </TouchableOpacity>
+
+                            )
+                        }
                         {
                             this.state.isLoading ? (
                                 <Button transparent>

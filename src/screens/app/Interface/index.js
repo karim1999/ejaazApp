@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, FlatList, AsyncStorage, Dimensions, TouchableOpacity, ActivityIndicator} from 'react-native';
-import { Text, H2 } from 'native-base';
+import { Text, H2,Button } from 'native-base';
 import axios from "axios";
 import Server from "../../../constants/config";
 import AppTemplate from "../appTemplate";
@@ -28,9 +28,9 @@ class Interface extends Component {
                 this.setState({
                     isLoading: false,
                     cloneInterface: response.data
-                });               
+                });
             }).catch(error => {
-                
+
             })
         }).then(() => {
             this.setState({
@@ -41,13 +41,24 @@ class Interface extends Component {
     async componentDidMount(){
 
         await this._onLoad();
-        
+
     }
 
 
     render() {
         return (
             <AppTemplate fab={this.props.user.type == 2} interface={this.props.user.type == 1} onLoad={()=> this._onLoad()} navigation={this.props.navigation} title="Home">
+              {
+                (this.props.user.email == 'abdolabib602@yahoo.com')?(
+                      <Button
+                          light
+                          style={{width: "100%"}}><Text style={{fontSize:13}}> We do not support online payments, All payments will be handled with the instructors hand-to-hand. </Text>
+                      </Button>
+
+                ):(
+                  <Text></Text>
+                )
+              }
                 <View style={styles.all}>
                     {
                         (this.state.isLoading)? (
@@ -67,7 +78,7 @@ class Interface extends Component {
                                                 onPress={() => this.props.navigation.navigate("CourseView", {...item, user_name: item.user.name, user_id: item.user.id,user_img: item.user.img})}>
                                                 <CourseBox {...item} user_name={item.user.name} />
                                             </TouchableOpacity>
-                                    
+
                                 </View>
                             )}
                             keyExtractor = { (item, index) => index.toString() }
@@ -128,7 +139,7 @@ class Interface extends Component {
                         </View>
 
                         )
-                            
+
                     }
                 </View>
             </AppTemplate>
